@@ -1,0 +1,89 @@
+<!-- views/agency/orders.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/header') %>
+  <link rel="stylesheet" href="/css/agency-orders.css">
+  <title>Agency Orders | SETU E-commerce</title>
+</head>
+<body>
+  <%- include('../partials/agency-header') %>
+  
+  <div class="dashboard-container">
+    <%- include('../partials/agency-sidebar', { active: 'orders' }) %>
+    
+    <main class="dashboard-content">
+      <div class="dashboard-header">
+        <h1>Orders Management</h1>
+        <div class="dashboard-actions">
+          <div class="filter-container">
+            <select id="statusFilter" class="filter-select">
+              <option value="all">All Orders</option>
+              <option value="pending">Pending</option>
+              <option value="processing">Processing</option>
+              <option value="shipped">Shipped</option>
+              <option value="delivered">Delivered</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      
+      <div class="orders-container">
+        <% if (orders && orders.length > 0) { %>
+          <table class="orders-table">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Date</th>
+                <th>Items</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% orders.forEach(order => { %>
+                <tr class="order-row" data-status="<%= order.status %>">
+                  <td><%= order.orderId %></td>
+                  <td>
+                    <% if (order.customer) { %>
+                      <%= order.customer.name %>
+                    <% } else { %>
+                      Unknown Customer
+                    <% } %>
+                  </td>
+                  <td><%= new Date(order.createdAt).toLocaleDateString() %></td>
+                  <td><%= order.agencyItems.length %> items</td>
+                  <td>₹<%= order.totalAmount.toFixed(2) %></td>
+                  <td>
+                    <span class="status-badge status-<%= order.status %>">
+                      <%= order.status.charAt(0).toUpperCase() + order.status.slice(1) %>
+                    </span>
+                  </td>
+                  <td>
+                    <a href="/agency/orders/<%= order._id %>" class="btn btn-sm btn-primary">View</a>
+                  </td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        <% } else { %>
+          <div class="empty-state">
+            <div class="empty-state-icon">
+              <i class="fas fa-box-open"></i>
+            </div>
+            <h2>No Orders Yet</h2>
+            <p>You haven't received any orders yet. When customers place orders for your products, they will appear here.</p>
+          </div>
+        <% } %>
+      </div>
+    </main>
+  </div>
+  
+  <%- include('../partials/footer') %>
+  
+  <script src="/js/agency-orders.js"></script>
+</body>
+</html>

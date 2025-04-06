@@ -1,0 +1,1640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | SETU</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <style>
+    .form-group {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  transition: border-color 0.3s ease;
+}
+
+.form-control.error {
+  border-color: #dc3545;
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  min-height: 1.25rem;
+}
+
+.hidden {
+  display: none;
+}
+
+.alert {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  color: #155724;
+}
+
+/* Password strength indicator */
+.password-strength {
+  height: 4px;
+  margin-top: 0.5rem;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.password-strength.weak {
+  background-color: #dc3545;
+  width: 33%;
+}
+
+.password-strength.medium {
+  background-color: #ffc107;
+  width: 66%;
+}
+
+.password-strength.strong {
+  background-color: #28a745;
+  width: 100%;
+}
+
+  </style>
+</head>
+<body>
+
+  <!-- Flash Messages -->
+  <% if(success_msg && success_msg.length > 0) { %>
+    <div class="notification success visible">
+      <%= success_msg %>
+    </div>
+  <% } %>
+  
+  <% if(error_msg && error_msg.length > 0) { %>
+    <div class="notification error visible">
+      <%= error_msg %>
+    </div>
+  <% } %>
+
+  <!-- Home Page -->
+  <% if(page === 'home') { %>
+    <div class="min-h-screen flex flex-col">
+      <!-- Navigation -->
+      <%- include('partials/header') %>
+
+
+      <div class="flex-1 max-w-7xl mx-auto px-8 py-8 flex flex-col justify-center">
+        <header class="text-center mb-14">
+          <h1 class="text-4xl font-bold text-gray-900 mb-4 tracking-tight">Welcome to Our Portal</h1>
+          <p class="text-lg text-gray-600 max-w-xl mx-auto">
+            Select your account type to access your personalized dashboard experience
+          </p>
+        </header>
+
+        <div class="flex justify-center gap-8 flex-wrap">
+          <div class="portal-card customer-portal">
+            <div class="portal-image">
+              <div class="portal-icon">
+                <i class="fas fa-user-circle"></i>
+              </div>
+            </div>
+            <div class="portal-content">
+              <h3 class="portal-title">Customer Portal</h3>
+              <p class="portal-description">
+                Access your account information, view reports, and manage your services in one place.
+              </p>
+              <a href="auth/customer/login" class="btn btn-primary">
+                <i class="fas fa-sign-in-alt"></i>
+                <span>Access Dashboard</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="portal-card agency-portal">
+            <div class="portal-image">
+              <div class="portal-icon">
+                <i class="fas fa-building"></i>
+              </div>
+            </div>
+            <div class="portal-content">
+              <h3 class="portal-title">Agency Portal</h3>
+              <p class="portal-description">
+                Manage clients, access agency tools, and view performance metrics for your team.
+              </p>
+              <a href="auth/agency/login" class="btn btn-primary">
+                <i class="fas fa-sign-in-alt"></i>
+                <span>Access Dashboard</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="help-card">
+          <h3 class="help-title">Need Help?</h3>
+          <p class="help-description">Not sure which portal to choose or having trouble logging in?</p>
+          <div class="help-actions">
+            <button class="btn btn-secondary">
+              <i class="fas fa-question-circle"></i>
+              <span>Get Support</span>
+            </button>
+            <button class="btn btn-secondary">
+              <i class="fas fa-envelope"></i>
+              <span>Contact Us</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <%- include('partials/footer') %>'
+    </div>
+  <% } %>
+
+  <!-- Customer Login Page -->
+  <% if(page === 'customer-login') { %>
+    <div class="auth-container">
+      <div class="auth-card">
+        <div class="auth-logo">
+          <a href="/" class="logo">
+            <div class="logo-icon">
+              <i class="fas fa-shopping-bag"></i>
+            </div>
+            <span class="logo-text">SETU</span>
+          </a>
+        </div>
+
+        <div class="auth-content">
+          <div class="auth-header">
+            <h1 class="auth-title">Customer Login</h1>
+            <p class="auth-description">Welcome back! Please enter your details</p>
+          </div>
+
+          <form action="/auth/customer/login" method="POST" class="auth-form">
+            <div class="form-group">
+              <label for="email" class="form-label">Email</label>
+              <input id="email" name="email" type="email" class="form-input" placeholder="Enter your email" required>
+            </div>
+
+            <div class="form-group">
+              <div class="form-label-group">
+                <label for="password" class="form-label">Password</label>
+                <a href="/auth/customer/forgot-password" class="form-link">Forgot password?</a>
+              </div>
+              <input id="password" name="password" type="password" class="form-input" placeholder="Enter your password" required>
+            </div>
+
+            <div class="form-checkbox">
+              <input type="checkbox" id="remember" name="remember" class="checkbox">
+              <label for="remember" class="checkbox-label">Remember me for 30 days</label>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+          </form>
+
+          <div class="auth-footer">
+            <p class="auth-footer-text">
+              Don't have an account?
+              <a href="/auth/customer/register" class="auth-footer-link">Sign up</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% } %>
+
+  <!-- Customer Register Page -->
+  <% if(page === 'customer-register') { %>
+    <div class="auth-container">
+      <div class="auth-card">
+        <div class="auth-logo">
+          <a href="/" class="logo">
+            <div class="logo-icon">
+              <i class="fas fa-shopping-bag"></i>
+            </div>
+            <span class="logo-text">SETU</span>
+          </a>
+        </div>
+
+        <div class="auth-content">
+          <div class="auth-header">
+            <h1 class="auth-title">Create Customer Account</h1>
+            <p class="auth-description">Fill in your details to get started</p>
+          </div>
+
+          <form action="/auth/customer/register" method="POST" class="auth-form">
+            <div class="form-group">
+              <label for="name" class="form-label">Full Name</label>
+              <input id="name" name="name" type="text" class="form-input" placeholder="Enter your full name" required value="<%= typeof name != 'undefined' ? name : '' %>">
+              <div id="name-error" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="email" class="form-label">Email</label>
+              <input id="email" name="email" type="email" class="form-input" placeholder="Enter your email" required value="<%= typeof email != 'undefined' ? email : '' %>">
+              <div id="email-error" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="password" class="form-label">Password</label>
+              <input id="password" name="password" type="password" class="form-input" placeholder="Create a password" required>
+              <div id="password-error" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="confirmPassword" class="form-label">Confirm Password</label>
+              <input id="confirmPassword" name="confirmPassword" type="password" class="form-input confirmPassword" placeholder="Confirm your password" required>
+              <div id="confirm-password-error" class="error-message"></div> 
+            </div>
+
+            <div class="form-checkbox">
+              <input type="checkbox" id="terms" name="terms" class="checkbox" required>
+              <label for="terms" class="checkbox-label">
+                I agree to the <a href="/terms" class="form-link">Terms of Service</a> and <a href="/privacy" class="form-link">Privacy Policy</a>
+              </label>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+          </form>
+
+          <div class="auth-footer">
+            <p class="auth-footer-text">
+              Already have an account?
+              <a href="/auth/customer/login" class="auth-footer-link">Sign in</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="auth-container">
+      <div class="auth-card">
+        <div class="auth-logo">
+          <a href="/" class="logo">
+            <div class="logo-icon">
+              <i class="fas fa-user"></i>
+            </div>
+            <span class="logo-text">SETU</span>
+          </a>
+        </div>
+    
+        <div class="auth-content">
+          <div class="auth-header">
+            <h1 class="auth-title">Customer Registration</h1>
+            <p class="auth-description">Create an account to start shopping</p>
+          </div>
+    
+         
+          <% if(typeof errors !== 'undefined' && errors.length > 0) { %>
+            <% errors.forEach(function(error) { %>
+              <div class="alert alert-danger"><%= error.msg %></div>
+            <% }); %>
+          <% } %>
+    
+         
+          <div id="success-message" class="alert alert-success hidden">
+            Registration successful! You can now log in.
+          </div>
+    
+          <form id="registration-form" action="/auth/customer/register" method="POST" class="auth-form">
+            <div class="form-group">
+              <label for="name">Full Name</label>
+              <input type="text" id="name" name="name" class="form-control" value="<%= typeof name != 'undefined' ? name : '' %>">
+              <div id="name-error" class="error-message"></div>
+            </div>
+    
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" name="email" class="form-control" value="<%= typeof email != 'undefined' ? email : '' %>">
+              <div id="email-error" class="error-message"></div>
+            </div>
+    
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" id="password" name="password" class="form-control">
+              <div id="password-error" class="error-message"></div>
+            </div>
+    
+            <div class="form-group">
+              <label for="confirm-password">Confirm Password</label>
+              <input type="password" id="confirm-password" name="confirmPassword" class="form-control">
+              <div id="confirm-password-error" class="error-message"></div>
+            </div>
+    
+            <div class="form-checkbox">
+              <input type="checkbox" id="terms" name="terms" class="checkbox" required>
+              <label for="terms" class="checkbox-label">
+                I agree to the <a href="/terms" class="form-link">Terms of Service</a> and <a href="/privacy" class="form-link">Privacy Policy</a>
+              </label>
+            </div>
+    
+            <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+          </form>
+    
+          <div class="auth-footer">
+            <p class="auth-footer-text">
+              Already have an account? <a href="/auth/customer/login" class="form-link">Log in</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+  <% } %>
+
+  <!-- Agency Login Page -->
+  <% if(page === 'agency-login') { %>
+    <div class="auth-container">
+      <div class="auth-card">
+        <div class="auth-logo">
+          <a href="/" class="logo">
+            <div class="logo-icon">
+              <i class="fas fa-building"></i>
+            </div>
+            <span class="logo-text">SETU</span>
+          </a>
+        </div>
+
+        <div class="auth-content">
+          <div class="auth-header">
+            <h1 class="auth-title">Agency Login</h1>
+            <p class="auth-description">Sign in to your agency account</p>
+          </div>
+
+          <form action="/auth/agency/login" method="POST" class="auth-form">
+            <div class="form-group">
+              <label for="email" class="form-label">Email</label>
+              <input id="email" name="email" type="email" class="form-input" placeholder="Enter your email" required>
+            </div>
+
+            <div class="form-group">
+              <div class="form-label-group">
+                <label for="password" class="form-label">Password</label>
+                <a href="/auth/agency/forgot-password" class="form-link">Forgot password?</a>
+              </div>
+              <input id="password" name="password" type="password" class="form-input" placeholder="Enter your password" required>
+            </div>
+
+            <div class="form-checkbox">
+              <input type="checkbox" id="remember" name="remember" class="checkbox">
+              <label for="remember" class="checkbox-label">Remember me for 30 days</label>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+          </form>
+
+          <div class="auth-footer">
+            <p class="auth-footer-text">
+              Don't have an agency account?
+              <a href="/auth/agency/register" class="auth-footer-link">Apply now</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% } %>
+
+  <!-- Agency Register Page -->
+  <% if(page === 'agency-register') { %>
+    <div class="auth-container">
+      <div class="auth-card wide-card">
+        <div class="auth-logo">
+          <a href="/" class="logo">
+            <div class="logo-icon">
+              <i class="fas fa-building"></i>
+            </div>
+            <span class="logo-text">SETU</span>
+          </a>
+        </div>
+
+        <div class="auth-content">
+          <div class="auth-header">
+            <h1 class="auth-title">Agency Registration</h1>
+            <p class="auth-description">Create an agency account to start selling on our platform</p>
+          </div>
+
+          <form action="/auth/agency/register" method="POST" class="auth-form">
+            <div class="form-section">
+              <h2 class="form-section-title">Agency Information</h2>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="agencyName" class="form-label">Agency Name</label>
+                  <input id="agencyName" name="agencyName" type="text" class="form-input" placeholder="Enter your agency name" required>
+                </div>
+
+                <div class="form-group">
+                  <label for="businessType" class="form-label">Business Type</label>
+                  <select id="businessType" name="businessType" class="form-input" required>
+                    <option value="">Select business type</option>
+                    <option value="sole_proprietorship">Sole Proprietorship</option>
+                    <option value="partnership">Partnership</option>
+                    <option value="llc">Limited Liability Company (LLC)</option>
+                    <option value="corporation">Corporation</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="businessDescription" class="form-label">Business Description</label>
+                <textarea id="businessDescription" name="businessDescription" class="form-textarea" placeholder="Briefly describe your business and the products you sell" required></textarea>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="website" class="form-label">Website (Optional)</label>
+                  <input id="website" name="website" type="url" class="form-input" placeholder="https://www.example.com">
+                </div>
+
+                <div class="form-group">
+                  <label for="phone" class="form-label">Business Phone</label>
+                  <input id="phone" name="phone" type="tel" class="form-input" placeholder="Enter business phone number" required>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h2 class="form-section-title">Contact Information</h2>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="firstName" class="form-label">First Name</label>
+                  <input id="firstName" name="firstName" type="text" class="form-input" placeholder="Enter your first name" required>
+                </div>
+
+                <div class="form-group">
+                  <label for="lastName" class="form-label">Last Name</label>
+                  <input id="lastName" name="lastName" type="text" class="form-input" placeholder="Enter your last name" required>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="email" class="form-label">Email Address</label>
+                  <input id="email" name="email" type="email" class="form-input" placeholder="Enter your email" required>
+                </div>
+
+                <div class="form-group">
+                  <label for="position" class="form-label">Position/Title</label>
+                  <input id="position" name="position" type="text" class="form-input" placeholder="Enter your position" required>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h2 class="form-section-title">Account Information</h2>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="password" class="form-label">Password</label>
+                  <input id="password" name="password" type="password" class="form-input" placeholder="Create a password" required>
+                </div>
+
+                <div class="form-group">
+                  <label for="confirmPassword" class="form-label">Confirm Password</label>
+                  <input id="confirmPassword" name="confirmPassword" type="password" class="form-input" placeholder="Confirm your password" required>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <div class="form-checkbox">
+                <input type="checkbox" id="terms" name="terms" class="checkbox" required>
+                <label for="terms" class="checkbox-label">
+                  I agree to the <a href="/terms" class="form-link">Terms of Service</a> and <a href="/privacy" class="form-link">Privacy Policy</a>
+                </label>
+              </div>
+
+              <div class="form-checkbox">
+                <input type="checkbox" id="marketing" name="marketing" class="checkbox">
+                <label for="marketing" class="checkbox-label">
+                  I agree to receive marketing communications from SETU
+                </label>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Submit Application</button>
+          </form>
+
+          <div class="auth-footer">
+            <p class="auth-footer-text">
+              Already have an agency account?
+              <a href="/auth/agency/login" class="auth-footer-link">Sign in</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% } %>
+
+  <!-- Customer Browsing Page -->
+  <% if(page === 'customer-browsing') { %>
+    <div class="container">
+      <!-- Mobile Sidebar Toggle -->
+      <button class="mobile-sidebar-toggle" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
+      </button>
+
+      <!-- Mobile Header -->
+      <div class="mobile-header">
+        <div class="mobile-header-content">
+          <a href="/customer/browsing" class="mobile-logo">SETU</a>
+          <div class="mobile-actions">
+            <a href="index" class="mobile-cart-icon">
+              <i class="fas fa-shopping-cart"></i>
+              <span class="cart-count" id="mobileCartCount">0</span>
+            </a>
+          </div>
+        </div>
+        <!-- Mobile Search Bar -->
+        <div class="mobile-search-container">
+          <form class="search-form" action="/customer/search" method="POST">
+            <input type="text" name="searchTerm" placeholder="Search products..." class="search-input">
+            <button type="submit" class="search-button">
+              <i class="fas fa-search"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <%- include('partials/sidebar') %>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <!-- Desktop Search Bar -->
+        <div class="search-container">
+          <form class="search-form" action="/customer/search" method="POST">
+            <input type="text" name="searchTerm" placeholder="Search products..." class="search-input" value="<%= locals.searchTerm || '' %>">
+            <button type="submit" class="search-button">
+              <i class="fas fa-search"></i>
+            </button>
+          </form>
+        </div>
+
+        <div class="page-header">
+          <h1 class="page-title">Browse Products</h1>
+          <p class="page-description">Explore our wide range of products</p>
+        </div>
+
+        <div class="tabs">
+          <div class="tab-list">
+            <div class="tab-item <%= activeTab === 'all' ? 'active' : '' %>" data-tab="all">
+              <a href="/customer/browsing">All Categories</a>
+            </div>
+            <div class="tab-item <%= activeTab === 'electronics' ? 'active' : '' %>" data-tab="electronics">
+              <a href="/customer/browsing/electronics">Electronics</a>
+            </div>
+            <div class="tab-item <%= activeTab === 'clothing' ? 'active' : '' %>" data-tab="clothing">
+              <a href="/customer/browsing/clothing">Clothing</a>
+            </div>
+            <div class="tab-item <%= activeTab === 'home' ? 'active' : '' %>" data-tab="home">
+              <a href="/customer/browsing/home">Home & Kitchen</a>
+            </div>
+          </div>
+
+          <div class="tab-content active">
+            <div class="product-grid">
+              <% if(products && products.length > 0) { %>
+                <% products.forEach(function(product) { %>
+                  <div class="product-card" data-category="<%= product.category %>">
+                    <div style="position: relative;">
+                      <img src="<%= product.image %>" alt="<%= product.name %>" class="product-image">
+                      <% if(product.isNew) { %>
+                        <span class="product-badge">New</span>
+                      <% } %>
+                    </div>
+                    <div class="product-content">
+                      <div class="product-category"><%= product.category.charAt(0).toUpperCase() + product.category.slice(1) %></div>
+                      <h3 class="product-title"><%= product.name %></h3>
+                      <div class="product-price">$<%= product.price.toFixed(2) %></div>
+                      <div class="product-actions">
+                        <button class="btn btn-primary add-to-cart add-to-cart-btn" 
+                          data-id="<%= product._id %>" 
+                          data-name="<%= product.name %>" 
+                          data-price="<%= product.price %>" 
+                          data-image="<%= product.image %>">
+                          <i class="fas fa-shopping-cart"></i> Add to Cart
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                <% }); %>
+              <% } else { %>
+                <p>No products available in this category yet.</p>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  <% } %>
+
+  <!-- Customer Cart Page -->
+  <% if(page === 'customer-cart') { %>
+    <div class="container">
+      <!-- Mobile Sidebar Toggle -->
+      <button class="mobile-sidebar-toggle" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
+      </button>
+
+      <!-- Mobile Header -->
+      <div class="mobile-header">
+        <div class="mobile-header-content">
+          <a href="/customer/browsing" class="mobile-logo">SETU</a>
+          <div class="mobile-actions">
+            <a href="/customer/cart" class="mobile-cart-icon">
+              <i class="fas fa-shopping-cart"></i>
+              <span class="cart-count" id="mobileCartCount">0</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <%- include('partials/sidebar') %>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <div class="page-header">
+          <h1 class="page-title">Shopping Cart</h1>
+          <p class="page-description">Review and checkout your items</p>
+        </div>
+
+        <div class="flex-wrap">
+          <div class="flex-1 min-w-300">
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">Cart Items</h2>
+              </div>
+              <div class="card-content">
+               
+                <div class="cart-items" id="cartItems">
+                  <% if (cart.length > 0) { %>
+                    <% cart.forEach(item => { %>
+                      <div class="cart-item">
+                        <span><%= item.name %></span>
+                        <span>₹<%= item.price %> x <%= item.quantity %></span>
+                      </div>
+                    <% }) %>
+                  <% } else { %>
+                    <div class="cart-empty">Your cart is empty.</div>
+                  <% } %>
+                </div>
+                
+
+              </div>
+            </div>
+          </div>
+
+          <div class="cart-sidebar">
+            <div class="card cart-summary">
+              <div class="card-header">
+                <h2 class="card-title">Order Summary</h2>
+              </div>
+              <div class="card-content">
+                <div class="cart-subtotal">
+                  <span>Subtotal</span>
+                  <span class="cart-subtotal-value" id="cartSubtotal">$0.00</span>
+                </div>
+
+                <div class="cart-tax">
+                  <span>Tax (10%)</span>
+                  <span class="cart-tax-value" id="cartTax">$0.00</span>
+                </div>
+
+                <div class="cart-shipping">
+                  <span>Shipping</span>
+                  <span class="cart-shipping-value" id="cartShipping">$5.00</span>
+                </div>
+
+                <div class="cart-total">
+                  <span>Total</span>
+                  <span class="cart-total-value" id="cartTotal">$0.00</span>
+                </div>
+
+                <a href="/customer/checkout" class="btn btn-primary btn-block" id="checkoutBtn">
+                  Proceed to Checkout
+                </a>
+              </div>
+            </div>
+
+            <div class="card mt-4">
+              <div class="card-header">
+                <h3 class="card-title">Have a Promo Code?</h3>
+              </div>
+              <div class="card-content">
+                <div class="form-group">
+                  <input type="text" class="form-input" placeholder="Enter promo code">
+                </div>
+                <button class="btn btn-secondary btn-block">Apply</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  <% } %>
+
+  <!-- Customer Checkout Page -->
+  <% if(page === 'customer-checkout') { %>
+    <div class="container">
+      <!-- Mobile Sidebar Toggle -->
+      <button class="mobile-sidebar-toggle" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
+      </button>
+
+      <!-- Mobile Header -->
+      <div class="mobile-header">
+        <div class="mobile-header-content">
+          <a href="/customer/browsing" class="mobile-logo">SETU</a>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <%- include('partials/sidebar') %>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <div class="page-header">
+          <h1 class="page-title">Checkout</h1>
+          <p class="page-description">Complete your purchase</p>
+        </div>
+
+        <form action="/customer/place-order" method="POST">
+          <div class="flex-wrap">
+            <div class="flex-1 min-w-300">
+              <div class="card">
+                <div class="card-header">
+                  <h2 class="card-title">Shipping Information</h2>
+                  <p class="card-description">Enter your shipping details</p>
+                </div>
+                <div class="card-content">
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="firstName" class="form-label">First Name</label>
+                      <input type="text" id="firstName" name="firstName" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="lastName" class="form-label">Last Name</label>
+                      <input type="text" id="lastName" name="lastName" class="form-input" required>
+                    </div>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="email" class="form-label">Email</label>
+                      <input type="email" id="email" name="email" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="phone" class="form-label">Phone</label>
+                      <input type="tel" id="phone" name="phone" class="form-input" required>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="address" class="form-label">Address</label>
+                    <input type="text" id="address" name="address" class="form-input" required>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="city" class="form-label">City</label>
+                      <input type="text" id="city" name="city" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="state" class="form-label">State</label>
+                      <input type="text" id="state" name="state" class="form-input" required>
+                    </div>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="zip" class="form-label">ZIP Code</label>
+                      <input type="text" id="zip" name="zip" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="country" class="form-label">Country</label>
+                      <input type="text" id="country" name="country" class="form-input" required>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-header">
+                  <h2 class="card-title">Payment Method</h2>
+                  <p class="card-description">Select your preferred payment method</p>
+                </div>
+                <div class="card-content">
+                  <div class="payment-methods">
+                    <div class="payment-method-tabs">
+                      <div class="payment-method-tab active" data-method="credit-card">
+                        <i class="far fa-credit-card"></i> Credit Card
+                      </div>
+                      <div class="payment-method-tab" data-method="paypal">
+                        <i class="fab fa-paypal"></i> PayPal
+                      </div>
+                      <div class="payment-method-tab" data-method="apple-pay">
+                        <i class="fab fa-apple-pay"></i> Apple Pay
+                      </div>
+                      <div class="payment-method-tab" data-method="paytm">
+                        <i class="fas fa-wallet"></i> Paytm
+                      </div>
+                    </div>
+
+                    <div class="payment-method-content active" id="credit-card-content">
+                      <div class="credit-card-info">
+                        <div class="form-group">
+                          <label for="cardNumber" class="form-label">Card Number</label>
+                          <input type="text" id="cardNumber" name="cardNumber" class="form-input" placeholder="Enter your card number">
+                        </div>
+                        <div class="form-group">
+                          <label for="cardName" class="form-label">Name on Card</label>
+                          <input type="text" id="cardName" name="cardName" class="form-input" placeholder="Enter the name on the card">
+                        </div>
+                        <div class="form-row">
+                          <div class="form-group">
+                            <label for="cardExpiry" class="form-label">Expiration Date</label>
+                            <input type="text" id="cardExpiry" name="cardExpiry" class="form-input" placeholder="MM/YY">
+                          </div>
+                          <div class="form-group">
+                            <label for="cardCvv" class="form-label">CVV</label>
+                            <input type="text" id="cardCvv" name="cardCvv" class="form-input" placeholder="CVV">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="payment-method-content" id="paypal-content">
+                      <div class="paypal-info">
+                        <p>You will be redirected to PayPal to complete your payment securely.</p>
+                        <button type="button" class="btn btn-primary mt-4">Pay with PayPal</button>
+                      </div>
+                    </div>
+
+                    <div class="payment-method-content" id="apple-pay-content">
+                      <div class="apple-pay-info">
+                        <p>Pay securely with Apple Pay.</p>
+                        <button type="button" class="btn btn-primary mt-4">
+                          <i class="fab fa-apple-pay"></i> Pay with Apple Pay
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="payment-method-content" id="paytm-content">
+                      <div class="paytm-info">
+                        <p>You will be redirected to Paytm to complete your payment securely.</p>
+                        <div class="paytm-logo">
+                          <div class="paytm-logo-image">
+                            <i class="fas fa-wallet fa-2x"></i> <span class="paytm-text">Paytm</span>
+                          </div>
+                        </div>
+                        <div class="paytm-form">
+                          <div class="form-group">
+                            <label for="paytmMobile" class="form-label">Mobile Number</label>
+                            <input type="tel" id="paytmMobile" name="paytmMobile" class="form-input" placeholder="Enter your registered mobile number" maxlength="10">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <input type="hidden" name="paymentMethod" id="paymentMethod" value="credit-card">
+                </div>
+              </div>
+            </div>
+
+            <div class="cart-sidebar">
+              <div class="card cart-summary">
+                <div class="card-header">
+                  <h2 class="card-title">Order Summary</h2>
+                </div>
+                <div class="card-content">
+                  <div class="checkout-items">
+                    <% if(cart && cart.length > 0) { %>
+                      <% cart.forEach(function(item) { %>
+                        <div class="checkout-item">
+                          <div class="checkout-item-image">
+                            <img src="<%= item.image %>" alt="<%= item.name %>">
+                          </div>
+                          <div class="checkout-item-details">
+                            <div class="checkout-item-name"><%= item.name %></div>
+                            <div class="checkout-item-price">
+                              $<%= item.price.toFixed(2) %> × <%= item.quantity %>
+                            </div>
+                          </div>
+                        </div>
+                      <% }); %>
+                    <% } %>
+                  </div>
+
+                  <div class="cart-subtotal">
+                    <span>Subtotal</span>
+                    <span class="cart-subtotal-value">$<%= subtotal.toFixed(2) %></span>
+                  </div>
+
+                  <div class="cart-tax">
+                    <span>Tax (10%)</span>
+                    <span class="cart-tax-value">$<%= tax.toFixed(2) %></span>
+                  </div>
+
+                  <div class="cart-shipping">
+                    <span>Shipping</span>
+                    <span class="cart-shipping-value">$<%= shipping.toFixed(2) %></span>
+                  </div>
+
+                  <div class="cart-total">
+                    <span>Total</span>
+                    <span class="cart-total-value">$<%= total.toFixed(2) %></span>
+                  </div>
+
+                  <button type="submit" class="btn btn-primary btn-block">Place Order</button>
+                </div>
+              </div>
+
+              <div class="card mt-4">
+                <div class="card-header">
+                  <h3 class="card-title">Secure Checkout</h3>
+                </div>
+                <div class="card-content">
+                  <p class="secure-text">All your information is secured by 256-bit SSL encryption.</p>
+                  <div class="payment-icons">
+                    <i class="fab fa-cc-visa"></i>
+                    <i class="fab fa-cc-mastercard"></i>
+                    <i class="fab fa-cc-amex"></i>
+                    <i class="fab fa-cc-discover"></i>
+                    <i class="fab fa-cc-paypal"></i>
+                    <i class="fab fa-apple-pay"></i>
+                    <i class="fas fa-wallet paytm-icon"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </main>
+    </div>
+  <% } %>
+
+  <!-- Include other page templates here -->
+
+  <!-- Footer partials for other pages -->
+  <% if(page !== 'home' && !page.includes('login') && !page.includes('register')) { %>
+    <%- include('partials/footer') %>
+  <% } %>
+<!-- <script src="../public/js/customer.js"></script> -->
+
+    <script>
+  //     function validateForm() {
+  //     const name = document.getElementById("name").value;
+  //     const email = document.getElementById("email").value;
+  //     const password = document.getElementById("password").value;
+
+  //     // Name validation: Only letters and spaces allowed
+  //     const namePattern = /^[A-Za-z\s]+$/;
+  //     if (!namePattern.test(name)) {
+  //         alert("Name should only contain letters.");
+  //         return false;
+  //     }
+
+  //     // Email validation: Must end with "@gmail.com"
+  //     if (!email.endsWith("@gmail.com")) {
+  //         alert("Email must be a Gmail address (@gmail.com).");
+  //         return false;
+  //     }
+
+  //     // Password validation: At least 8 characters and one special character
+  //     const passwordPattern = /^(?=.*[\W_]).{8,}$/;
+  //     if (!passwordPattern.test(password)) {
+  //         alert("Password must be at least 8 characters long and include a special character.");
+  //         return false;
+  //     }
+
+  //     alert("Registration successful!");
+  //     return true;
+  // }
+
+  // function validateForm() {
+  //     const name = document.getElementById("name").value;
+  //     const email = document.getElementById("email").value;
+  //     const password = document.getElementById("password").value;
+
+  //     // Name validation: Only letters and spaces allowed
+  //     const namePattern = /^[A-Za-z\s]+$/;
+  //     if (!namePattern.test(name)) {
+  //         alert("Name should only contain letters.");
+  //         return false;
+  //     }
+
+  //     // Email validation: Must end with "@gmail.com"
+  //     if (!email.endsWith("@gmail.com")) {
+  //         alert("Email must be a Gmail address (@gmail.com).");
+  //         return false;
+  //     }
+
+  //     // Password validation: At least 8 characters and one special character
+  //     const passwordPattern = /^(?=.*[\W_]).{8,}$/;
+  //     if (!passwordPattern.test(password)) {
+  //         alert("Password must be at least 8 characters long and include a special character.");
+  //         return false;
+  //     }
+
+  //     alert("Registration successful!");
+  //     return true;
+  //}
+
+        // Sample data - would be replaced with API calls in a real implementation
+        // const documents = [
+        //     { 
+        //         id: 'DOC-001', 
+        //         agency: 'Travel Agency Ltd', 
+        //         type: 'Business License', 
+        //         date: '2025-03-20', 
+        //         status: 'pending', 
+        //         fileType: 'pdf',
+        //         fileUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+        //         notes: '' 
+        //     },
+        //     { 
+        //         id: 'DOC-002', 
+        //         agency: 'Holiday Experts', 
+        //         type: 'Tax Certificate', 
+        //         date: '2025-03-19', 
+        //         status: 'pending', 
+        //         fileType: 'image',
+        //         fileUrl: 'https://via.placeholder.com/800x600?text=Tax+Certificate',
+        //         notes: '' 
+        //     },
+        //     { 
+        //         id: 'DOC-003', 
+        //         agency: 'Adventure Tours', 
+        //         type: 'Insurance Policy', 
+        //         date: '2025-03-18', 
+        //         status: 'pending', 
+        //         fileType: 'pdf',
+        //         fileUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+        //         notes: '' 
+        //     },
+        //     { 
+        //         id: 'DOC-004', 
+        //         agency: 'Global Vacations', 
+        //         type: 'Business License', 
+        //         date: '2025-03-15', 
+        //         status: 'approved', 
+        //         verifiedDate: '2025-03-16', 
+        //         fileType: 'image',
+        //         fileUrl: 'https://via.placeholder.com/800x600?text=Business+License',
+        //         notes: 'All documents appear to be in order. Business license is valid for 2 years.',
+        //         verifiedBy: 'Admin User'
+        //     },
+        //     { 
+        //         id: 'DOC-005', 
+        //         agency: 'Dream Holidays', 
+        //         type: 'Tax Certificate', 
+        //         date: '2025-03-12', 
+        //         status: 'rejected', 
+        //         verifiedDate: '2025-03-13', 
+        //         fileType: 'pdf',
+        //         fileUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+        //         notes: 'Tax certificate is expired. Please upload the most recent version.',
+        //         verifiedBy: 'Admin User'
+        //     }
+        // ];
+        
+        // const agencyFunctions = [
+        //     { 
+        //         id: 'FUNC-001', 
+        //         name: 'Automated Booking System', 
+        //         agency: 'Travel Agency Ltd', 
+        //         description: 'This function provides an automated booking system for travel packages. It integrates with payment gateways and sends confirmation emails to customers.',
+        //         dateAdded: '2025-03-10',
+        //         status: 'active',
+        //         notes: ''
+        //     },
+        //     { 
+        //         id: 'FUNC-002', 
+        //         name: 'Customer Feedback Collection', 
+        //         agency: 'Holiday Experts', 
+        //         description: 'This module collects and analyzes customer feedback after trips, generating satisfaction reports and improvement suggestions.',
+        //         dateAdded: '2025-03-15',
+        //         status: 'pending',
+        //         notes: ''
+        //     },
+        //     { 
+        //         id: 'FUNC-003', 
+        //         name: 'Dynamic Pricing Algorithm', 
+        //         agency: 'Adventure Tours', 
+        //         description: 'An algorithm that adjusts package prices based on demand, seasonality, and competitor pricing. Helps maximize bookings and revenue.',
+        //         dateAdded: '2025-03-18',
+        //         status: 'active',
+        //         notes: 'Approved after testing with sample data'
+        //     }
+        // ];
+        
+        // // Initialize the page
+        // document.addEventListener('DOMContentLoaded', function() {
+        //     populatePendingDocuments();
+        //     populateVerifiedDocuments();
+        //     populateAgencyFunctions();
+            
+        //     // Close document modal when clicking the X
+        //     document.querySelector('#documentModal .close').addEventListener('click', function() {
+        //         document.getElementById('documentModal').style.display = 'none';
+        //     });
+            
+        //     // Close modals when clicking outside of them
+        //     window.addEventListener('click', function(event) {
+        //         const docModal = document.getElementById('documentModal');
+        //         const funcModal = document.getElementById('functionModal');
+                
+        //         if (event.target == docModal) {
+        //             docModal.style.display = 'none';
+        //         }
+        //         if (event.target == funcModal) {
+        //             funcModal.style.display = 'none';
+        //         }
+        //     });
+        // });
+        
+        // // Tab switching function
+        // function openTab(tabName) {
+        //     // Hide all tab contents
+        //     const tabContents = document.getElementsByClassName('tab-content');
+        //     for (let i = 0; i < tabContents.length; i++) {
+        //         tabContents[i].style.display = 'none';
+        //     }
+            
+        //     // Remove active class from all tabs
+        //     const tabs = document.getElementsByClassName('tab');
+        //     for (let i = 0; i < tabs.length; i++) {
+        //         tabs[i].classList.remove('active');
+        //     }
+            
+        //     // Show the selected tab content and set it as active
+        //     document.getElementById(tabName).style.display = 'block';
+        //     document.querySelector(⁠ .tab[onclick="openTab('${tabName}')"] ⁠).classList.add('active');
+        // }
+        
+        // // Populate tables with data
+        // function populatePendingDocuments() {
+        //     const tableBody = document.getElementById('pending-documents');
+        //     tableBody.innerHTML = '';
+            
+        //     const pendingDocs = documents.filter(doc => doc.status === 'pending');
+            
+        //     pendingDocs.forEach(doc => {
+        //         const row = document.createElement('tr');
+        //         row.innerHTML = `
+        //             <td>${doc.id}</td>
+        //             <td>${doc.agency}</td>
+        //             <td><i class="fas ${getDocumentIcon(doc.type)} document-type-icon"></i> ${doc.type}</td>
+        //             <td>${doc.date}</td>
+        //             <td><span class="badge badge-pending">Pending</span></td>
+        //             <td>
+        //                 <button class="btn btn-view" onclick="viewDocument('${doc.id}')">
+        //                     <i class="fas fa-eye"></i> View
+        //                 </button>
+        //             </td>
+        //         `;
+        //         tableBody.appendChild(row);
+        //     });
+        // }
+        
+        // function populateVerifiedDocuments() {
+        //     const tableBody = document.getElementById('verified-documents');
+        //     tableBody.innerHTML = '';
+            
+        //     const verifiedDocs = documents.filter(doc => doc.status === 'approved' || doc.status === 'rejected');
+            
+        //     verifiedDocs.forEach(doc => {
+        //         const row = document.createElement('tr');
+        //         const badgeClass = doc.status === 'approved' ? 'badge-approved' : 'badge-rejected';
+        //         const statusText = doc.status.charAt(0).toUpperCase() + doc.status.slice(1);
+                
+        //         row.innerHTML = `
+        //             <td>${doc.id}</td>
+        //             <td>${doc.agency}</td>
+        //             <td><i class="fas ${getDocumentIcon(doc.type)} document-type-icon"></i> ${doc.type}</td>
+        //             <td>${doc.verifiedDate}</td>
+        //             <td><span class="badge ${badgeClass}">${statusText}</span></td>
+        //             <td>
+        //                 <button class="btn btn-view" onclick="viewDocument('${doc.id}')">
+        //                     <i class="fas fa-eye"></i> View
+        //                 </button>
+        //             </td>
+        //         `;
+        //         tableBody.appendChild(row);
+        //     });
+        // }
+        
+        // function populateAgencyFunctions() {
+        //     const functionsContainer = document.getElementById('agency-functions');
+        //     functionsContainer.innerHTML = '';
+            
+        //     agencyFunctions.forEach(func => {
+        //         const functionCard = document.createElement('div');
+        //         functionCard.className = 'function-card';
+                
+        //         const statusBadge = func.status === 'active' ? 
+        //             '<span class="badge badge-approved">Active</span>' : 
+        //             '<span class="badge badge-pending">Pending</span>';
+                
+        //         functionCard.innerHTML = `
+        //             <div class="function-header">
+        //                 <h3>${func.name}</h3>
+        //                 ${statusBadge}
+        //             </div>
+        //             <p class="agency-name">By ${func.agency} | Added on ${func.dateAdded}</p>
+        //             <div class="function-body">
+        //                 <p>${func.description}</p>
+        //             </div>
+        //             <div style="margin-top: 15px;">
+        //                 <button class="btn btn-view" onclick="viewFunctionDetails('${func.id}')">
+        //                     <i class="fas fa-cog"></i> Manage
+        //                 </button>
+        //                 ${func.status === 'pending' ? `
+        //                 <button class="btn btn-approve" onclick="openFunctionApproval('${func.id}')">
+        //                     <i class="fas fa-check"></i> Approve
+        //                 </button>` : ''}
+        //             </div>
+        //         `;
+                
+        //         functionsContainer.appendChild(functionCard);
+        //     });
+        // }
+        
+        // // Helper function to get appropriate icon for document type
+        // function getDocumentIcon(docType) {
+        //     if (docType.includes('License')) return 'fa-file-contract';
+        //     if (docType.includes('Certificate')) return 'fa-certificate';
+        //     if (docType.includes('Policy')) return 'fa-file-signature';
+        //     return 'fa-file-alt';
+        // }
+        
+        // // Document view and verification functions
+        // let currentDocumentId = null;
+        
+        // function viewDocument(documentId) {
+        //     currentDocumentId = documentId;
+        //     const document = documents.find(doc => doc.id === documentId);
+            
+        //     if (document) {
+        //         // Set modal title and basic info
+        //         document.getElementById('modal-title').textContent = ⁠ ${document.type}: ${document.id} ⁠;
+        //         document.getElementById('document-id').textContent = document.id;
+        //         document.getElementById('document-agency').textContent = document.agency;
+        //         document.getElementById('document-type').textContent = document.type;
+        //         document.getElementById('document-date').textContent = document.date;
+                
+        //         // Set status with appropriate badge
+        //         const statusEl = document.getElementById('document-status');
+        //         statusEl.textContent = document.status.charAt(0).toUpperCase() + document.status.slice(1);
+        //         statusEl.className = '';
+        //         statusEl.classList.add('badge', document.status === 'approved' ? 'badge-approved' : 
+        //                               document.status === 'rejected' ? 'badge-rejected' : 'badge-pending');
+                
+        //         // Show/hide verification info based on status
+        //         const verifiedByContainer = document.getElementById('verified-by-container');
+        //         const notesDisplayContainer = document.getElementById('verification-notes-container');
+        //         const verificationForm = document.getElementById('verification-form-container');
+        //         const verificationFooter = document.getElementById('verification-footer');
+                
+        //         if (document.status !== 'pending') {
+        //             verifiedByContainer.style.display = 'block';
+        //             notesDisplayContainer.style.display = 'block';
+        //             verificationForm.style.display = 'none';
+        //             verificationFooter.style.display = 'none';
+                    
+        //             document.getElementById('verification-notes-display').textContent = document.notes || 'No notes provided';
+        //         } else {
+        //             verifiedByContainer.style.display = 'none';
+        //             notesDisplayContainer.style.display = 'none';
+        //             verificationForm.style.display = 'block';
+        //             verificationFooter.style.display = 'flex';
+                    
+        //             document.getElementById('verification-notes-input').value = '';
+        //         }
+                
+        //         // Load document preview based on file type
+        //         const previewContainer = document.getElementById('document-preview-container');
+        //         previewContainer.innerHTML = '';
+                
+        //         if (document.fileType === 'image') {
+        //             const img = document.createElement('img');
+        //             img.src = document.fileUrl;
+        //             img.alt = ⁠ ${document.type} Preview ⁠;
+        //             img.style.maxWidth = '100%';
+        //             img.style.maxHeight = '400px';
+        //             previewContainer.appendChild(img);
+        //         } else if (document.fileType === 'pdf') {
+        //             const embed = document.createElement('embed');
+        //             embed.src = document.fileUrl;
+        //             embed.type = 'application/pdf';
+        //             embed.style.width = '100%';
+        //             embed.style.height = '400px';
+        //             previewContainer.appendChild(embed);
+                    
+        //             const downloadLink = document.createElement('a');
+        //             downloadLink.href = document.fileUrl;
+        //             downloadLink.textContent = 'Download PDF';
+        //             downloadLink.className = 'btn btn-view';
+        //             downloadLink.style.marginTop = '10px';
+        //             downloadLink.style.display = 'inline-block';
+        //             downloadLink.target = '_blank';
+        //             previewContainer.appendChild(document.createElement('br'));
+        //             previewContainer.appendChild(downloadLink);
+        //         } else {
+        //             previewContainer.innerHTML = ⁠ <p>Preview not available for this file type. <a href="${document.fileUrl}" class="btn btn-view" target="_blank">Download File</a></p> ⁠;
+        //         }
+                
+        //         // Show the modal
+        //         document.getElementById('documentModal').style.display = 'block';
+        //     }
+        // }
+        
+        // function approveDocument() {
+        //     if (!currentDocumentId) return;
+            
+        //     const documentIndex = documents.findIndex(doc => doc.id === currentDocumentId);
+        //     if (documentIndex !== -1) {
+        //         const notes = document.getElementById('verification-notes-input').value;
+                
+        //         documents[documentIndex].status = 'approved';
+        //         documents[documentIndex].verifiedDate = new Date().toISOString().split('T')[0];
+        //         documents[documentIndex].notes = notes;
+        //         documents[documentIndex].verifiedBy = 'Admin User';
+                
+        //         // In a real app, this would be an API call
+        //         alert(⁠ Document ${currentDocumentId} has been approved. ⁠);
+                
+        //         document.getElementById('documentModal').style.display = 'none';
+        //         populatePendingDocuments();
+        //         populateVerifiedDocuments();
+        //     }
+        // }
+        
+        // function rejectDocument() {
+        //     if (!currentDocumentId) return;
+            
+        //     const documentIndex = documents.findIndex(doc => doc.id === currentDocumentId);
+        //     if (documentIndex !== -1) {
+        //         const notes = document.getElementById('verification-notes-input').value;
+                
+        //         documents[documentIndex].status = 'rejected';
+        //         documents[documentIndex].verifiedDate = new Date().toISOString().split('T')[0];
+        //         documents[documentIndex].notes = notes;
+        //         documents[documentIndex].verifiedBy = 'Admin User';
+                
+        //         // In a real app, this would be an API call
+        //         alert(⁠ Document ${currentDocumentId} has been rejected. ⁠);
+                
+        //         document.getElementById('documentModal').style.display = 'none';
+        //         populatePendingDocuments();
+        //         populateVerifiedDocuments();
+        //     }
+        // }
+        
+        // // Function management
+        // let currentFunctionId = null;
+        
+        // function viewFunctionDetails(functionId) {
+        //     currentFunctionId = functionId;
+        //     const func = agencyFunctions.find(f => f.id === functionId);
+            
+        //     if (func) {
+        //         document.getElementById('function-modal-title').textContent = func.name;
+        //         document.getElementById('function-id').textContent = func.id;
+        //         document.getElementById('function-name').textContent = func.name;
+        //         document.getElementById('function-agency').textContent = func.agency;
+        //         document.getElementById('function-date').textContent = func.dateAdded;
+        //         document.getElementById('function-description-text').textContent = func.description;
+                
+        //         const statusEl = document.getElementById('function-status');
+        //         statusEl.textContent = func.status.charAt(0).toUpperCase() + func.status.slice(1);
+        //         statusEl.className = '';
+        //         statusEl.classList.add('badge', func.status === 'active' ? 'badge-approved' : 'badge-pending');
+                
+        //         // Hide approval section for already approved functions
+        //         if (func.status === 'active') {
+        //             document.getElementById('function-verification-container').style.display = 'none';
+        //             document.getElementById('approve-function-btn').style.display = 'none';
+        //         } else {
+        //             document.getElementById('function-verification-container').style.display = 'block';
+        //             document.getElementById('approve-function-btn').style.display = 'inline-block';
+        //         }
+                
+        //         document.getElementById('functionModal').style.display = 'block';
+        //     }
+        // }
+        
+        // function openFunctionApproval(functionId) {
+        //     currentFunctionId = functionId;
+        //     viewFunctionDetails(functionId);
+        // }
+        
+        // function closeFunctionModal() {
+        //     document.getElementById('functionModal').style.display = 'none';
+        // }
+        
+        // function approveFunction() {
+        //     if (!currentFunctionId) return;
+            
+        //     const functionIndex = agencyFunctions.findIndex(f => f.id === currentFunctionId);
+            
+        //     if (functionIndex !== -1) {
+        //         const notes = document.getElementById('function-notes-input').value;
+                
+        //         agencyFunctions[functionIndex].status = 'active';
+        //         agencyFunctions[functionIndex].notes = notes;
+                
+        //         // In a real app, this would be an API call
+        //         alert(⁠ Function ${currentFunctionId} has been approved and is now active. ⁠);
+                
+        //         document.getElementById('functionModal').style.display = 'none';
+        //         populateAgencyFunctions();
+        //     }
+        // }
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('registration-form');
+  const successMessage = document.getElementById('success-message');
+  
+  // Get all form inputs
+  const nameInput = document.getElementById('name');
+  const emailInput = document.getElementById('email');
+  const passwordInput = document.getElementById('password');
+  const confirmPasswordInput = document.getElementById('confirm-password');
+
+  // Get all error message elements
+  const nameError = document.getElementById('name-error');
+  const emailError = document.getElementById('email-error');
+  const passwordError = document.getElementById('password-error');
+  const confirmPasswordError = document.getElementById('confirm-password-error');
+
+  // Validation functions
+  const validateName = (name) => {
+    if (!name) {
+      return 'Name is required';
+    }
+    if (!/^[a-zA-Z\s]+$/.test(name)) {
+      return 'Name should only contain letters and spaces';
+    }
+    return '';
+  };
+
+  const validateEmail = (email) => {
+    if (!email) {
+      return 'Email is required';
+    }
+    if (!email.includes('@')) {
+      return 'Please provide a valid email address';
+    }
+    const domain = email.split('@')[1];
+    if (domain !== 'gmail.com') {
+      return 'Please use a Gmail address (@gmail.com)';
+    }
+    return '';
+  };
+
+  const validatePassword = (password) => {
+    if (!password) {
+      return 'Password is required';
+    }
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(password)) {
+      return 'Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character';
+    }
+    return '';
+  };
+
+  const validateConfirmPassword = (password, confirmPassword) => {
+    if (!confirmPassword) {
+      return 'Please confirm your password';
+    }
+    if (password !== confirmPassword) {
+      return 'Passwords do not match';
+    }
+    return '';
+  };
+
+  // Show error message and highlight input
+  const showError = (input, errorElement, errorMessage) => {
+    input.classList.add('error');
+    errorElement.textContent = errorMessage;
+  };
+
+  // Clear error message and remove highlight
+  const clearError = (input, errorElement) => {
+    input.classList.remove('error');
+    errorElement.textContent = '';
+  };
+
+  // Real-time validation
+  nameInput.addEventListener('input', () => {
+    const error = validateName(nameInput.value);
+    if (error) {
+      showError(nameInput, nameError, error);
+    } else {
+      clearError(nameInput, nameError);
+    }
+  });
+
+  emailInput.addEventListener('input', () => {
+    const error = validateEmail(emailInput.value);
+    if (error) {
+      showError(emailInput, emailError, error);
+    } else {
+      clearError(emailInput, emailError);
+    }
+  });
+
+  passwordInput.addEventListener('input', () => {
+    const error = validatePassword(passwordInput.value);
+    if (error) {
+      showError(passwordInput, passwordError, error);
+    } else {
+      clearError(passwordInput, passwordError);
+    }
+
+    // Revalidate confirm password
+    if (confirmPasswordInput.value) {
+      const confirmError = validateConfirmPassword(passwordInput.value, confirmPasswordInput.value);
+      if (confirmError) {
+        showError(confirmPasswordInput, confirmPasswordError, confirmError);
+      } else {
+        clearError(confirmPasswordInput, confirmPasswordError);
+      }
+    }
+  });
+
+  confirmPasswordInput.addEventListener('input', () => {
+    const error = validateConfirmPassword(passwordInput.value, confirmPasswordInput.value);
+    if (error) {
+      showError(confirmPasswordInput, confirmPasswordError, error);
+    } else {
+      clearError(confirmPasswordInput, confirmPasswordError);
+    }
+  });
+
+  // Form submission
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    // Validate all fields
+    const nameError = validateName(nameInput.value);
+    const emailError = validateEmail(emailInput.value);
+    const passwordError = validatePassword(passwordInput.value);
+    const confirmPasswordError = validateConfirmPassword(
+      passwordInput.value,
+      confirmPasswordInput.value
+    );
+
+    // Show all errors if any
+    if (nameError) showError(nameInput, document.getElementById('name-error'), nameError);
+    if (emailError) showError(emailInput, document.getElementById('email-error'), emailError);
+    if (passwordError) showError(passwordInput, document.getElementById('password-error'), passwordError);
+    if (confirmPasswordError) showError(confirmPasswordInput, document.getElementById('confirm-password-error'), confirmPasswordError);
+
+    // If no errors, submit the form
+    if (!nameError && !emailError && !passwordError && !confirmPasswordError) {
+      // Hide the form and show success message
+      form.style.display = 'none';
+      successMessage.classList.remove('hidden');
+
+      // Log the form data (in a real application, you would send this to a server)
+      console.log('Form submitted:', {
+        name: nameInput.value,
+        email: emailInput.value,
+        password: passwordInput.value
+      });
+    }
+  });
+});
+
+
+
+
+    </script>
+  <script src="/js/script.js"></script>
+  <script src="/js/customer.js"></script>
+</body>
+</html>

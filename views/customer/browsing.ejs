@@ -1,0 +1,115 @@
+<!-- Customer Browsing Page -->
+<div class="dashboard-container">
+  <!-- Sidebar -->
+  <%- include('../partials/customer-sidebar') %>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Header Section -->
+    <div class="dashboard-header">
+      <h1 class="dashboard-title">Browse Products</h1>
+    </div>
+
+    <!-- Search Section -->
+    <div class="search-container">
+      <form action="/customer/search" method="POST" class="search-form">
+        <div class="search-input-wrapper">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" name="search" class="search-input" placeholder="Search products...">
+        </div>
+      </form>
+    </div>
+
+    <!-- Category Tabs -->
+    <div class="category-tabs">
+      <a href="/customer/browsing" class="category-tab <%= !category || category === 'all' ? 'active' : '' %>">All</a>
+      <a href="/customer/browsing/electronics" class="category-tab <%= category === 'electronics' ? 'active' : '' %>">Electronics</a>
+      <a href="/customer/browsing/clothing" class="category-tab <%= category === 'clothing' ? 'active' : '' %>">Clothing</a>
+      <a href="/customer/browsing/books" class="category-tab <%= category === 'books' ? 'active' : '' %>">Books</a>
+      <a href="/customer/browsing/home" class="category-tab <%= category === 'home' ? 'active' : '' %>">Home</a>
+    </div>
+
+    <!-- Product Grid -->
+    <div class="product-grid">
+      <% products.forEach(product => { %>
+        <div class="product-card">
+          <img src="<%= product.image %>" alt="<%= product.name %>" class="product-image">
+          <div class="product-content">
+            <div class="product-category"><%= product.category %></div>
+            <h3 class="product-title"><%= product.name %></h3>
+            <p class="product-description"><%= product.description %></p>
+            <div class="product-price">₹<%= product.price %></div>
+            <div class="product-actions">
+              <button class="btn btn-primary add-to-cart" data-product-id="<%= product._id %>">
+                <i class="fas fa-shopping-cart"></i> Add to Cart
+              </button>
+              <button class="btn btn-icon add-to-wishlist" data-product-id="<%= product._id %>">
+                <i class="fas fa-heart"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+</div>
+
+<!-- Add to Cart Notification -->
+<div class="notification" id="cart-notification">
+  Product added to cart successfully!
+</div>
+
+<!-- Add to Wishlist Notification -->
+<div class="notification" id="wishlist-notification">
+  Product added to wishlist successfully!
+</div>
+
+<script>
+  // Add to Cart functionality
+  document.querySelectorAll('.add-to-cart').forEach(button => {
+    button.addEventListener('click', async () => {
+      const productId = button.dataset.productId;
+      try {
+        const response = await fetch('/customer/cart/add', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ productId })
+        });
+        
+        if (response.ok) {
+          const notification = document.getElementById('cart-notification');
+          notification.classList.add('visible', 'success');
+          setTimeout(() => {
+            notification.classList.remove('visible');
+          }, 3000);
+        }
+      } catch (error) {
+        console.error('Error adding to cart:', error);
+      }
+    });
+  });
+
+  // Add to Wishlist functionality
+  document.querySelectorAll('.add-to-wishlist').forEach(button => {
+    button.addEventListener('click', async () => {
+      const productId = button.dataset.productId;
+      try {
+        const response = await fetch(`/customer/wishlist/add/${productId}`, {
+          method: 'POST'
+        });
+        
+        if (response.ok) {
+          const notification = document.getElementById('wishlist-notification');
+          notification.classList.add('visible', 'success');
+          setTimeout(() => {
+            notification.classList.remove('visible');
+          }, 3000);
+        }
+      } catch (error) {
+        console.error('Error adding to wishlist:', error);
+      }
+    });
+  });
+</script>

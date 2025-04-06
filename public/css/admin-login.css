@@ -1,0 +1,134 @@
+/* Admin Login Page Styles */
+.admin-login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1a237e, #283593);
+    padding: 20px;
+  }
+  
+  .admin-login-card {
+    width: 100%;
+    max-width: 450px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    padding: 40px;
+  }
+  
+  .login-header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .login-logo {
+    width: 120px;
+    height: auto;
+    margin-bottom: 20px;
+  }
+  
+  .login-header h1 {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .login-header p {
+    color: #666;
+    font-size: 16px;
+  }
+  
+  .login-form .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .login-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #333;
+  }
+  
+  .input-group {
+    position: relative;
+  }
+  
+  .input-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+  }
+  
+  .login-form input[type="text"],
+  .login-form input[type="password"] {
+    width: 100%;
+    padding: 12px 15px 12px 45px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+  }
+  
+  .login-form input:focus {
+    border-color: #3f51b5;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.2);
+  }
+  
+  .btn-primary {
+    background-color: #3f51b5;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%;
+  }
+  
+  .btn-primary:hover {
+    background-color: #303f9f;
+  }
+  
+  .form-check {
+    display: flex;
+    align-items: center;
+  }
+  
+  .form-check-input {
+    margin-right: 10px;
+  }
+  
+  .form-check-label {
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .login-footer {
+    margin-top: 30px;
+    text-align: center;
+    color: #666;
+    font-size: 14px;
+  }
+  
+  .login-footer p {
+    margin: 5px 0;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 576px) {
+    .admin-login-card {
+      padding: 30px 20px;
+    }
+  
+    .login-header h1 {
+      font-size: 24px;
+    }
+  }
+  
+  

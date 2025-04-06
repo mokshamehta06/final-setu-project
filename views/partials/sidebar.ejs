@@ -1,0 +1,68 @@
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <a href="/customer/browsing" class="logo">
+        <i class="fas fa-shopping-bag"></i>
+        <span>SETU</span>
+      </a>
+    </div>
+    <div class="sidebar-content">
+      <nav>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav-item">
+            <a href="/customer/browsing" class="sidebar-nav-link <%= page === 'customer-browsing' ? 'active' : '' %>">
+              <i class="fas fa-search"></i>
+              <span>Browse Products</span>
+            </a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="/customer/dashboard" class="sidebar-nav-link <%= page === 'customer-dashboard' ? 'active' : '' %>">
+              <i class="fas fa-user"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="/customer/orders" class="sidebar-nav-link <%= page === 'customer-orders' ? 'active' : '' %>">
+              <i class="fas fa-box"></i>
+              <span>Orders</span>
+            </a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="/customer/cart" class="sidebar-nav-link <%= page === 'customer-cart' ? 'active' : '' %>">
+              <i class="fas fa-shopping-cart"></i>
+              <span>Cart</span>
+              <span class="cart-count" id="sidebarCartCount">0</span>
+            </a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="/customer/support" class="sidebar-nav-link <%= page === 'customer-support' ? 'active' : '' %>">
+              <i class="fas fa-headset"></i>
+              <span>Support</span>
+            </a>
+          </li>
+          <!-- <li class="sidebar-nav-item">
+            <a href="/customer/settings" class="nav-link active">
+              <i class="fas fa-cog"></i>
+              Settings
+            </a>
+          </li> -->
+
+        </ul>
+      </nav>
+    </div>
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <div class="user-avatar">
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="user-details">
+          <% if(user) { %>
+            <p class="user-name"><%= user.name %></p>
+            <p class="user-email"><%= user.email %></p>
+          <% } else { %>
+            <p class="user-name">Guest User</p>
+            <p class="user-email"><a href="/auth/customer/login">Sign In</a></p>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </aside>

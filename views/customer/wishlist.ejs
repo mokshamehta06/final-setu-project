@@ -1,0 +1,199 @@
+<%- include('../partials/customer-sidebar') %>
+
+<div class="main-content">
+  <div class="welcome-banner">
+    <h1>My Wishlist</h1>
+    <p>Keep track of products you love</p>
+  </div>
+
+  <% if (wishlistItems.length === 0) { %>
+    <div class="card">
+      <div class="card-body text-center py-5">
+        <i class="bi bi-heart text-primary" style="font-size: 3rem;"></i>
+        <h5 class="mt-3">Your wishlist is empty</h5>
+        <p class="text-muted">Add products you love to your wishlist</p>
+        <a href="/customer/browsing" class="btn btn-primary mt-3">
+          <i class="bi bi-search me-2"></i>Browse Products
+        </a>
+      </div>
+    </div>
+  <% } else { %>
+    <div class="row">
+      <% wishlistItems.forEach(product => { %>
+        <div class="col-md-4 mb-4">
+          <div class="card h-100">
+            <img src="<%= product.image %>" class="card-img-top" alt="<%= product.name %>" style="height: 200px; object-fit: cover;">
+            <div class="card-body">
+              <h5 class="card-title"><%= product.name %></h5>
+              <p class="card-text text-muted"><%= product.description %></p>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="h5 mb-0">₹<%= product.price %></span>
+                <div class="btn-group">
+                  <form action="/customer/wishlist/remove/<%= product._id %>" method="POST" class="d-inline">
+                    <button type="submit" class="btn btn-outline-danger">
+                      <i class="bi bi-heart-fill"></i>
+                    </button>
+                  </form>
+                  <button class="btn btn-primary add-to-cart" 
+                          data-product-id="<%= product._id %>"
+                          data-name="<%= product.name %>"
+                          data-price="<%= product.price %>"
+                          data-image="<%= product.image %>">
+                    <i class="bi bi-cart-plus"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Add to cart functionality
+  const addToCartButtons = document.querySelectorAll('.add-to-cart');
+  addToCartButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const productId = this.dataset.productId;
+      const name = this.dataset.name;
+      const price = this.dataset.price;
+      const image = this.dataset.image;
+
+      fetch('/customer/cart/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          productId,
+          name,
+          price,
+          image,
+          quantity: 1
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // Show success notification
+          const notification = document.createElement('div');
+          notification.className = 'notification success';
+          notification.textContent = data.message;
+          document.body.appendChild(notification);
+          setTimeout(() => notification.remove(), 3000);
+
+          // Update cart count in sidebar
+          const cartCount = document.querySelector('.cart-count');
+          if (cartCount) {
+            cartCount.textContent = data.cartCount;
+          }
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    });
+  });
+});
+</script> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

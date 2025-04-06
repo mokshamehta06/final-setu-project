@@ -1,0 +1,410 @@
+<div class="agency-details-container">
+    <!-- Back Button -->
+    <div class="back-link">
+      <a href="/admin/agencies">
+        <i class="fas fa-arrow-left"></i> Back to Agencies
+      </a>
+    </div>
+    
+    <!-- Agency Header -->
+    <div class="agency-header">
+      <div class="agency-logo">
+        <% if (agency.logo) { %>
+          <img src="<%= agency.logo %>" alt="<%= agency.name %> Logo">
+        <% } else { %>
+          <div class="placeholder-logo">
+            <%= agency.name.charAt(0) %>
+          </div>
+        <% } %>
+      </div>
+      
+      <div class="agency-title">
+        <h2><%= agency.name %></h2>
+        <div class="agency-meta">
+          <span class="agency-id">ID: <%= agency.agencyId %></span>
+          <span class="status-badge status-<%= agency.status %>">
+            <%= agency.status.charAt(0).toUpperCase() + agency.status.slice(1) %>
+          </span>
+        </div>
+      </div>
+      
+      <div class="agency-actions">
+        <% if (agency.status === 'pending') { %>
+          <button class="btn btn-success" data-toggle="modal" data-target="#approveModal">
+            <i class="fas fa-check"></i> Approve
+          </button>
+          <button class="btn btn-danger" data-toggle="modal" data-target="#rejectModal">
+            <i class="fas fa-times"></i> Reject
+          </button>
+        <% } else if (agency.status === 'approved') { %>
+          <button class="btn btn-danger" data-toggle="modal" data-target="#rejectModal">
+            <i class="fas fa-ban"></i> Suspend
+          </button>
+        <% } else if (agency.status === 'rejected') { %>
+          <button class="btn btn-success" data-toggle="modal" data-target="#approveModal">
+            <i class="fas fa-check"></i> Approve
+          </button>
+        <% } %>
+      </div>
+    </div>
+    
+    <!-- Agency Details -->
+    <div class="agency-details-grid">
+      <!-- Basic Information -->
+      <div class="dashboard-card">
+        <div class="card-header">
+          <h3>Basic Information</h3>
+        </div>
+        <div class="card-body">
+          <div class="info-group">
+            <div class="info-item">
+              <span class="info-label">Name</span>
+              <span class="info-value"><%= agency.name %></span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Email</span>
+              <span class="info-value"><%= agency.email %></span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Phone</span>
+              <span class="info-value"><%= agency.phone %></span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Business Type</span>
+              <span class="info-value"><%= agency.businessType %></span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Website</span>
+              <span class="info-value">
+                <% if (agency.website) { %>
+                  <a href="<%= agency.website %>" target="_blank"><%= agency.website %></a>
+                <% } else { %>
+                  Not provided
+                <% } %>
+              </span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Description</span>
+              <span class="info-value"><%= agency.description || 'Not provided' %></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Address Information -->
+      <div class="dashboard-card">
+        <div class="card-header">
+          <h3>Address Information</h3>
+        </div>
+        <div class="card-body">
+          <div class="info-group">
+            <div class="info-item">
+              <span class="info-label">Street</span>
+              <span class="info-value"><%= agency.address.street || 'Not provided' %></span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">City</span>
+              <span class="info-value"><%= agency.address.city || 'Not provided' %></span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">State</span>
+              <span class="info-value"><%= agency.address.state || 'Not provided' %></span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">ZIP Code</span>
+              <span class="info-value"><%= agency.address.zip || 'Not provided' %></span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Country</span>
+              <span class="info-value"><%= agency.address.country || 'Not provided' %></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Social Media -->
+      <div class="dashboard-card">
+        <div class="card-header">
+          <h3>Social Media</h3>
+        </div>
+        <div class="card-body">
+          <div class="social-links">
+            <% if (agency.socialMedia.facebook) { %>
+              <a href="<%= agency.socialMedia.facebook %>" target="_blank" class="social-link facebook">
+                <i class="fab fa-facebook"></i>
+                <span>Facebook</span>
+              </a>
+            <% } %>
+            
+            <% if (agency.socialMedia.instagram) { %>
+              <a href="<%= agency.socialMedia.instagram %>" target="_blank" class="social-link instagram">
+                <i class="fab fa-instagram"></i>
+                <span>Instagram</span>
+              </a>
+            <% } %>
+            
+            <% if (agency.socialMedia.twitter) { %>
+              <a href="<%= agency.socialMedia.twitter %>" target="_blank" class="social-link twitter">
+                <i class="fab fa-twitter"></i>
+                <span>Twitter</span>
+              </a>
+            <% } %>
+            
+            <% if (agency.socialMedia.linkedin) { %>
+              <a href="<%= agency.socialMedia.linkedin %>" target="_blank" class="social-link linkedin">
+                <i class="fab fa-linkedin"></i>
+                <span>LinkedIn</span>
+              </a>
+            <% } %>
+            
+            <% if (!agency.socialMedia.facebook && !agency.socialMedia.instagram && !agency.socialMedia.twitter && !agency.socialMedia.linkedin) { %>
+              <p class="no-data">No social media links provided</p>
+            <% } %>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Bank Details -->
+      <div class="dashboard-card">
+        <div class="card-header">
+          <h3>Bank Details</h3>
+        </div>
+        <div class="card-body">
+          <div class="info-group">
+            <div class="info-item">
+              <span class="info-label">Account Name</span>
+              <span class="info-value"><%= agency.bankDetails.accountName || 'Not provided' %></span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Account Number</span>
+              <span class="info-value">
+                <% if (agency.bankDetails.accountNumber) { %>
+                  <%= agency.bankDetails.accountNumber.replace(/\d(?=\d{4})/g, "*") %>
+                <% } else { %>
+                  Not provided
+                <% } %>
+              </span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Bank Name</span>
+              <span class="info-value"><%= agency.bankDetails.bankName || 'Not provided' %></span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">IFSC Code</span>
+              <span class="info-value"><%= agency.bankDetails.ifscCode || 'Not provided' %></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Documents -->
+      <div class="dashboard-card">
+        <div class="card-header">
+          <h3>Documents</h3>
+        </div>
+        <div class="card-body">
+          <div class="documents-grid">
+            <% if (agency.documents.businessRegistration) { %>
+              <div class="document-card">
+                <div class="document-icon">
+                  <i class="fas fa-file-alt"></i>
+                </div>
+                <div class="document-info">
+                  <h4>Business Registration</h4>
+                  <a href="<%= agency.documents.businessRegistration %>" target="_blank" class="btn btn-sm btn-outline">
+                    <i class="fas fa-eye"></i> View
+                  </a>
+                </div>
+              </div>
+            <% } %>
+            
+            <% if (agency.documents.taxId) { %>
+              <div class="document-card">
+                <div class="document-icon">
+                  <i class="fas fa-file-invoice"></i>
+                </div>
+                <div class="document-info">
+                  <h4>Tax ID</h4>
+                  <a href="<%= agency.documents.taxId %>" target="_blank" class="btn btn-sm btn-outline">
+                    <i class="fas fa-eye"></i> View
+                  </a>
+                </div>
+              </div>
+            <% } %>
+            
+            <% if (agency.documents.identityProof) { %>
+              <div class="document-card">
+                <div class="document-icon">
+                  <i class="fas fa-id-card"></i>
+                </div>
+                <div class="document-info">
+                  <h4>Identity Proof</h4>
+                  <a href="<%= agency.documents.identityProof %>" target="_blank" class="btn btn-sm btn-outline">
+                    <i class="fas fa-eye"></i> View
+                  </a>
+                </div>
+              </div>
+            <% } %>
+            
+            <% if (!agency.documents.businessRegistration && !agency.documents.taxId && !agency.documents.identityProof) { %>
+              <p class="no-data">No documents uploaded</p>
+            <% } %>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Status History -->
+      <div class="dashboard-card">
+        <div class="card-header">
+          <h3>Status History</h3>
+        </div>
+        <div class="card-body">
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-point"></div>
+              <div class="timeline-content">
+                <div class="timeline-date">
+                  <%= new Date(agency.createdAt).toLocaleString() %>
+                </div>
+                <div class="timeline-status">
+                  <span class="status-badge status-pending">Registration</span>
+                </div>
+                <div class="timeline-note">
+                  Agency registered and pending approval
+                </div>
+              </div>
+            </div>
+            
+            <% if (agency.reviewedAt) { %>
+              <div class="timeline-item">
+                <div class="timeline-point"></div>
+                <div class="timeline-content">
+                  <div class="timeline-date">
+                    <%= new Date(agency.reviewedAt).toLocaleString() %>
+                  </div>
+                  <div class="timeline-status">
+                    <span class="status-badge status-<%= agency.status %>">
+                      <%= agency.status.charAt(0).toUpperCase() + agency.status.slice(1) %>
+                    </span>
+                  </div>
+                  <div class="timeline-note">
+                    <%= agency.statusReason || `Agency ${agency.status}` %>
+                  </div>
+                </div>
+              </div>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Approve Modal -->
+  <div class="modal" id="approveModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Approve Agency</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <form action="/admin/agencies/<%= agency._id %>/update-status" method="POST">
+          <div class="modal-body">
+            <p>Are you sure you want to approve <strong><%= agency.name %></strong>?</p>
+            <p>This will allow the agency to log in and start selling products on the platform.</p>
+            
+            <div class="form-group">
+              <label for="approveNote">Note (Optional)</label>
+              <textarea id="approveNote" name="statusReason" class="form-control" rows="3" placeholder="Add a note about this approval..."></textarea>
+            </div>
+            
+            <input type="hidden" name="status" value="approved">
+          </div>
+          
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-success">Approve Agency</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Reject Modal -->
+  <div class="modal" id="rejectModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">
+            <%= agency.status === 'approved' ? 'Suspend Agency' : 'Reject Agency' %>
+          </h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <form action="/admin/agencies/<%= agency._id %>/update-status" method="POST">
+          <div class="modal-body">
+            <p>
+              Are you sure you want to 
+              <%= agency.status === 'approved' ? 'suspend' : 'reject' %>
+              <strong><%= agency.name %></strong>?
+            </p>
+            
+            <div class="form-group">
+              <label for="rejectReason">Reason (Required)</label>
+              <textarea id="rejectReason" name="statusReason" class="form-control" rows="3" placeholder="Provide a reason..." required></textarea>
+            </div>
+            
+            <input type="hidden" name="status" value="rejected">
+          </div>
+          
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-danger">
+              <%= agency.status === 'approved' ? 'Suspend Agency' : 'Reject Agency' %>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Initialize modals
+    document.addEventListener('DOMContentLoaded', function() {
+      // Modal functionality
+      const modals = document.querySelectorAll('.modal');
+      const modalTogglers = document.querySelectorAll('[data-toggle="modal"]');
+      const modalClosers = document.querySelectorAll('[data-dismiss="modal"]');
+      
+      // Show modal
+      modalTogglers.forEach(toggler => {
+        toggler.addEventListener('click', function() {
+          const targetModal = document.querySelector(this.dataset.target);
+          if (targetModal) {
+            targetModal.classList.add('show');
+          }
+        });
+      });
+      
+      // Close modal
+      modalClosers.forEach(closer => {
+        closer.addEventListener('click', function() {
+          const modal = this.closest('.modal');
+          if (modal) {
+            modal.classList.remove('show');
+          }
+        });
+      });
+      
+      // Close modal when clicking outside
+      modals.forEach(modal => {
+        modal.addEventListener('click', function(event) {
+          if (event.target === this) {
+            this.classList.remove('show');
+          }
+        });
+      });
+    });
+  </script>
+  
+  

@@ -1,0 +1,502 @@
+<%- include('../partials/header') %>
+
+<div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar-customer">
+        <div class="user-profile">
+            <div class="d-flex align-items-center">
+                <div class="profile-pic">
+                    <%= user.name.charAt(0).toUpperCase() %>
+                </div>
+                <div class="user-info">
+                    <h6 class="text-white"><%= user.name %></h6>
+                    <small class="text-neutral-400"><%= user.email %></small>
+                </div>
+            </div>
+        </div>
+        <nav class="mt-4">
+            <a href="/customer/dashboard" class="nav-link">
+                <i class="fas fa-home"></i>
+                Dashboard
+            </a>
+            <a href="/customer/orders" class="nav-link">
+                <i class="fas fa-shopping-bag"></i>
+                Orders
+            </a>
+            <a href="/customer/wishlist" class="nav-link">
+                <i class="fas fa-heart"></i>
+                Wishlist
+            </a>
+            <a href="/customer/cart" class="nav-link">
+                <i class="fas fa-shopping-cart"></i>
+                Cart
+            </a>
+            <a href="/customer/support" class="nav-link">
+                <i class="fas fa-headset"></i>
+                Support
+            </a>
+            <a href="/customer/settings" class="nav-link active">
+                <i class="fas fa-cog"></i>
+                Settings
+            </a>
+            <a href="/auth/logout" class="nav-link text-danger">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Settings Header -->
+        <div class="welcome-banner bg-primary text-white p-4 rounded-md mb-4">
+            <div class="container-fluid">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h1 class="h3 mb-2 fw-bold">Account Settings</h1>
+                        <p class="mb-0 opacity-75">Manage your account preferences and security settings</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Settings Navigation -->
+                <div class="col-lg-3 mb-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="settings-nav">
+                            <a href="#profile" class="settings-nav-item active" data-bs-toggle="tab">
+                                <i class="fas fa-user me-2"></i>Profile Settings
+                            </a>
+                            <a href="#security" class="settings-nav-item" data-bs-toggle="tab">
+                                <i class="fas fa-shield-alt me-2"></i>Security
+                            </a>
+                            <a href="#notifications" class="settings-nav-item" data-bs-toggle="tab">
+                                <i class="fas fa-bell me-2"></i>Notifications
+                            </a>
+                            <a href="#preferences" class="settings-nav-item" data-bs-toggle="tab">
+                                <i class="fas fa-sliders-h me-2"></i>Preferences
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Content -->
+                <div class="col-lg-9">
+                    <div class="tab-content">
+                        <!-- Profile Settings -->
+                        <div class="tab-pane fade show active" id="profile">
+                            <div class="card border-0 shadow-sm mb-4">
+                                <div class="card-header bg-white py-3 border-bottom">
+                                    <h5 class="mb-0 fw-semibold">Profile Settings</h5>
+                                </div>
+                                <div class="card-body p-4">
+                                    <form action="/customer/update-profile" method="POST">
+                                        <div class="row">
+                                            <div class="col-md-6 mb-4">
+                                                <label class="form-label fw-medium">Full Name</label>
+                                                <input type="text" class="form-control form-control-lg" name="name" value="<%= user.name %>" required>
+                                            </div>
+                                            <div class="col-md-6 mb-4">
+                                                <label class="form-label fw-medium">Email Address</label>
+                                                <input type="email" class="form-control form-control-lg" name="email" value="<%= user.email %>" required>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-4">
+                                                <label class="form-label fw-medium">Phone Number</label>
+                                                <input type="tel" class="form-control form-control-lg" name="phone" value="<%= user.phone || '' %>">
+                                            </div>
+                                            <div class="col-md-6 mb-4">
+                                                <label class="form-label fw-medium">Date of Birth</label>
+                                                <input type="date" class="form-control form-control-lg" name="dob" value="<%= user.dob || '' %>">
+                                            </div>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label class="form-label fw-medium">Address</label>
+                                            <textarea class="form-control form-control-lg" name="address" rows="3"><%= user.address || '' %></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary btn-lg px-4">
+                                            <i class="fas fa-save me-2"></i>Save Changes
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Security Settings -->
+                        <div class="tab-pane fade" id="security">
+                            <div class="card border-0 shadow-sm mb-4">
+                                <div class="card-header bg-white py-3 border-bottom">
+                                    <h5 class="mb-0 fw-semibold">Security Settings</h5>
+                                </div>
+                                <div class="card-body p-4">
+                                    <form action="/customer/update-password" method="POST">
+                                        <div class="mb-4">
+                                            <label class="form-label fw-medium">Current Password</label>
+                                            <input type="password" class="form-control form-control-lg" name="currentPassword" required>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label class="form-label fw-medium">New Password</label>
+                                            <input type="password" class="form-control form-control-lg" name="newPassword" required>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label class="form-label fw-medium">Confirm New Password</label>
+                                            <input type="password" class="form-control form-control-lg" name="confirmPassword" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary btn-lg px-4">
+                                            <i class="fas fa-key me-2"></i>Update Password
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-header bg-white py-3 border-bottom">
+                                    <h5 class="mb-0 fw-semibold">Two-Factor Authentication</h5>
+                                </div>
+                                <div class="card-body p-4">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="fw-medium mb-1">Enable Two-Factor Authentication</h6>
+                                            <p class="text-muted mb-0">Add an extra layer of security to your account</p>
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="twoFactorToggle" style="width: 3rem; height: 1.5rem;">
+                                            <label class="form-check-label" for="twoFactorToggle"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Notification Settings -->
+                        <div class="tab-pane fade" id="notifications">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-header bg-white py-3 border-bottom">
+                                    <h5 class="mb-0 fw-semibold">Notification Preferences</h5>
+                                </div>
+                                <div class="card-body p-4">
+                                    <div class="notification-settings">
+                                        <div class="notification-item p-3 border-bottom">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <h6 class="fw-medium mb-1">Order Updates</h6>
+                                                    <p class="text-muted mb-0">Get notified about your order status changes</p>
+                                                </div>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" id="orderUpdates" checked style="width: 3rem; height: 1.5rem;">
+                                                    <label class="form-check-label" for="orderUpdates"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="notification-item p-3 border-bottom">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <h6 class="fw-medium mb-1">Promotional Emails</h6>
+                                                    <p class="text-muted mb-0">Receive updates about new products and offers</p>
+                                                </div>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" id="promotionalEmails" checked style="width: 3rem; height: 1.5rem;">
+                                                    <label class="form-check-label" for="promotionalEmails"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="notification-item p-3">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <h6 class="fw-medium mb-1">Security Alerts</h6>
+                                                    <p class="text-muted mb-0">Get notified about security-related activities</p>
+                                                </div>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" id="securityAlerts" checked style="width: 3rem; height: 1.5rem;">
+                                                    <label class="form-check-label" for="securityAlerts"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Preferences -->
+                        <div class="tab-pane fade" id="preferences">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-header bg-white py-3 border-bottom">
+                                    <h5 class="mb-0 fw-semibold">Account Preferences</h5>
+                                </div>
+                                <div class="card-body p-4">
+                                    <div class="preferences-settings">
+                                        <div class="mb-4">
+                                            <h6 class="fw-medium mb-3">Language</h6>
+                                            <select class="form-select form-select-lg">
+                                                <option value="en">English</option>
+                                                <option value="hi">Hindi</option>
+                                                <option value="es">Spanish</option>
+                                                <option value="fr">French</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-4">
+                                            <h6 class="fw-medium mb-3">Currency</h6>
+                                            <select class="form-select form-select-lg">
+                                                <option value="inr">Indian Rupee (₹)</option>
+                                                <option value="usd">US Dollar ($)</option>
+                                                <option value="eur">Euro (€)</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-4">
+                                            <h6 class="fw-medium mb-3">Theme</h6>
+                                            <div class="d-flex gap-4">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="theme" id="lightTheme" checked>
+                                                    <label class="form-check-label" for="lightTheme">
+                                                        <i class="fas fa-sun me-2 text-warning"></i>Light
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="theme" id="darkTheme">
+                                                    <label class="form-check-label" for="darkTheme">
+                                                        <i class="fas fa-moon me-2 text-primary"></i>Dark
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <h6 class="fw-medium mb-3">Privacy Settings</h6>
+                                            <div class="form-check mb-3">
+                                                <input class="form-check-input" type="checkbox" id="profileVisibility" checked>
+                                                <label class="form-check-label" for="profileVisibility">
+                                                    Make my profile visible to other users
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="orderHistory" checked>
+                                                <label class="form-check-label" for="orderHistory">
+                                                    Show my order history to other users
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Custom CSS -->
+<style>
+    .dashboard-container {
+        display: grid;
+        grid-template-columns: 260px 1fr;
+        min-height: 100vh;
+    }
+    
+    .sidebar-customer {
+        background-color: #0d3b66;
+        color: white;
+        padding: 1.5rem;
+        position: fixed;
+        height: 100vh;
+        width: 260px;
+        z-index: 100;
+    }
+    
+    .main-content {
+        background-color: #ffffff;
+        padding: 2rem;
+        margin-left: 260px;
+    }
+    
+    .profile-pic {
+        width: 40px;
+        height: 40px;
+        background-color: #4f81bd;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        margin-right: 10px;
+    }
+    
+    .nav-link {
+        color: rgba(255, 255, 255, 0.8);
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        margin-bottom: 0.5rem;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+    }
+    
+    .nav-link i {
+        margin-right: 10px;
+        width: 20px;
+        text-align: center;
+    }
+    
+    .nav-link:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+    
+    .nav-link.active {
+        background-color: rgba(255, 255, 255, 0.2);
+        color: white;
+        font-weight: 500;
+    }
+    
+    .settings-nav {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .settings-nav-item {
+        padding: 1rem;
+        color: #495057;
+        text-decoration: none;
+        border-bottom: 1px solid #f1f1f1;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+    }
+    
+    .settings-nav-item:hover {
+        background-color: #fafafa;
+        color: #007bff;
+    }
+    
+    .settings-nav-item.active {
+        color: #007bff;
+        background-color: #f8f9ff;
+        font-weight: 500;
+        border-left: 3px solid #007bff;
+    }
+    
+    .form-check-input:checked {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+    
+    .form-control, .form-select {
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+        padding: 0.75rem 1rem;
+        background-color: #ffffff;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        border-color: #80bdff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.15);
+        background-color: #ffffff;
+    }
+    
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        border-radius: 8px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+        transition: all 0.2s;
+    }
+    
+    .btn-primary:hover {
+        background-color: #0069d9;
+        border-color: #0062cc;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .card {
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+        border: 1px solid #f0f0f0;
+        background-color: #ffffff;
+    }
+    
+    .card-header {
+        background-color: #ffffff;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .welcome-banner {
+        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 123, 255, 0.15);
+    }
+    
+    .notification-item {
+        transition: all 0.2s;
+        border-bottom: 1px solid #f5f5f5;
+    }
+    
+    .notification-item:hover {
+        background-color: #fafafa;
+    }
+    
+    .notification-item:last-child {
+        border-bottom: none;
+    }
+    
+    .form-check-input {
+        cursor: pointer;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 992px) {
+        .dashboard-container {
+            grid-template-columns: 1fr;
+        }
+        
+        .sidebar-customer {
+            position: relative;
+            width: 100%;
+            height: auto;
+        }
+        
+        .main-content {
+            margin-left: 0;
+        }
+    }
+    
+    /* Input field focus styling */
+    .form-control:focus, .form-select:focus {
+        border-color: #80bdff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.15);
+    }
+    
+    /* Better form label styling */
+    .form-label {
+        color: #495057;
+        margin-bottom: 0.5rem;
+    }
+    
+    /* Improved button hover effect */
+    .btn:active {
+        transform: translateY(1px);
+    }
+    
+    /* Better switch styling */
+    .form-switch .form-check-input {
+        height: 1.5rem;
+        width: 3rem;
+    }
+    
+    /* Card hover effect */
+    .card {
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .card:hover {
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+</style>
+
+<%- include('../partials/footer') %>

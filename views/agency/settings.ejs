@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Agency Settings | SETU Platform</title>
+   <link rel="stylesheet" href="/css/styles.css">
+   <link rel="stylesheet" href="/css/agency.css">
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+   <div class="app-container">
+       <!-- Sidebar -->
+       <%- include('../partials/agency-sidebar', { page: 'settings' }) %>
+       
+       <!-- Main Content -->
+       <div class="main-content">
+           <!-- Header -->
+           <header class="header">
+               <div class="search-bar">
+                   <input type="text" placeholder="Search...">
+                   <button><i class="fas fa-search"></i></button>
+               </div>
+               <div class="user-menu">
+                   <div class="notifications">
+                       <i class="fas fa-bell"></i>
+                       <% if (locals.notificationCount && notificationCount > 0) { %>
+                           <span class="badge"><%= notificationCount %></span>
+                       <% } %>
+                       <!-- Dropdown Menu -->
+                       <div class="dropdown-menu">
+                           <!-- Mark All as Read Option -->
+                           <button class="mark-all-read">Mark All as Read</button>
+                           <!-- Notifications List -->
+                           <div class="notifications-list" id="notificationsList">
+                               <!-- Notifications will be loaded via JavaScript -->
+                               <div class="notification">
+                                   <p>Loading notifications...</p>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+                   <div class="profile">
+                       <i class="fa-solid fa-user"></i>
+                       <span><%= user.name %></span>
+                       <i class="fas fa-chevron-down"></i>
+                       <!-- Dropdown Menu -->
+                       <div class="dropdown-menu">
+                           <!-- Search Bar on top -->
+                           <input type="text" class="search-bar" placeholder="Search...">
+                           <a href="/agency/settings"><i class="fa-solid fa-user"></i> Profile</a>
+                           <a href="/agency/settings"><i class="fas fa-cog"></i> Settings</a>
+                           <a href="/agency/support"><i class="fas fa-question-circle"></i> Support</a>
+                           <a href="/agency/support"><i class="fas fa-question-circle"></i> Help</a>
+                           <a href="/agency/support"><i class="fas fa-comment"></i> Feedback</a>
+                           <a href="/auth/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                       </div>
+                   </div>
+               </div>
+           </header>
+           
+           <!-- Settings Content -->
+           <div class="dashboard-content">
+               <h1>Agency Settings</h1>
+               
+               <!-- Flash Messages -->
+               <% if(typeof success_msg !== 'undefined' && success_msg.length > 0) { %>
+                   <div class="alert alert-success"><%= success_msg %></div>
+               <% } %>
+               
+               <% if(typeof error_msg !== 'undefined' && error_msg.length > 0) { %>
+                   <div class="alert alert-danger"><%= error_msg %></div>
+               <% } %>
+               
+               <!-- Profile Settings -->
+               <div class="card">
+                   <div class="card-header">
+                       <h2 class="card-title">Profile Information</h2>
+                       <p class="card-description">Update your agency profile information</p>
+                   </div>
+                   <div class="card-content">
+                       <form action="/agency/settings/profile" method="POST">
+                           <div class="form-row">
+                               <div class="form-group col-md-6">
+                                   <label for="name">Contact Name</label>
+                                   <input type="text" id="name" name="name" value="<%= user.name %>" required>
+                               </div>
+                               
+                               <div class="form-group col-md-6">
+                                   <label for="email">Email Address</label>
+                                   <input type="email" id="email" name="email" value="<%= user.email %>" required>
+                               </div>
+                           </div>
+                           
+                           <div class="form-row">
+                               <div class="form-group col-md-6">
+                                   <label for="phone">Phone Number</label>
+                                   <input type="tel" id="phone" name="phone" value="<%= user.phone || '' %>">
+                               </div>
+                               
+                               <div class="form-group col-md-6">
+                                   <label for="agencyName">Agency Name</label>
+                                   <input type="text" id="agencyName" name="agencyName" value="<%= user.agencyDetails ? user.agencyDetails.agencyName : '' %>">
+                               </div>
+                           </div>
+                           
+                           <div class="form-row">
+                               <div class="form-group col-md-6">
+                                   <label for="businessType">Business Type</label>
+                                   <select id="businessType" name="businessType">
+                                       <option value="sole_proprietorship" <%= user.agencyDetails && user.agencyDetails.businessType === 'sole_proprietorship' ? 'selected' : '' %>>Sole Proprietorship</option>
+                                       <option value="partnership" <%= user.agencyDetails && user.agencyDetails.businessType === 'partnership' ? 'selected' : '' %>>Partnership</option>
+                                       <option value="llc" <%= user.agencyDetails && user.agencyDetails.businessType === 'llc' ? 'selected' : '' %>>Limited Liability Company (LLC)</option>
+                                       <option value="corporation" <%= user.agencyDetails && user.agencyDetails.businessType === 'corporation' ? 'selected' : '' %>>Corporation</option>
+                                       <option value="other" <%= user.agencyDetails && user.agencyDetails.businessType === 'other' ? 'selected' : '' %>>Other</option>
+                                   </select>
+                               </div>
+                               
+                               <div class="form-group col-md-6">
+                                   <label for="website">Website (Optional)</label>
+                                   <input type="url" id="website" name="website" value="<%= user.agencyDetails ? user.agencyDetails.website : '' %>" placeholder="https://www.example.com">
+                               </div>
+                           </div>
+                           
+                           <div class="form-group">
+                               <label for="businessDescription">Business Description</label>
+                               <textarea id="businessDescription" name="businessDescription" rows="4"><%= user.agencyDetails ? user.agencyDetails.businessDescription : '' %></textarea>
+                           </div>
+                           
+                           <div class="form-actions">
+                               <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Save Changes</button>
+                           </div>
+                       </form>
+                   </div>
+               </div>
+               
+               <!-- Password Settings -->
+               <div class="card">
+                   <div class="card-header">
+                       <h2 class="card-title">Change Password</h2>
+                       <p class="card-description">Update your account password</p>
+                   </div>
+                   <div class="card-content">
+                       <form action="/agency/settings/password" method="POST">
+                           <div class="form-group">
+                               <label for="currentPassword">Current Password</label>
+                               <input type="password" id="currentPassword" name="currentPassword" required>
+                           </div>
+                           
+                           <div class="form-row">
+                               <div class="form-group col-md-6">
+                                   <label for="newPassword">New Password</label>
+                                   <input type="password" id="newPassword" name="newPassword" required>
+                                   <p class="form-text">Password must be at least 6 characters long</p>
+                               </div>
+                               
+                               <div class="form-group col-md-6">
+                                   <label for="confirmPassword">Confirm New Password</label>
+                                   <input type="password" id="confirmPassword" name="confirmPassword" required>
+                               </div>
+                           </div>
+                           
+                           <div class="form-actions">
+                               <button type="submit" class="btn-primary"><i class="fas fa-key"></i> Change Password</button>
+                           </div>
+                       </form>
+                   </div>
+               </div>
+               
+               <!-- Notification Settings -->
+               <div class="card">
+                   <div class="card-header">
+                       <h2 class="card-title">Notification Settings</h2>
+                       <p class="card-description">Manage your notification preferences</p>
+                   </div>
+                   <div class="card-content">
+                       <form action="/agency/settings/notifications" method="POST">
+                           <div class="form-group">
+                               <div class="checkbox">
+                                   <input type="checkbox" id="emailNotifications" name="emailNotifications" <%= user.preferences && user.preferences.emailNotifications ? 'checked' : '' %>>
+                                   <label for="emailNotifications">Email Notifications</label>
+                                   <p class="form-text">Receive notifications via email</p>
+                               </div>
+                           </div>
+                           
+                           <div class="form-group">
+                               <div class="checkbox">
+                                   <input type="checkbox" id="smsNotifications" name="smsNotifications" <%= user.preferences && user.preferences.smsNotifications ? 'checked' : '' %>>
+                                   <label for="smsNotifications">SMS Notifications</label>
+                                   <p class="form-text">Receive notifications via SMS</p>
+                               </div>
+                           </div>
+                           
+                           <div class="form-group">
+                               <div class="checkbox">
+                                   <input type="checkbox" id="productUpdates" name="productUpdates" <%= user.preferences && user.preferences.productUpdates ? 'checked' : '' %>>
+                                   <label for="productUpdates">Product Updates</label>
+                                   <p class="form-text">Receive updates about new features and products</p>
+                               </div>
+                           </div>
+                           
+                           <div class="form-actions">
+                               <button type="submit" class="btn-primary"><i class="fas fa-bell"></i> Save Preferences</button>
+                           </div>
+                       </form>
+                   </div>
+               </div>
+           </div>
+       </div>
+   </div>
+
+   <script src="/js/agency.js"></script>
+</body>
+</html>
+

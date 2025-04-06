@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Management | SETU Platform</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/agency.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <%- include('../partials/agency-sidebar', { page: 'orders' }) %>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="search-bar">
+                    <input type="text" placeholder="Search orders..." id="orderSearch">
+                    <button><i class="fas fa-search"></i></button>
+                </div>
+                <div class="user-menu">
+                    <div class="notifications">
+                        <i class="fas fa-bell"></i>
+                        <% if (locals.notificationCount && notificationCount > 0) { %>
+                            <span class="badge"><%= notificationCount %></span>
+                        <% } %>
+                        <!-- Dropdown Menu -->
+                        <div class="dropdown-menu">
+                            <!-- Mark All as Read Option -->
+                            <button class="mark-all-read">Mark All as Read</button>
+                            <!-- Notifications List -->
+                            <div class="notifications-list" id="notificationsList">
+                                <!-- Notifications will be loaded via JavaScript -->
+                                <div class="notification">
+                                    <p>Loading notifications...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="profile">
+                        <i class="fa-solid fa-user"></i>
+                        <span><%= user.name %></span>
+                        <i class="fas fa-chevron-down"></i>
+                        <!-- Dropdown Menu -->
+                        <div class="dropdown-menu">
+                            <!-- Search Bar on top -->
+                            <input type="text" class="search-bar" placeholder="Search...">
+                            <a href="/agency/settings"><i class="fa-solid fa-user"></i> Profile</a>
+                            <a href="/agency/settings"><i class="fas fa-cog"></i> Settings</a>
+                            <a href="/agency/support"><i class="fas fa-question-circle"></i> Support</a>
+                            <a href="/agency/support"><i class="fas fa-question-circle"></i> Help</a>
+                            <a href="/agency/support"><i class="fas fa-comment"></i> Feedback</a>
+                            <a href="/auth/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Orders Content -->
+            <div class="dashboard-content">
+                <h1>Order Management</h1>
+                
+                <!-- Filter Controls -->
+                <div class="filter-sort-container">
+                    <div class="filter-controls">
+                        <select id="statusFilter">
+                            <option value="all">All Statuses</option>
+                            <option value="pending">Pending</option>
+                            <option value="processing">Processing</option>
+                            <option value="shipped">Shipped</option>
+                            <option value="delivered">Delivered</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                        <select id="dateFilter">
+                            <option value="all">All Time</option>
+                            <option value="today">Today</option>
+                            <option value="week">This Week</option>
+                            <option value="month">This Month</option>
+                            <option value="year">This Year</option>
+                        </select>
+                        <select id="sortBy">
+                            <option value="newest">Newest First</option>
+                            <option value="oldest">Oldest First</option>
+                            <option value="amount-high">Amount: High to Low</option>
+                            <option value="amount-low">Amount: Low to High</option>
+                        </select>
+                    </div>
+                    <button class="btn-primary btn-filter"><i class="fas fa-filter"></i> Advanced Filter</button>
+                </div>
+                
+                <!-- Orders Table -->
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Product</th>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (locals.orders && orders.length > 0) { %>
+                                <% orders.forEach(order => { %>
+                                    <tr>
+                                        <td><%= order.orderId || order.orderNumber %></td>
+                                        <td><%= order.customer ? order.customer.name : 'Unknown' %></td>
+                                        <td>
+                                            <% if (order.products && order.products.length > 0) { %>
+                                                <%= order.products[0].product ? order.products[0].product.name : 'Unknown' %>
+                                                <% if (order.products.length > 1) { %>
+                                                    <span>+<%= order.products.length - 1 %> more</span>
+                                                <% } %>
+                                            <% } else if (order.items && order.items.length > 0) { %>
+                                                <%= order.items[0].name || 'Unknown' %>
+                                                <% if (order.items.length > 1) { %>
+                                                    <span>+<%= order.items.length - 1 %> more</span>
+                                                <% } %>
+                                            <% } else { %>
+                                                N/A
+                                            <% } %>
+                                        </td>
+                                        <td><%= new Date(order.createdAt).toLocaleDateString() %></td>
+                                        <td>$<%= order.totalAmount ? order.totalAmount.toFixed(2) : '0.00' %></td>
+                                        <td>
+                                            <span class="status-<%= order.status.toLowerCase() %>">
+                                                <%= order.status.charAt(0).toUpperCase() + order.status.slice(1) %>
+                                            </span>
+                                        </td>
+                                        <td><a href="/agency/orders/<%= order._id %>" class="btn-small">View</a></td>
+                                    </tr>
+                                <% }); %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="7" class="text-center">No orders found</td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    <script src="/js/agency.js"></script>
+</body>
+</html>
+

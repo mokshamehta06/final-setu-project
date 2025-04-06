@@ -1,0 +1,30 @@
+<div class="sidebar">
+    <div class="logo">
+        <a href="/agency/dashboard">
+            <img src="/images/logo.png" alt="SETU Logo" onerror="this.src='/api/placeholder/200/60'">
+        </a>
+    </div>
+    <nav class="sidebar-nav">
+        <ul>
+            <li class="<%= page === 'dashboard' ? 'active' : '' %>">
+                <a href="/agency/dashboard"><i class="fas fa-home"></i> <span>Dashboard</span></a>
+            </li>
+            <li class="<%= page === 'products' ? 'active' : '' %>">
+                <a href="/agency/products"><i class="fas fa-box"></i> <span>Products</span></a>
+            </li>
+            <li class="<%= page === 'orders' ? 'active' : '' %>">
+                <a href="/agency/orders"><i class="fas fa-shopping-cart"></i> <span>Orders</span></a>
+            </li>
+            <li class="<%= page === 'verification' ? 'active' : '' %>">
+                <a href="/agency/verification"><i class="fas fa-check-circle"></i> <span>Verification</span></a>
+            </li>
+            <li class="<%= page === 'settings' ? 'active' : '' %>">
+                <a href="/agency/settings"><i class="fas fa-cog"></i> <span>Settings</span></a>
+            </li>
+            <li class="<%= page === 'support' ? 'active' : '' %>">
+                <a href="/agency/support"><i class="fas fa-question-circle"></i> <span>Support</span></a>
+            </li>
+        </ul>
+    </nav>
+</div>
+

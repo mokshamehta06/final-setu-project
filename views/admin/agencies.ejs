@@ -1,0 +1,99 @@
+<div class="agencies-container">
+    <!-- Filter and Search -->
+    <div class="filter-bar">
+      <div class="filter-tabs">
+        <a href="/admin/agencies" class="filter-tab <%= filter === 'all' ? 'active' : '' %>">
+          All Agencies
+          <span class="count"><%= agencies.length %></span>
+        </a>
+        <a href="/admin/agencies?status=pending" class="filter-tab <%= filter === 'pending' ? 'active' : '' %>">
+          Pending
+          <span class="count"><%= agencies.filter(a => a.status === 'pending').length %></span>
+        </a>
+        <a href="/admin/agencies?status=approved" class="filter-tab <%= filter === 'approved' ? 'active' : '' %>">
+          Approved
+          <span class="count"><%= agencies.filter(a => a.status === 'approved').length %></span>
+        </a>
+        <a href="/admin/agencies?status=rejected" class="filter-tab <%= filter === 'rejected' ? 'active' : '' %>">
+          Rejected
+          <span class="count"><%= agencies.filter(a => a.status === 'rejected').length %></span>
+        </a>
+      </div>
+      
+      <div class="search-bar">
+        <form action="/admin/agencies" method="GET">
+          <% if (filter !== 'all') { %>
+            <input type="hidden" name="status" value="<%= filter %>">
+          <% } %>
+          <div class="search-input">
+            <input type="text" name="search" placeholder="Search agencies..." value="<%= search %>">
+            <button type="submit" class="search-btn">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    
+    <!-- Agencies Table -->
+    <div class="dashboard-card">
+      <div class="card-body">
+        <% if (agencies && agencies.length > 0) { %>
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Agency ID</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Business Type</th>
+                  <th>Status</th>
+                  <th>Registration Date</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% agencies.forEach(agency => { %>
+                  <tr>
+                    <td><%= agency.agencyId %></td>
+                    <td><%= agency.name %></td>
+                    <td><%= agency.email %></td>
+                    <td><%= agency.phone %></td>
+                    <td><%= agency.businessType %></td>
+                    <td>
+                      <span class="status-badge status-<%= agency.status %>">
+                        <%= agency.status.charAt(0).toUpperCase() + agency.status.slice(1) %>
+                      </span>
+                    </td>
+                    <td><%= new Date(agency.createdAt).toLocaleDateString() %></td>
+                    <td>
+                      <a href="/admin/agencies/<%= agency._id %>" class="btn btn-sm btn-primary">View</a>
+                    </td>
+                  </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+        <% } else { %>
+          <div class="empty-state">
+            <div class="empty-state-icon">
+              <i class="fas fa-building"></i>
+            </div>
+            <h3>No Agencies Found</h3>
+            <p>
+              <% if (search) { %>
+                No agencies match your search criteria.
+              <% } else if (filter !== 'all') { %>
+                There are no <%= filter %> agencies at the moment.
+              <% } else { %>
+                There are no agencies registered yet.
+              <% } %>
+            </p>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+  
+  

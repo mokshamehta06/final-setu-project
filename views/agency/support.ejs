@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Agency Support | SETU Platform</title>
+   <link rel="stylesheet" href="/css/styles.css">
+   <link rel="stylesheet" href="/css/agency.css">
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+   <div class="app-container">
+       <!-- Sidebar -->
+       <%- include('../partials/agency-sidebar', { page: 'support' }) %>
+       
+       <!-- Main Content -->
+       <div class="main-content">
+           <!-- Header -->
+           <header class="header">
+               <div class="search-bar">
+                   <input type="text" placeholder="Search...">
+                   <button><i class="fas fa-search"></i></button>
+               </div>
+               <div class="user-menu">
+                   <div class="notifications">
+                       <i class="fas fa-bell"></i>
+                       <% if (locals.notificationCount && notificationCount > 0) { %>
+                           <span class="badge"><%= notificationCount %></span>
+                       <% } %>
+                       <!-- Dropdown Menu -->
+                       <div class="dropdown-menu">
+                           <!-- Mark All as Read Option -->
+                           <button class="mark-all-read">Mark All as Read</button>
+                           <!-- Notifications List -->
+                           <div class="notifications-list" id="notificationsList">
+                               <!-- Notifications will be loaded via JavaScript -->
+                               <div class="notification">
+                                   <p>Loading notifications...</p>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+                   <div class="profile">
+                       <i class="fa-solid fa-user"></i>
+                       <span><%= user.name %></span>
+                       <i class="fas fa-chevron-down"></i>
+                       <!-- Dropdown Menu -->
+                       <div class="dropdown-menu">
+                           <!-- Search Bar on top -->
+                           <input type="text" class="search-bar" placeholder="Search...">
+                           <a href="/agency/settings"><i class="fa-solid fa-user"></i> Profile</a>
+                           <a href="/agency/settings"><i class="fas fa-cog"></i> Settings</a>
+                           <a href="/agency/support"><i class="fas fa-question-circle"></i> Support</a>
+                           <a href="/agency/support"><i class="fas fa-question-circle"></i> Help</a>
+                           <a href="/agency/support"><i class="fas fa-comment"></i> Feedback</a>
+                           <a href="/auth/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                       </div>
+                   </div>
+               </div>
+           </header>
+           
+           <!-- Support Content -->
+           <div class="dashboard-content">
+               <h1>Agency Support</h1>
+               
+               <!-- Flash Messages -->
+               <% if(typeof success_msg !== 'undefined' && success_msg.length > 0) { %>
+                   <div class="alert alert-success"><%= success_msg %></div>
+               <% } %>
+               
+               <% if(typeof error_msg !== 'undefined' && error_msg.length > 0) { %>
+                   <div class="alert alert-danger"><%= error_msg %></div>
+               <% } %>
+               
+               <div class="support-container">
+                   <div class="row">
+                       <!-- Contact Support Form -->
+                       <div class="col-md-8">
+                           <div class="card">
+                               <div class="card-header">
+                                   <h2 class="card-title">Contact Support</h2>
+                                   <p class="card-description">Submit a support request and we'll get back to you as soon as possible</p>
+                               </div>
+                               <div class="card-content">
+                                   <form action="/agency/support" method="POST">
+                                       <div class="form-group">
+                                           <label for="subject">Subject</label>
+                                           <select id="subject" name="subject" required>
+                                               <option value="">Select a subject</option>
+                                               <option value="account">Account Issues</option>
+                                               <option value="products">Product Management</option>
+                                               <option value="orders">Order Processing</option>
+                                               <option value="verification">Verification Process</option>
+                                               <option value="payment">Payment Issues</option>
+                                               <option value="technical">Technical Support</option>
+                                               <option value="other">Other</option>
+                                           </select>
+                                       </div>
+                                       
+                                       <div class="form-group">
+                                           <label for="message">Message</label>
+                                           <textarea id="message" name="message" rows="6" required></textarea>
+                                       </div>
+                                       
+                                       <div class="form-group">
+                                           <label for="attachment">Attachment (Optional)</label>
+                                           <input type="file" id="attachment" name="attachment">
+                                           <p class="form-text">Maximum file size: 5MB. Supported formats: PDF, JPG, PNG</p>
+                                       </div>
+                                       
+                                       <div class="form-actions">
+                                           <button type="submit" class="btn-primary"><i class="fas fa-paper-plane"></i> Submit Request</button>
+                                       </div>
+                                   </form>
+                               </div>
+                           </div>
+                       </div>
+                       
+                       <!-- Support Information -->
+                       <div class="col-md-4">
+                           <div class="card">
+                               <div class="card-header">
+                                   <h2 class="card-title">Support Information</h2>
+                               </div>
+                               <div class="card-content">
+                                   <div class="support-info">
+                                       <div class="support-info-item">
+                                           <div class="support-info-icon">
+                                               <i class="fas fa-envelope"></i>
+                                           </div>
+                                           <div class="support-info-details">
+                                               <h4>Email Support</h4>
+                                               <p>agency-support@setu.com</p>
+                                               <p class="text-muted">Response time: 24-48 hours</p>
+                                           </div>
+                                       </div>
+                                       
+                                       <div class="support-info-item">
+                                           <div class="support-info-icon">
+                                               <i class="fas fa-phone"></i>
+                                           </div>
+                                           <div class="support-info-details">
+                                               <h4>Phone Support</h4>
+                                               <p>+1 (555) 123-4567</p>
+                                               <p class="text-muted">Mon-Fri, 9am-5pm EST</p>
+                                           </div>
+                                       </div>
+                                       
+                                       <div class="support-info-item">
+                                           <div class="support-info-icon">
+                                               <i class="fas fa-comments"></i>
+                                           </div>
+                                           <div class="support-info-details">
+                                               <h4>Live Chat</h4>
+                                               <p>Available during business hours</p>
+                                               <button class="btn-small start-chat">Start Chat</button>
+                                           </div>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+                           
+                           <div class="card mt-4">
+                               <div class="card-header">
+                                   <h2 class="card-title">Frequently Asked Questions</h2>
+                               </div>
+                               <div class="card-content">
+                                   <div class="faq-list">
+                                       <div class="faq-item">
+                                           <h4>How do I add a new product?</h4>
+                                           <p>Go to Products page and click on "Add New Product" button.</p>
+                                       </div>
+                                       
+                                       <div class="faq-item">
+                                           <h4>How long does verification take?</h4>
+                                           <p>Verification typically takes 2-3 business days.</p>
+                                       </div>
+                                       
+                                       <div class="faq-item">
+                                           <h4>When will I receive payment?</h4>
+                                           <p>Payments are processed within 7 days after order delivery.</p>
+                                       </div>
+                                       
+                                       <div class="faq-item">
+                                           <h4>How do I update my agency information?</h4>
+                                           <p>Go to Settings page to update your agency profile.</p>
+                                       </div>
+                                   </div>
+                                   
+                                   <a href="/agency/support/faq" class="view-all">View All FAQs</a>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </div>
+   </div>
+
+   <script src="/js/agency.js"></script>
+</body>
+</html>
+

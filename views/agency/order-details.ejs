@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details | SETU Platform</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/agency.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <%- include('../partials/agency-sidebar', { page: 'orders' }) %>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="search-bar">
+                    <input type="text" placeholder="Search...">
+                    <button><i class="fas fa-search"></i></button>
+                </div>
+                <div class="user-menu">
+                    <div class="notifications">
+                        <i class="fas fa-bell"></i>
+                        <% if (locals.notificationCount && notificationCount > 0) { %>
+                            <span class="badge"><%= notificationCount %></span>
+                        <% } %>
+                        <!-- Dropdown Menu -->
+                        <div class="dropdown-menu">
+                            <!-- Mark All as Read Option -->
+                            <button class="mark-all-read">Mark All as Read</button>
+                            <!-- Notifications List -->
+                            <div class="notifications-list" id="notificationsList">
+                                <!-- Notifications will be loaded via JavaScript -->
+                                <div class="notification">
+                                    <p>Loading notifications...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="profile">
+                        <i class="fa-solid fa-user"></i>
+                        <span><%= user.name %></span>
+                        <i class="fas fa-chevron-down"></i>
+                        <!-- Dropdown Menu -->
+                        <div class="dropdown-menu">
+                            <!-- Search Bar on top -->
+                            <input type="text" class="search-bar" placeholder="Search...">
+                            <a href="/agency/settings"><i class="fa-solid fa-user"></i> Profile</a>
+                            <a href="/agency/settings"><i class="fas fa-cog"></i> Settings</a>
+                            <a href="/agency/support"><i class="fas fa-question-circle"></i> Support</a>
+                            <a href="/agency/support"><i class="fas fa-question-circle"></i> Help</a>
+                            <a href="/agency/support"><i class="fas fa-comment"></i> Feedback</a>
+                            <a href="/auth/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Order Details Content -->
+            <div class="dashboard-content">
+                <div class="section-header">
+                    <h1>Order Details: <%= order.orderId || order.orderNumber %></h1>
+                    <a href="/agency/orders" class="btn-secondary"><i class="fas fa-arrow-left"></i> Back to Orders</a>
+                </div>
+                
+                <!-- Order Details -->
+                <div class="order-details-container">
+                    <div class="order-header">
+                        <div class="order-id">Order #<%= order.orderId || order.orderNumber %></div>
+                        <div class="order-status">
+                            <span class="status-<%= order.status.toLowerCase() %>">
+                                <%= order.status.charAt(0).toUpperCase() + order.status.slice(1) %>
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="order-info-grid">
+                        <div class="order-info-item">
+                            <h4>Customer</h4>
+                            <p><%= order.customer ? order.customer.name : 'Unknown' %></p>
+                            <p><%= order.customer ? order.customer.email : '' %></p>
+                            <p><%= order.customer ? order.customer.phone : '' %></p>
+                        </div>
+                        <div class="order-info-item">
+                            <h4>Order Date</h4>
+                            <p><%= new Date(order.createdAt).toLocaleDateString() %></p>
+                            <p><%= new Date(order.createdAt).toLocaleTimeString() %></p>
+                        </div>
+                        <div class="order-info-item">
+                            <h4>Shipping Address</h4>
+                            <% if (order.shippingAddress) { %>
+                                <p><%= order.shippingAddress.street || order.shippingAddress.address %></p>
+                                <p><%= order.shippingAddress.city %>, <%= order.shippingAddress.state %> <%= order.shippingAddress.zipCode || order.shippingAddress.zip %></p>
+                                <p><%= order.shippingAddress.country %></p>
+                            <% } else { %>
+                                <p>No shipping address provided</p>
+                            <% } %>
+                        </div>
+                        <div class="order-info-item">
+                            <h4>Payment Method</h4>
+                            <p><%= order.paymentMethod ? order.paymentMethod.charAt(0).toUpperCase() + order.paymentMethod.slice(1) : 'Unknown' %></p>
+                            <p>Payment Status: <%= order.paymentStatus ? order.paymentStatus.charAt(0).toUpperCase() + order.paymentStatus.slice(1) : 'Unknown' %></p>
+                        </div>
+                    </div>
+                    
+                    <!-- Order Items -->
+                    <div class="order-items">
+                        <h4>Order Items</h4>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Price</th>
+                                        <th>Quantity</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (order.products && order.products.length > 0) { %>
+                                        <% order.products.forEach(item => { %>
+                                            <tr>
+                                                <td>
+                                                    <div class="product-info-small">
+                                                        <% if (item.product && item.product.image) { %>
+                                                            <img src="<%= item.product.image %>" alt="<%= item.product.name %>">
+                                                        <% } %>
+                                                        <span><%= item.product ? item.product.name : 'Unknown Product' %></span>
+                                                    </div>
+                                                </td>
+                                                <td>$<%= item.price ? item.price.toFixed(2) : '0.00' %></td>
+                                                <td><%= item.quantity %></td>
+                                                <td>$<%= (item.price * item.quantity).toFixed(2) %></td>
+                                            </tr>
+                                        <% }); %>
+                                    <% } else if (order.items && order.items.length > 0) { %>
+                                        <% order.items.forEach(item => { %>
+                                            <tr>
+                                                <td>
+                                                    <div class="product-info-small">
+                                                        <% if (item.image) { %>
+                                                            <img src="<%= item.image %>" alt="<%= item.name %>">
+                                                        <% } %>
+                                                        <span><%= item.name || 'Unknown Product' %></span>
+                                                    </div>
+                                                </td>
+                                                <td>$<%= item.price ? item.price.toFixed(2) : '0.00' %></td>
+                                                <td><%= item.quantity %></td>
+                                                <td>$<%= (item.price * item.quantity).toFixed(2) %></td>
+                                            </tr>
+                                        <% }); %>
+                                    <% } else { %>
+                                        <tr>
+                                            <td colspan="4" class="text-center">No items found</td>
+                                        </tr>
+                                    <% } %>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="3" class="text-right">Subtotal</td>
+                                        <td>$<%= order.subtotal ? order.subtotal.toFixed(2) : (order.totalAmount ? order.totalAmount.toFixed(2) : '0.00') %></td>
+                                    </tr>
+                                    <% if (order.tax) { %>
+                                        <tr>
+                                            <td colspan="3" class="text-right">Tax</td>
+                                            <td>$<%= order.tax.toFixed(2) %></td>
+                                        </tr>
+                                    <% } %>
+                                    <% if (order.shipping) { %>
+                                        <tr>
+                                            <td colspan="3" class="text-right">Shipping</td>
+                                            <td>$<%= order.shipping.toFixed(2) %></td>
+                                        </tr>
+                                    <% } %>
+                                    <tr class="total-row">
+                                        <td colspan="3" class="text-right">Total</td>
+                                        <td>$<%= order.totalAmount ? order.totalAmount.toFixed(2) : '0.00' %></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Order Timeline -->
+                    <div class="order-timeline">
+                        <h4>Order Timeline</h4>
+                        <ul class="timeline">
+                            <% if (order.timeline && order.timeline.length > 0) { %>
+                                <% order.timeline.forEach(event => { %>
+                                    <li class="complete">
+                                        <div class="timeline-badge"><i class="fas fa-check"></i></div>
+                                        <div class="timeline-content">
+                                            <h5><%= event.status.charAt(0).toUpperCase() + event.status.slice(1).replace(/-/g, ' ') %></h5>
+                                            <p><%= new Date(event.timestamp || event.createdAt).toLocaleString() %></p>
+                                            <% if (event.note) { %>
+                                                <p class="note"><%= event.note %></p>
+                                            <% } %>
+                                        </div>
+                                    </li>
+                                <% }); %>
+                            <% } else { %>
+                                <li class="complete">
+                                    <div class="timeline-badge"><i class="fas fa-check"></i></div>
+                                    <div class="timeline-content">
+                                        <h5>Order Placed</h5>
+                                        <p><%= new Date(order.createdAt).toLocaleString() %></p>
+                                    </div>
+                                </li>
+                            <% } %>
+                        </ul>
+                    </div>
+                    
+                    <!-- Order Actions -->
+                    <div class="order-actions">
+                        <h4>Update Order Status</h4>
+                        <form action="/agency/orders/<%= order._id %>/status" method="POST" class="status-update-form">
+                            <div class="form-group">
+                                <select name="status" id="orderStatus">
+                                    <option value="pending" <%= order.status === 'pending' ? 'selected' : '' %>>Pending</option>
+                                    <option value="processing" <%= order.status === 'processing' ? 'selected' : '' %>>Processing</option>
+                                    <option value="shipped" <%= order.status === 'shipped' ? 'selected' : '' %>>Shipped</option>
+                                    <option value="delivered" <%= order.status === 'delivered' ? 'selected' : '' %>>Delivered</option>
+                                    <option value="cancelled" <%= order.status === 'cancelled' ? 'selected' : '' %>>Cancelled</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="statusNote">Note (optional)</label>
+                                <textarea name="note" id="statusNote" rows="3"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn-primary">Update Status</button>
+                                <button type="button" class="btn-secondary" id="downloadInvoice">Download Invoice</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/agency.js"></script>
+</body>
+</html>
+

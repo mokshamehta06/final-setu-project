@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Edit Product | SETU Platform</title>
+   <link rel="stylesheet" href="/css/styles.css">
+   <link rel="stylesheet" href="/css/agency.css">
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+   <div class="app-container">
+       <!-- Sidebar -->
+       <%- include('../partials/agency-sidebar', { page: 'products' }) %>
+       
+       <!-- Main Content -->
+       <div class="main-content">
+           <!-- Header -->
+           <header class="header">
+               <div class="search-bar">
+                   <input type="text" placeholder="Search...">
+                   <button><i class="fas fa-search"></i></button>
+               </div>
+               <div class="user-menu">
+                   <div class="notifications">
+                       <i class="fas fa-bell"></i>
+                       <% if (locals.notificationCount && notificationCount > 0) { %>
+                           <span class="badge"><%= notificationCount %></span>
+                       <% } %>
+                       <!-- Dropdown Menu -->
+                       <div class="dropdown-menu">
+                           <!-- Mark All as Read Option -->
+                           <button class="mark-all-read">Mark All as Read</button>
+                           <!-- Notifications List -->
+                           <div class="notifications-list" id="notificationsList">
+                               <!-- Notifications will be loaded via JavaScript -->
+                               <div class="notification">
+                                   <p>Loading notifications...</p>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+                   <div class="profile">
+                       <i class="fa-solid fa-user"></i>
+                       <span><%= user.name %></span>
+                       <i class="fas fa-chevron-down"></i>
+                       <!-- Dropdown Menu -->
+                       <div class="dropdown-menu">
+                           <!-- Search Bar on top -->
+                           <input type="text" class="search-bar" placeholder="Search...">
+                           <a href="/agency/settings"><i class="fa-solid fa-user"></i> Profile</a>
+                           <a href="/agency/settings"><i class="fas fa-cog"></i> Settings</a>
+                           <a href="/agency/support"><i class="fas fa-question-circle"></i> Support</a>
+                           <a href="/agency/support"><i class="fas fa-question-circle"></i> Help</a>
+                           <a href="/agency/support"><i class="fas fa-comment"></i> Feedback</a>
+                           <a href="/auth/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                       </div>
+                   </div>
+               </div>
+           </header>
+           
+           <!-- Edit Product Content -->
+           <div class="dashboard-content">
+               <div class="section-header">
+                   <h1>Edit Product</h1>
+                   <a href="/agency/products" class="btn-secondary"><i class="fas fa-arrow-left"></i> Back to Products</a>
+               </div>
+               
+               <!-- Flash Messages -->
+               <% if(typeof success_msg !== 'undefined' && success_msg.length > 0) { %>
+                   <div class="alert alert-success"><%= success_msg %></div>
+               <% } %>
+               
+               <% if(typeof error_msg !== 'undefined' && error_msg.length > 0) { %>
+                   <div class="alert alert-danger"><%= error_msg %></div>
+               <% } %>
+               
+               <div class="card">
+                   <div class="card-header">
+                       <h2 class="card-title">Product Information</h2>
+                       <p class="card-description">Update the details of your product</p>
+                   </div>
+                   <div class="card-content">
+                       <form action="/agency/products/edit/<%= product._id %>" method="POST" enctype="multipart/form-data">
+                           <div class="form-row">
+                               <div class="form-group col-md-6">
+                                   <label for="name">Product Name</label>
+                                   <input type="text" id="name" name="name" value="<%= product.name %>" required>
+                               </div>
+                               
+                               <div class="form-group col-md-6">
+                                   <label for="category">Category</label>
+                                   <select id="category" name="category" required>
+                                       <option value="">Select category</option>
+                                       <option value="electronics" <%= product.category === 'electronics' ? 'selected' : '' %>>Electronics</option>
+                                       <option value="mobile" <%= product.category === 'mobile' ? 'selected' : '' %>>Mobile Phones</option>
+                                       <option value="laptops" <%= product.category === 'laptops' ? 'selected' : '' %>>Laptops</option>
+                                       <option value="cameras" <%= product.category === 'cameras' ? 'selected' : '' %>>Cameras</option>
+                                       <option value="jewelry" <%= product.category === 'jewelry' ? 'selected' : '' %>>Jewelry</option>
+                                       <option value="clothing" <%= product.category === 'clothing' ? 'selected' : '' %>>Clothing</option>
+                                       <option value="home" <%= product.category === 'home' ? 'selected' : '' %>>Home & Kitchen</option>
+                                       <option value="other" <%= product.category === 'other' ? 'selected' : '' %>>Other</option>
+                                   </select>
+                               </div>
+                           </div>
+                           
+                           <div class="form-group">
+                               <label for="description">Description</label>
+                               <textarea id="description" name="description" rows="4" required><%= product.description %></textarea>
+                           </div>
+                           
+                           <div class="form-row">
+                               <div class="form-group col-md-6">
+                                   <label for="price">Price ($)</label>
+                                   <input type="number" id="price" name="price" min="0.01" step="0.01" value="<%= product.price %>" required>
+                               </div>
+                               
+                               <div class="form-group col-md-6">
+                                   <label for="stock">Stock Quantity</label>
+                                   <input type="number" id="stock" name="stock" min="0" value="<%= product.stock %>" required>
+                               </div>
+                           </div>
+                           
+                           <div class="form-row">
+                               <div class="form-group col-md-6">
+                                   <label for="condition">Condition</label>
+                                   <select id="condition" name="condition" required>
+                                       <option value="">Select condition</option>
+                                       <option value="excellent" <%= product.condition === 'excellent' ? 'selected' : '' %>>Excellent</option>
+                                       <option value="good" <%= product.condition === 'good' ? 'selected' : '' %>>Good</option>
+                                       <option value="fair" <%= product.condition === 'fair' ? 'selected' : '' %>>Fair</option>
+                                       <option value="poor" <%= product.condition === 'poor' ? 'selected' : '' %>>Poor</option>
+                                   </select>
+                               </div>
+                               
+                               <div class="form-group col-md-6">
+                                   <label for="source">Source of Goods</label>
+                                   <select id="source" name="source">
+                                       <option value="law-enforcement" <%= product.source === 'law-enforcement' ? 'selected' : '' %>>Law Enforcement Auction</option>
+                                       <option value="customs" <%= product.source === 'customs' ? 'selected' : '' %>>Customs Seizure</option>
+                                       <option value="tax-authority" <%= product.source === 'tax-authority' ? 'selected' : '' %>>Tax Authority Confiscation</option>
+                                       <option value="bankruptcy" <%= product.source === 'bankruptcy' ? 'selected' : '' %>>Bankruptcy Auction</option>
+                                       <option value="other" <%= product.source === 'other' ? 'selected' : '' %>>Other</option>
+                                   </select>
+                               </div>
+                           </div>
+                           
+                           <div class="form-group">
+                               <label for="image">Product Image</label>
+                               <input type="file" id="image" name="image" accept="image/*">
+                               <p class="form-text">Maximum file size: 5MB. Supported formats: JPEG, PNG, GIF</p>
+                               <% if (product.image) { %>
+                                   <div class="current-image">
+                                       <p>Current image:</p>
+                                       <img src="<%= product.image %>" alt="<%= product.name %>" style="max-width: 200px; max-height: 200px;">
+                                   </div>
+                               <% } %>
+                           </div>
+                           
+                           <div class="form-group">
+                               <div class="checkbox">
+                                   <input type="checkbox" id="seizureProof" name="seizureProof" <%= product.seizureProof ? 'checked' : '' %>>
+                                   <label for="seizureProof">Government Seizure Proof Available</label>
+                               </div>
+                           </div>
+                           
+                           <div class="form-actions">
+                               <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Save Changes</button>
+                               <a href="/agency/products" class="btn-secondary">Cancel</a>
+                           </div>
+                       </form>
+                   </div>
+               </div>
+           </div>
+       </div>
+   </div>
+
+   <script src="/js/agency.js"></script>
+</body>
+</html>
+

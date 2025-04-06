@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Agency Verification | SETU Platform</title>
+   <link rel="stylesheet" href="/css/styles.css">
+   <link rel="stylesheet" href="/css/agency.css">
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+   <div class="app-container">
+       <!-- Sidebar -->
+       <%- include('../partials/agency-sidebar', { page: 'verification' }) %>
+       
+       <!-- Main Content -->
+       <div class="main-content">
+           <!-- Header -->
+           <header class="header">
+               <div class="search-bar">
+                   <input type="text" placeholder="Search...">
+                   <button><i class="fas fa-search"></i></button>
+               </div>
+               <div class="user-menu">
+                   <div class="notifications">
+                       <i class="fas fa-bell"></i>
+                       <% if (locals.notificationCount && notificationCount > 0) { %>
+                           <span class="badge"><%= notificationCount %></span>
+                       <% } %>
+                       <!-- Dropdown Menu -->
+                       <div class="dropdown-menu">
+                           <!-- Mark All as Read Option -->
+                           <button class="mark-all-read">Mark All as Read</button>
+                           <!-- Notifications List -->
+                           <div class="notifications-list" id="notificationsList">
+                               <!-- Notifications will be loaded via JavaScript -->
+                               <div class="notification">
+                                   <p>Loading notifications...</p>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+                   <div class="profile">
+                       <i class="fa-solid fa-user"></i>
+                       <span><%= user.name %></span>
+                       <i class="fas fa-chevron-down"></i>
+                       <!-- Dropdown Menu -->
+                       <div class="dropdown-menu">
+                           <!-- Search Bar on top -->
+                           <input type="text" class="search-bar" placeholder="Search...">
+                           <a href="/agency/settings"><i class="fa-solid fa-user"></i> Profile</a>
+                           <a href="/agency/settings"><i class="fas fa-cog  Profile"></i></a>
+                           <a href="/agency/settings"><i class="fas fa-cog"></i> Settings</a>
+                           <a href="/agency/support"><i class="fas fa-question-circle"></i> Support</a>
+                           <a href="/agency/support"><i class="fas fa-question-circle"></i> Help</a>
+                           <a href="/agency/support"><i class="fas fa-comment"></i> Feedback</a>
+                           <a href="/auth/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                       </div>
+                   </div>
+               </div>
+           </header>
+           
+           <!-- Verification Content -->
+           <div class="dashboard-content">
+               <h1>Agency Verification</h1>
+               
+               <div class="card">
+                   <div class="card-header">
+                       <h2 class="card-title">Verification Status</h2>
+                   </div>
+                   <div class="card-content">
+                       <div class="verification-status">
+                           <div class="verification-icon verified">
+                               <i class="fas fa-check-circle"></i>
+                           </div>
+                           <div class="verification-details">
+                               <h3>Your agency is verified</h3>
+                               <p>Your agency has been verified and approved to sell products on our platform.</p>
+                               <div class="verification-date">
+                                   <strong>Verified on:</strong> <%= new Date().toLocaleDateString() %>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+               
+               <div class="card">
+                   <div class="card-header">
+                       <h2 class="card-title">Verification Documents</h2>
+                   </div>
+                   <div class="card-content">
+                       <div class="document-list">
+                           <div class="document-item">
+                               <div class="document-icon">
+                                   <i class="fas fa-file-pdf"></i>
+                               </div>
+                               <div class="document-details">
+                                   <h4>Business Registration</h4>
+                                   <p>Uploaded on: <%= new Date().toLocaleDateString() %></p>
+                                   <div class="document-status verified">
+                                       <i class="fas fa-check-circle"></i> Verified
+                                   </div>
+                               </div>
+                               <div class="document-actions">
+                                   <button class="btn-small"><i class="fas fa-eye"></i> View</button>
+                                   <button class="btn-small"><i class="fas fa-download"></i> Download</button>
+                               </div>
+                           </div>
+                           
+                           <div class="document-item">
+                               <div class="document-icon">
+                                   <i class="fas fa-file-pdf"></i>
+                               </div>
+                               <div class="document-details">
+                                   <h4>Tax Identification</h4>
+                                   <p>Uploaded on: <%= new Date().toLocaleDateString() %></p>
+                                   <div class="document-status verified">
+                                       <i class="fas fa-check-circle"></i> Verified
+                                   </div>
+                               </div>
+                               <div class="document-actions">
+                                   <button class="btn-small"><i class="fas fa-eye"></i> View</button>
+                                   <button class="btn-small"><i class="fas fa-download"></i> Download</button>
+                               </div>
+                           </div>
+                           
+                           <div class="document-item">
+                               <div class="document-icon">
+                                   <i class="fas fa-file-pdf"></i>
+                               </div>
+                               <div class="document-details">
+                                   <h4>ID Verification</h4>
+                                   <p>Uploaded on: <%= new Date().toLocaleDateString() %></p>
+                                   <div class="document-status verified">
+                                       <i class="fas fa-check-circle"></i> Verified
+                                   </div>
+                               </div>
+                               <div class="document-actions">
+                                   <button class="btn-small"><i class="fas fa-eye"></i> View</button>
+                                   <button class="btn-small"><i class="fas fa-download"></i> Download</button>
+                               </div>
+                           </div>
+                       </div>
+                       
+                       <div class="upload-new-document">
+                           <button class="btn-primary"><i class="fas fa-upload"></i> Upload New Document</button>
+                       </div>
+                   </div>
+               </div>
+               
+               <div class="card">
+                   <div class="card-header">
+                       <h2 class="card-title">Verification Requirements</h2>
+                   </div>
+                   <div class="card-content">
+                       <div class="requirements-list">
+                           <div class="requirement-item completed">
+                               <div class="requirement-status">
+                                   <i class="fas fa-check-circle"></i>
+                               </div>
+                               <div class="requirement-details">
+                                   <h4>Business Registration</h4>
+                                   <p>Official business registration document or certificate</p>
+                               </div>
+                           </div>
+                           
+                           <div class="requirement-item completed">
+                               <div class="requirement-status">
+                                   <i class="fas fa-check-circle"></i>
+                               </div>
+                               <div class="requirement-details">
+                                   <h4>Tax Identification</h4>
+                                   <p>Tax ID number or certificate</p>
+                               </div>
+                           </div>
+                           
+                           <div class="requirement-item completed">
+                               <div class="requirement-status">
+                                   <i class="fas fa-check-circle"></i>
+                               </div>
+                               <div class="requirement-details">
+                                   <h4>ID Verification</h4>
+                                   <p>Government-issued ID of the business owner or representative</p>
+                               </div>
+                           </div>
+                           
+                           <div class="requirement-item completed">
+                               <div class="requirement-status">
+                                   <i class="fas fa-check-circle"></i>
+                               </div>
+                               <div class="requirement-details">
+                                   <h4>Address Verification</h4>
+                                   <p>Proof of business address (utility bill, lease agreement, etc.)</p>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </div>
+   </div>
+
+   <script src="/js/agency.js"></script>
+</body>
+</html>
+

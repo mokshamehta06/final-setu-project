@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+  <link rel="stylesheet" href="/css/agency-auth.css">
+  <title>Check Registration Status | SETU E-commerce</title>
+</head>
+<body>
+  <%- include('../partials/header') %>
+  
+  <main class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h1>Check Registration Status</h1>
+        <p>Enter your email to check your agency registration status</p>
+      </div>
+      
+      <div id="statusMessage" class="status-message"></div>
+      
+      <form id="checkStatusForm" class="auth-form">
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+        
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary btn-block">Check Status</button>
+        </div>
+      </form>
+      
+      <div class="auth-footer">
+        <p>Already approved? <a href="/agency/login">Login here</a></p>
+        <p>Don't have an account? <a href="/agency/register">Register as Agency</a></p>
+      </div>
+    </div>
+  </main>
+  
+  <%- include('../partials/footer') %>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const checkStatusForm = document.getElementById('checkStatusForm');
+      const statusMessage = document.getElementById('statusMessage');
+      
+      checkStatusForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const email = document.getElementById('email').value;
+        
+        try {
+          statusMessage.innerHTML = '<div class="loading">Checking status...</div>';
+          
+          const response = await fetch('/agency/check-status', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email })
+          });
+          
+          const data = await response.json();
+          
+          if (data.success) {
+            let statusClass = '';
+            let statusIcon = '';
+            let statusText = '';
+            
+            switch (data.status) {
+              case 'pending':
+                statusClass = 'status-pending';
+                statusIcon = '<i class="fas fa-clock"></i>';
+                statusText = 'Your registration is pending approval';
+                break;
+              case 'approved':
+                statusClass = 'status-approved';
+                statusIcon = '<i class="fas fa-check-circle"></i>';
+                statusText = 'Your registration has been approved';
+                break;
+              case 'rejected':
+                statusClass = 'status-rejected';
+                statusIcon = '<i class="fas fa-times-circle"></i>';
+                statusText = 'Your registration has been rejected';
+                break;
+            }
+            
+            let messageHtml = `
+              <div class="status-result ${statusClass}">
+                <div class="status-icon">${statusIcon}</div>
+                <div class="status-details">
+                  <h3>${statusText}</h3>
+                  <p>Agency ID: ${data.agencyId}</p>
+            `;
+            
+            if (data.message) {
+              messageHtml += `<p class="status-message">${data.message}</p>`;
+            }
+            
+            if (data.status === 'approved') {
+              messageHtml += `
+                <div class="status-action">
+                  <a href="/agency/login" class="btn btn-primary">Login Now</a>
+                </div>
+              `;
+            }
+            
+            messageHtml += `
+                </div>
+              </div>
+            `;
+            
+            statusMessage.innerHTML = messageHtml;
+          } else {
+            statusMessage.innerHTML = `
+              <div class="status-result status-error">
+                <div class="status-icon"><i class="fas fa-exclamation-circle"></i></div>
+                <div class="status-details">
+                  <h3>Agency Not Found</h3>
+                  <p>We couldn't find an agency registration with this email address.</p>
+                  <div class="status-action">
+                    <a href="/agency/register" class="btn btn-primary">Register Now</a>
+                  </div>
+                  class="btn btn-primary">Register Now</a>
+                  </div>
+                </div>
+              </div>
+            `;
+          }
+        } catch (error) {
+          console.error('Error checking status:', error);
+          statusMessage.innerHTML = `
+            <div class="status-result status-error">
+              <div class="status-icon"><i class="fas fa-exclamation-circle"></i></div>
+              <div class="status-details">
+                <h3>Error</h3>
+                <p>An error occurred while checking your status. Please try again later.</p>
+              </div>
+            </div>
+          `;
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+

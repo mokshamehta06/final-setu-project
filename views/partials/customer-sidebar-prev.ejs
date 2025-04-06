@@ -1,0 +1,29 @@
+<div class="card shadow-sm mb-4">
+    <div class="card-body p-0">
+      <div class="list-group list-group-flush">
+        <a href="/customer/dashboard" class="list-group-item list-group-item-action <%= page === 'dashboard' ? 'active' : '' %>">
+          <i class="bi bi-speedometer2 me-2"></i> Dashboard
+        </a>
+        <a href="/customer/orders" class="list-group-item list-group-item-action <%= page === 'orders' ? 'active' : '' %>">
+          <i class="bi bi-bag me-2"></i> My Orders
+        </a>
+        <a href="/customer/wishlist" class="list-group-item list-group-item-action <%= page === 'wishlist' ? 'active' : '' %>">
+          <i class="bi bi-heart me-2"></i> Wishlist
+        </a>
+        <a href="/customer/profile" class="list-group-item list-group-item-action <%= page === 'profile' ? 'active' : '' %>">
+          <i class="bi bi-person me-2"></i> My Profile
+        </a>
+        <a href="/customer/addresses" class="list-group-item list-group-item-action <%= page === 'addresses' ? 'active' : '' %>">
+          <i class="bi bi-geo-alt me-2"></i> Addresses
+        </a>
+        <a href="/customer/support" class="list-group-item list-group-item-action <%= page === 'support' ? 'active' : '' %>">
+          <i class="bi bi-question-circle me-2"></i> Support
+        </a>
+        <a href="/auth/logout" class="list-group-item list-group-item-action text-danger">
+          <i class="bi bi-box-arrow-right me-2"></i> Logout
+        </a>
+      </div>
+    </div>
+  </div>
+  
+  

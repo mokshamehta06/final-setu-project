@@ -1,0 +1,200 @@
+<!-- views/agency/order-details.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+  <link rel="stylesheet" href="/css/agency-order-details.css">
+  <title>Order Details | SETU E-commerce</title>
+</head>
+<body>
+  <%- include('../partials/agency-header') %>
+  
+  <div class="dashboard-container">
+    <%- include('../partials/agency-sidebar', { active: 'orders' }) %>
+    
+    <main class="dashboard-content">
+      <div class="dashboard-header">
+        <div class="back-link">
+          <a href="/agency/orders"><i class="fas fa-arrow-left"></i> Back to Orders</a>
+        </div>
+        <h1>Order #<%= order.orderId %></h1>
+      </div>
+      
+      <div class="order-details-container">
+        <div class="order-info-grid">
+          <div class="order-info-card">
+            <h2>Order Information</h2>
+            <div class="info-group">
+              <div class="info-item">
+                <span class="info-label">Order ID:</span>
+                <span class="info-value"><%= order.orderId %></span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Date:</span>
+                <span class="info-value"><%= new Date(order.createdAt).toLocaleString() %></span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Payment Method:</span>
+                <span class="info-value"><%= order.paymentMethod %></span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Status:</span>
+                <span class="info-value status-badge status-<%= order.status %>">
+                  <%= order.status.charAt(0).toUpperCase() + order.status.slice(1) %>
+                </span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="order-info-card">
+            <h2>Customer Information</h2>
+            <div class="info-group">
+              <div class="info-item">
+                <span class="info-label">Name:</span>
+                <span class="info-value"><%= order.customer.name %></span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Email:</span>
+                <span class="info-value"><%= order.customer.email %></span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Phone:</span>
+                <span class="info-value"><%= order.customer.phone || 'Not provided' %></span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="order-info-card">
+            <h2>Shipping Address</h2>
+            <div class="info-group">
+              <div class="info-item">
+                <span class="info-label">Name:</span>
+                <span class="info-value"><%= order.shippingAddress.firstName %> <%= order.shippingAddress.lastName %></span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Address:</span>
+                <span class="info-value"><%= order.shippingAddress.address %></span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">City:</span>
+                <span class="info-value"><%= order.shippingAddress.city %>, <%= order.shippingAddress.state %> <%= order.shippingAddress.zip %></span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Country:</span>
+                <span class="info-value"><%= order.shippingAddress.country %></span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Phone:</span>
+                <span class="info-value"><%= order.shippingAddress.phone %></span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="order-info-card">
+            <h2>Update Order Status</h2>
+            <form action="/agency/orders/<%= order._id %>/update-status" method="POST" class="status-update-form">
+              <div class="form-group">
+                <label for="status">Status</label>
+                <select id="status" name="status" class="form-control">
+                  <option value="pending" <%= order.status === 'pending' ? 'selected' : '' %>>Pending</option>
+                  <option value="processing" <%= order.status === 'processing' ? 'selected' : '' %>>Processing</option>
+                  <option value="shipped" <%= order.status === 'shipped' ? 'selected' : '' %>>Shipped</option>
+                  <option value="delivered" <%= order.status === 'delivered' ? 'selected' : '' %>>Delivered</option>
+                  <option value="cancelled" <%= order.status === 'cancelled' ? 'selected' : '' %>>Cancelled</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="note">Note (Optional)</label>
+                <textarea id="note" name="note" class="form-control" rows="2"></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">Update Status</button>
+            </form>
+          </div>
+        </div>
+        
+        <div class="order-items-card">
+          <h2>Order Items</h2>
+          <div class="order-items">
+            <table class="items-table">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Price</th>
+                  <th>Quantity</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% order.items.forEach(item => { %>
+                  <tr>
+                    <td class="product-cell">
+                      <div class="product-info">
+                        <div class="product-image">
+                          <img src="<%= item.image %>" alt="<%= item.name %>">
+                        </div>
+                        <div class="product-details">
+                          <h3><%= item.name %></h3>
+                          <p class="product-id">Product ID: <%= item.product %></p>
+                        </div>
+                      </div>
+                    </td>
+                    <td>₹<%= item.price.toFixed(2) %></td>
+                    <td><%= item.quantity %></td>
+                    <td>₹<%= (item.price * item.quantity).toFixed(2) %></td>
+                  </tr>
+                <% }); %>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="3" class="text-right">Subtotal</td>
+                  <td>₹<%= order.subtotal.toFixed(2) %></td>
+                </tr>
+                <tr>
+                  <td colspan="3" class="text-right">Tax</td>
+                  <td>₹<%= order.tax.toFixed(2) %></td>
+                </tr>
+                <tr>
+                  <td colspan="3" class="text-right">Shipping</td>
+                  <td>₹<%= order.shipping.toFixed(2) %></td>
+                </tr>
+                <tr class="total-row">
+                  <td colspan="3" class="text-right">Total</td>
+                  <td>₹<%= order.totalAmount.toFixed(2) %></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+        
+        <div class="order-timeline-card">
+          <h2>Order Timeline</h2>
+          <div class="timeline">
+            <% order.timeline.forEach((event, index) => { %>
+              <div class="timeline-item">
+                <div class="timeline-point"></div>
+                <div class="timeline-content">
+                  <div class="timeline-date">
+                    <%= new Date(event.timestamp).toLocaleString() %>
+                  </div>
+                  <div class="timeline-status">
+                    <span class="status-badge status-<%= event.status %>">
+                      <%= event.status.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) %>
+                    </span>
+                  </div>
+                  <div class="timeline-note">
+                    <%= event.note %>
+                  </div>
+                </div>
+              </div>
+            <% }); %>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  
+  <%- include('../partials/footer') %>
+  
+  <script src="/js/agency-order-details.js"></script>
+</body>
+</html>

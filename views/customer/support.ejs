@@ -1,0 +1,208 @@
+<%- include('../partials/header') %>
+
+<div class="support-container">
+  <div class="support-header">
+    <h1>Customer Support</h1>
+    <p>We're here to help you with any questions or concerns you may have. Choose the best way to get in touch with us.</p>
+  </div>
+
+  <div class="support-options">
+    <div class="support-card">
+      <i class="fas fa-comments"></i>
+      <h3>Live Chat</h3>
+      <p>Get instant help from our support team through real-time chat.</p>
+      <button class="btn btn-primary" id="startChatBtn">
+        <i class="fas fa-comments"></i> Start Chat
+      </button>
+    </div>
+
+    <div class="support-card">
+      <i class="fas fa-ticket-alt"></i>
+      <h3>Support Tickets</h3>
+      <p>Create a ticket for complex issues that need detailed attention.</p>
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ticketModal">
+        <i class="fas fa-ticket-alt"></i> Create Ticket
+      </button>
+    </div>
+  </div>
+
+  <div class="faq-section">
+    <h2>Frequently Asked Questions</h2>
+    <div class="accordion" id="faqAccordion">
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+            How do I track my order?
+          </button>
+        </h2>
+        <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            You can track your order by going to "My Orders" section in your dashboard and clicking on the "View Details" button for the specific order.
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+            What is the return policy?
+          </button>
+        </h2>
+        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Most items can be returned within 7 days of delivery. Please note that some seized items may have special return policies. Check the product details for specific information.
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+            How do I cancel an order?
+          </button>
+        </h2>
+        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            You can cancel an order if it's still in "Pending" status. Go to "My Orders", find the order you want to cancel, click "View Details", and then click the "Cancel Order" button.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Ticket Modal -->
+<div class="modal fade" id="ticketModal" tabindex="-1" aria-labelledby="ticketModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ticketModalLabel">Create Support Ticket</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="supportTicketForm">
+          <div class="mb-3">
+            <label for="ticketSubject" class="form-label">Subject</label>
+            <input type="text" class="form-control" id="ticketSubject" required>
+          </div>
+          <div class="mb-3">
+            <label for="ticketCategory" class="form-label">Category</label>
+            <select class="form-select" id="ticketCategory" required>
+              <option value="">Select a category</option>
+              <option value="order">Order Issue</option>
+              <option value="payment">Payment Issue</option>
+              <option value="product">Product Inquiry</option>
+              <option value="return">Return/Refund</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="ticketMessage" class="form-label">Message</label>
+            <textarea class="form-control" id="ticketMessage" rows="5" required></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="ticketAttachment" class="form-label">Attachment (optional)</label>
+            <input type="file" class="form-control" id="ticketAttachment">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="submitTicketBtn">Submit Ticket</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Chat Widget -->
+<div id="chatWidget" class="chat-widget">
+  <div class="chat-header">
+    <h6>Customer Support</h6>
+    <button id="closeChatBtn" class="btn-close btn-close-white"></button>
+  </div>
+  <div class="chat-body" id="chatMessages">
+    <div class="message support">
+      <div class="message-content">
+        Hello! How can I help you today?
+      </div>
+      <div class="message-time">Just now</div>
+    </div>
+  </div>
+  <div class="chat-footer">
+    <input type="text" id="chatInput" class="form-control" placeholder="Type your message...">
+    <button id="sendMessageBtn" class="btn btn-primary">
+      <i class="fas fa-paper-plane"></i>
+    </button>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Chat widget functionality
+  const chatWidget = document.getElementById('chatWidget');
+  const startChatBtn = document.getElementById('startChatBtn');
+  const closeChatBtn = document.getElementById('closeChatBtn');
+  const chatInput = document.getElementById('chatInput');
+  const sendMessageBtn = document.getElementById('sendMessageBtn');
+  const chatMessages = document.getElementById('chatMessages');
+  
+  startChatBtn.addEventListener('click', function() {
+    chatWidget.style.display = 'flex';
+  });
+  
+  closeChatBtn.addEventListener('click', function() {
+    chatWidget.style.display = 'none';
+  });
+  
+  function sendMessage() {
+    const message = chatInput.value.trim();
+    if (message) {
+      // Add user message
+      const userMessage = document.createElement('div');
+      userMessage.className = 'message user';
+      userMessage.innerHTML = `
+        <div class="message-content">${message}</div>
+        <div class="message-time">Just now</div>
+      `;
+      chatMessages.appendChild(userMessage);
+      
+      // Clear input
+      chatInput.value = '';
+      
+      // Scroll to bottom
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      
+      // Simulate support response
+      setTimeout(() => {
+        const supportMessage = document.createElement('div');
+        supportMessage.className = 'message support';
+        supportMessage.innerHTML = `
+          <div class="message-content">Thank you for your message. Our support team will get back to you shortly.</div>
+          <div class="message-time">Just now</div>
+        `;
+        chatMessages.appendChild(supportMessage);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }, 1000);
+    }
+  }
+  
+  sendMessageBtn.addEventListener('click', sendMessage);
+  chatInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      sendMessage();
+    }
+  });
+  
+  // Ticket form submission
+  const submitTicketBtn = document.getElementById('submitTicketBtn');
+  submitTicketBtn.addEventListener('click', function() {
+    // Add your ticket submission logic here
+    alert('Ticket submitted successfully!');
+    const modal = bootstrap.Modal.getInstance(document.getElementById('ticketModal'));
+    modal.hide();
+  });
+});
+</script>
+
+<%- include('../partials/footer') %>
+
