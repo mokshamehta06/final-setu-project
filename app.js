@@ -7,7 +7,11 @@ const bcrypt = require("bcryptjs")
 const flash = require("connect-flash")
 const multer = require("multer")
 const fs = require("fs")
+const crypto = require("crypto")
 require('dotenv').config();
+
+// Import email sender utility
+const { sendEmail } = require("./utils/emailSender")
 
 // Import database connection
 const connectDB = require("./config/db")
@@ -17,13 +21,17 @@ const connectDB = require("./config/db")
 const authRoutes = require("./routes/auth")
 const customerRoutes = require("./routes/customer")
 const agencyRoutes = require("./routes/agency")
+const adminRoutes = require("./routes/admin")
 const apiRoutes = require("./routes/api")
+const passwordResetRoutes = require("./routes/password-reset")
+const supportRoutes = require("./routes/support")
 
 // Import models
 const User = require("./models/user")
 const Product = require("./models/product")
 const Order = require("./models/order")
 const Notification = require("./models/notification")
+const Token = require("./models/token")
 
 // Initialize Express app
 const app = express()
@@ -54,6 +62,11 @@ app.use(express.static(path.join(__dirname, "public")))
 app.set("view engine", "ejs")
 app.set("views", path.join(__dirname, "views"))
 
+// Set up EJS layouts
+const expressLayouts = require('express-ejs-layouts')
+app.use(expressLayouts)
+app.set('layout', 'layout')
+
 // Session configuration
 app.use(
   session({
@@ -82,10 +95,174 @@ app.use((req, res, next) => {
 })
 
 // Routes - IMPORTANT: Order matters here
+app.use("/password-reset", passwordResetRoutes) // Add this BEFORE other routes
+app.use("/support", supportRoutes)
 app.use("/api", apiRoutes)
 app.use("/agency", agencyRoutes)
 app.use("/customer", customerRoutes)
 app.use("/auth", authRoutes)
+app.use("/admin", adminRoutes)
+
+// Direct routes for backward compatibility
+app.get("/auth/customer/forgot-password", (req, res) => {
+  res.redirect("/password-reset/customer/forgot-password");
+});
+
+app.get("/auth/agency/forgot-password", (req, res) => {
+  res.redirect("/password-reset/agency/forgot-password");
+});
+
+app.get("/customer/forgot-password", (req, res) => {
+  res.redirect("/password-reset/customer/forgot-password");
+});
+
+app.get("/agency/forgot-password", (req, res) => {
+  res.redirect("/password-reset/agency/forgot-password");
+});
+
+// Direct route for forgot password POST request
+app.post("/auth/forgot-password", async (req, res) => {
+  try {
+    const { email, userType } = req.body;
+
+    // Find user by email and role
+    const user = await User.findOne({ email, role: userType });
+
+    if (!user) {
+      req.flash('error_msg', 'No account with that email address exists');
+      return res.redirect(`/auth/${userType}/forgot-password`);
+    }
+
+    // Delete any existing tokens for this user
+    await Token.deleteMany({ userId: user._id, type: 'passwordReset' });
+
+    // Create a new token
+    const resetToken = crypto.randomBytes(32).toString('hex');
+
+    // Save the token to the database
+    await new Token({
+      userId: user._id,
+      token: resetToken,
+      type: 'passwordReset'
+    }).save();
+
+    // Create reset URL
+    const resetUrl = `${req.protocol}://${req.get('host')}/auth/reset-password/${resetToken}`;
+
+    // Create email content
+    const emailContent = `
+      <h1>Password Reset Request</h1>
+      <p>You requested a password reset. Please click the link below to reset your password:</p>
+      <a href="${resetUrl}" style="display: inline-block; background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Reset Password</a>
+      <p>This link will expire in 1 hour.</p>
+      <p>If you didn't request this, please ignore this email.</p>
+    `;
+
+    // Send email
+    const emailResult = await sendEmail({
+      to: user.email,
+      subject: 'Password Reset Request',
+      html: emailContent
+    });
+
+    if (!emailResult.success) {
+      req.flash('error_msg', 'Failed to send password reset email. Please try again.');
+      return res.redirect(`/auth/${userType}/forgot-password`);
+    }
+
+    req.flash('success_msg', 'A password reset link has been sent to your email');
+    res.redirect(`/auth/${userType}/login`);
+
+  } catch (error) {
+    console.error('Forgot password error:', error);
+    req.flash('error_msg', 'An error occurred. Please try again.');
+    res.redirect(`/auth/${req.body.userType}/forgot-password`);
+  }
+});
+
+// Direct route for reset password POST request
+app.post("/auth/reset-password", async (req, res) => {
+  try {
+    const { token, password, confirmPassword } = req.body;
+
+    // Validate passwords
+    if (password !== confirmPassword) {
+      req.flash('error_msg', 'Passwords do not match');
+      return res.redirect(`/auth/reset-password/${token}`);
+    }
+
+    if (password.length < 6) {
+      req.flash('error_msg', 'Password should be at least 6 characters');
+      return res.redirect(`/auth/reset-password/${token}`);
+    }
+
+    // Find the token
+    const resetToken = await Token.findOne({
+      token,
+      type: 'passwordReset'
+    });
+
+    if (!resetToken) {
+      req.flash('error_msg', 'Invalid or expired password reset token');
+      return res.redirect('/');
+    }
+
+    // Find the user
+    const user = await User.findById(resetToken.userId);
+
+    if (!user) {
+      req.flash('error_msg', 'User not found');
+      return res.redirect('/');
+    }
+
+    // Update the password
+    user.password = password;
+    await user.save();
+
+    // Delete the token
+    await Token.deleteOne({ _id: resetToken._id });
+
+    req.flash('success_msg', 'Your password has been reset. You can now log in with your new password.');
+    res.redirect(`/auth/${user.role}/login`);
+
+  } catch (error) {
+    console.error('Reset password error:', error);
+    req.flash('error_msg', 'An error occurred. Please try again.');
+    res.redirect('/');
+  }
+});
+
+// Direct route for reset password - serving static HTML file
+app.get("/auth/reset-password/:token", async (req, res) => {
+  try {
+    // Find the token
+    const token = await Token.findOne({
+      token: req.params.token,
+      type: 'passwordReset'
+    });
+
+    if (!token) {
+      req.flash('error_msg', 'Invalid or expired password reset token');
+      return res.redirect('/');
+    }
+
+    // Find the user
+    const user = await User.findById(token.userId);
+
+    if (!user) {
+      req.flash('error_msg', 'User not found');
+      return res.redirect('/');
+    }
+
+    // Redirect to the static HTML page with token as query parameter
+    res.redirect(`/reset-password.html?token=${req.params.token}`);
+
+  } catch (error) {
+    console.error('Reset password page error:', error);
+    req.flash('error_msg', 'An error occurred. Please try again.');
+    res.redirect('/');
+  }
+});
 
 // Direct login routes for customer and agency
 app.get("/customer/login", (req, res) => {
@@ -131,12 +308,14 @@ app.get("/", async (req, res) => {
       page: "home",
       title: "SETU - E-commerce Platform",
       products,
+      layout: false
     })
   } catch (error) {
     console.error("Error fetching products for homepage:", error)
     res.render("index", {
       page: "home",
       title: "SETU - E-commerce Platform",
+      layout: false
     })
   }
 })
@@ -157,20 +336,14 @@ app.get("/solutions", (req, res) => {
   })
 })
 
-// Support route
-app.get("/support", (req, res) => {
-  res.render("index", {
-    page: "support",
-    title: "SETU Support",
-  })
+// Support route - redirect to new support page
+app.get("/support-old", (req, res) => {
+  res.redirect("/support")
 })
 
-// Contact route
+// Contact route - redirect to new contact page
 app.get("/contact", (req, res) => {
-  res.render("index", {
-    page: "contact",
-    title: "Contact SETU",
-  })
+  res.redirect("/support/contact")
 })
 
 // Terms route

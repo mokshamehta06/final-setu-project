@@ -144,13 +144,35 @@ const userSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: "Product", // Assuming wishlist items are products
     },
-  ],  
+  ],
   agencyDetails: {
     agencyName: String,
     businessType: String,
     businessDescription: String,
     website: String,
     position: String,
+  },
+  documents: {
+    businessRegistration: {
+      path: String,
+      uploadedAt: { type: Date, default: Date.now },
+      status: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' }
+    },
+    taxId: {
+      path: String,
+      uploadedAt: { type: Date, default: Date.now },
+      status: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' }
+    },
+    identityProof: {
+      path: String,
+      uploadedAt: { type: Date, default: Date.now },
+      status: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' }
+    },
+    addressProof: {
+      path: String,
+      uploadedAt: { type: Date, default: Date.now },
+      status: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' }
+    }
   },
   preferences: {
     emailNotifications: {
