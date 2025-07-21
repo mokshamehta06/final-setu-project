@@ -343,6 +343,7 @@ router.get("/checkout", isAuthenticated, isCustomer, async (req, res) => {
       shipping,
       total,
       user,
+      layout: false
     })
   } catch (error) {
     console.error("Error loading checkout page:", error)
@@ -730,7 +731,7 @@ router.post("/place-order", isAuthenticated, isCustomer, async (req, res) => {
 //         },
 //       ],
 //     });
-    
+
 
 //     await newOrder.save()
 
@@ -851,7 +852,7 @@ router.get("/order-confirmation", isAuthenticated, isCustomer, (req, res) => {
 //       wishlistItems: user.wishlist ? user.wishlist.length : 0
 //     }
 
-    
+
 
 //     res.render("customer/dashboard", {
 //       page: "customer-dashboard",
@@ -907,8 +908,8 @@ router.get("/dashboard", isAuthenticated, isCustomer, async (req, res) => {
     // Ensure addresses are properly passed
     const addresses = user.addresses || [];
 
-    // Render the dashboard
-    res.render("customer/dashboard", {
+    // Render the simple dashboard
+    res.render("customer/simple-dashboard", {
       page: "customer-dashboard",
       title: "Customer Dashboard",
       user, // Pass the full user object
@@ -916,7 +917,8 @@ router.get("/dashboard", isAuthenticated, isCustomer, async (req, res) => {
       notifications,
       stats,
       addresses,
-      wishlist // <-- Ensure wishlist is explicitly passed
+      wishlist, // <-- Ensure wishlist is explicitly passed
+      layout: false
     });
 
   } catch (error) {
@@ -931,7 +933,7 @@ router.get("/dashboard", isAuthenticated, isCustomer, async (req, res) => {
 // router.get("/dashboard", isAuthenticated, isCustomer, async (req, res) => {
 //   try {
 //     const user = await User.findById(req.session.user._id).populate("addresses");
-    
+
 //     if (!user) {
 //       req.flash("error_msg", "User not found");
 //       return res.redirect("/");
@@ -987,7 +989,7 @@ router.get("/dashboard", isAuthenticated, isCustomer, async (req, res) => {
 router.get("/wishlist", isAuthenticated, isCustomer, async (req, res) => {
   try {
     const user = await User.findById(req.session.user._id).populate('wishlist')
-    
+
     res.render("customer/wishlist", {
       page: "customer-wishlist",
       title: "My Wishlist",
@@ -1145,6 +1147,7 @@ router.get("/orders", isAuthenticated, isCustomer, async (req, res) => {
       title: "My Orders",
       orders,
       user: req.session.user,
+      layout: false
     })
   } catch (error) {
     console.error("Error fetching orders:", error)
@@ -1171,6 +1174,7 @@ router.get("/orders/:id", isAuthenticated, isCustomer, async (req, res) => {
       title: `Order #${order.orderId}`,
       order,
       user: req.session.user,
+      layout: false
     })
   } catch (error) {
     console.error("Error fetching order details:", error)
@@ -1187,48 +1191,48 @@ router.post('/checkout/cash-on-delivery', isAuthenticated, isCustomer, async (re
     const userId = req.session.user._id;
     console.log(`Working :${userId}`);
     const cart = await cartController.getCart(userId);
-    
+
     if (!cart || cart.items.length === 0) {
       console.log("❌ Cart is empty, redirecting...");
       req.flash('error_msg', 'Your cart is empty');
       return res.redirect('/customer/cart');
     }
-    
-    const { 
-      firstName, lastName, address, city, 
+
+    const {
+      firstName, lastName, address, city,
       state, zip, country, phone
     } = req.body;
-    
+
     // Calculate order totals
     const subtotal = cart.items.reduce((total, item) => total + (item.price * item.quantity), 0);
     const tax = subtotal * 0.10; // 10% tax
     const shipping = 50; // Fixed shipping cost
     const total = subtotal + tax + shipping;
-    
+
     // Create order items and update product stock
     const orderItems = [];
-    
+
     for (const item of cart.items) {
       // Get product to update stock and agency info
       const product = await Product.findById(item.product);
-      
+
       if (!product) {
         console.log(`❌ Product ${item.name} is unavailable, redirecting...`);
         req.flash('error_msg', `Product ${item.name} is no longer available`);
         return res.redirect('/customer/checkout');
       }
-      
+
       // Check if enough stock
       if (product.stock < item.quantity) {
         console.log(`❌ Not enough stock for ${item.name}, redirecting...`);
         req.flash('error_msg', `Not enough stock for ${item.name}. Available: ${product.stock}`);
         return res.redirect('/customer/checkout');
       }
-      
+
       // Update product stock
       product.stock -= item.quantity;
       await product.save();
-      
+
       // Add to order items with agency information
       orderItems.push({
         product: item.product,
@@ -1239,10 +1243,10 @@ router.post('/checkout/cash-on-delivery', isAuthenticated, isCustomer, async (re
         agency: product.agency // Store agency ID for filtering on agency side
       });
     }
-    
+
     // Create new order
     const orderId = 'ORD' + Date.now().toString().substring(7);
-    
+
     const newOrder = new Order({
       orderId: orderId,
       user: userId,
@@ -1271,15 +1275,15 @@ router.post('/checkout/cash-on-delivery', isAuthenticated, isCustomer, async (re
         }
       ]
     });
-    
+
     await newOrder.save();
-    
+
     // Create notifications for agencies
     const agencyIds = [...new Set(orderItems.map(item => item.agency.toString()))];
-    
+
     for (const agencyId of agencyIds) {
       const agencyItems = orderItems.filter(item => item.agency.toString() === agencyId);
-      
+
       const notification = new Notification({
         recipient: agencyId,
         recipientType: 'agency',
@@ -1292,13 +1296,13 @@ router.post('/checkout/cash-on-delivery', isAuthenticated, isCustomer, async (re
         },
         read: false
       });
-      
+
       await notification.save();
     }
-    
+
     // Clear the cart after successful order
     await cartController.clearCart(userId);
-    
+
     // Store order details in session for confirmation page
     req.session.lastOrder = {
       orderId: newOrder.orderId,
@@ -1321,7 +1325,7 @@ router.post('/checkout/cash-on-delivery', isAuthenticated, isCustomer, async (re
       total,
       paymentMethod: 'Cash on Delivery'
     };
-    console.log("✅ Order placed, redirecting to confirmation..."); 
+    console.log("✅ Order placed, redirecting to confirmation...");
     res.redirect('/customer/order-confirmation');
   } catch (error) {
     console.error('Error placing order:', error);
@@ -1343,7 +1347,7 @@ router.get("/support", (req, res) => {
 router.get("/settings", isAuthenticated, isCustomer, async (req, res) => {
   try {
     const user = await User.findById(req.session.user._id)
-    
+
     res.render("customer/settings", {
       page: "customer-settings",
       title: "Account Settings",

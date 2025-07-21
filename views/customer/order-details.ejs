@@ -1,21 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer Orders</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Details</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+<link rel="stylesheet" href="/css/dashboard-variables.css">
     <style>
-        :root {
-            --primary-blue: #3b82f6;
-            --light-blue: #eff6ff;
-            --white: #ffffff;
-            --gray-light: #f3f4f6;
-            --gray-dark: #374151;
-            --hover-shadow: rgba(0, 0, 0, 0.1);
-            --border-radius: 10px;
-            --transition-duration: 0.3s;
-        }
 
         * {
             margin: 0;
@@ -25,7 +17,7 @@
         }
 
         body {
-            background-color: var(--light-blue);
+            background-color: var(--primary-50);
             min-height: 100vh;
             padding: 2rem;
         }
@@ -36,13 +28,13 @@
         }
 
         .header {
-            background-color: var(--primary-blue);
-            color: var(--white);
+            background-color: var(--primary-600);
+            color: white;
             padding: 2rem;
-            border-radius: var(--border-radius);
+            border-radius: var(--card-radius);
             margin-bottom: 2rem;
             text-align: center;
-            box-shadow: 0 4px 8px var(--hover-shadow);
+            box-shadow: var(--card-shadow);
         }
 
         .orders-list {
@@ -51,16 +43,17 @@
         }
 
         .order-card {
-            background-color: var(--white);
-            border-radius: var(--border-radius);
+            background-color: white;
+            border-radius: var(--card-radius);
             padding: 1.5rem;
-            box-shadow: 0 2px 6px var(--hover-shadow);
-            transition: transform var(--transition-duration), box-shadow var(--transition-duration);
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            border: 1px solid var(--neutral-200);
         }
 
         .order-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 6px 12px var(--hover-shadow);
+            box-shadow: var(--hover-shadow);
         }
 
         .order-header {
@@ -69,20 +62,20 @@
             align-items: center;
             margin-bottom: 1.5rem;
             padding-bottom: 1rem;
-            border-bottom: 2px solid var(--light-blue);
+            border-bottom: 2px solid var(--neutral-100);
         }
 
         .order-id {
             font-weight: 600;
-            color: var(--primary-blue);
+            color: var(--primary-600);
             font-size: 1.3rem;
         }
 
         .order-status {
-            background-color: var(--light-blue);
-            color: var(--primary-blue);
+            background-color: var(--primary-100);
+            color: var(--primary-700);
             padding: 0.5rem 1rem;
-            border-radius: 20px;
+            border-radius: var(--badge-radius);
             font-size: 0.9rem;
             text-transform: capitalize;
         }
@@ -95,8 +88,8 @@
             display: grid;
             grid-template-columns: 3fr 1fr 1fr 1fr;
             padding: 0.75rem 0;
-            border-bottom: 1px solid var(--light-blue);
-            color: var(--gray-dark);
+            border-bottom: 1px solid var(--neutral-100);
+            color: var(--neutral-700);
         }
 
         .item:last-child {
@@ -104,7 +97,7 @@
         }
 
         .item strong {
-            color: var(--primary-blue);
+            color: var(--primary-600);
         }
 
         .order-total {
@@ -112,16 +105,16 @@
             font-weight: 600;
             margin-top: 1rem;
             font-size: 1.3rem;
-            color: var(--primary-blue);
+            color: var(--primary-600);
         }
 
         .empty-message {
             text-align: center;
-            color: var(--primary-blue);
+            color: var(--primary-600);
             padding: 2rem;
-            background: var(--white);
-            border-radius: var(--border-radius);
-            box-shadow: 0 4px 8px var(--hover-shadow);
+            background: white;
+            border-radius: var(--card-radius);
+            box-shadow: var(--card-shadow);
         }
 
         @media (max-width: 768px) {
@@ -198,7 +191,7 @@
 
         function renderOrders() {
             const ordersContainer = document.getElementById('orders-list');
-            
+
             if (orders.length === 0) {
                 ordersContainer.innerHTML = '<div class="empty-message">No orders found</div>';
                 return;

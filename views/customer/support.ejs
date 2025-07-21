@@ -1,4 +1,4 @@
-<%- include('../partials/header') %>
+<link rel="stylesheet" href="/css/dashboard-variables.css">
 
 <div class="support-container">
   <div class="support-header">
@@ -145,15 +145,15 @@ document.addEventListener('DOMContentLoaded', function() {
   const chatInput = document.getElementById('chatInput');
   const sendMessageBtn = document.getElementById('sendMessageBtn');
   const chatMessages = document.getElementById('chatMessages');
-  
+
   startChatBtn.addEventListener('click', function() {
     chatWidget.style.display = 'flex';
   });
-  
+
   closeChatBtn.addEventListener('click', function() {
     chatWidget.style.display = 'none';
   });
-  
+
   function sendMessage() {
     const message = chatInput.value.trim();
     if (message) {
@@ -165,13 +165,13 @@ document.addEventListener('DOMContentLoaded', function() {
         <div class="message-time">Just now</div>
       `;
       chatMessages.appendChild(userMessage);
-      
+
       // Clear input
       chatInput.value = '';
-      
+
       // Scroll to bottom
       chatMessages.scrollTop = chatMessages.scrollHeight;
-      
+
       // Simulate support response
       setTimeout(() => {
         const supportMessage = document.createElement('div');
@@ -185,14 +185,14 @@ document.addEventListener('DOMContentLoaded', function() {
       }, 1000);
     }
   }
-  
+
   sendMessageBtn.addEventListener('click', sendMessage);
   chatInput.addEventListener('keypress', function(e) {
     if (e.key === 'Enter') {
       sendMessage();
     }
   });
-  
+
   // Ticket form submission
   const submitTicketBtn = document.getElementById('submitTicketBtn');
   submitTicketBtn.addEventListener('click', function() {
@@ -203,6 +203,237 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 </script>
+
+<style>
+  .support-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  .support-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .support-header h1 {
+    color: var(--primary-700);
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .support-header p {
+    color: var(--neutral-600);
+    max-width: 700px;
+    margin: 0 auto;
+    font-size: 1.1rem;
+  }
+
+  .support-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+
+  .support-card {
+    background-color: white;
+    border-radius: var(--card-radius);
+    padding: 2rem;
+    text-align: center;
+    box-shadow: var(--card-shadow);
+    transition: var(--transition);
+  }
+
+  .support-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--hover-shadow);
+  }
+
+  .support-card i {
+    font-size: 2.5rem;
+    color: var(--primary-600);
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .support-card h3 {
+    color: var(--neutral-800);
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+  }
+
+  .support-card p {
+    color: var(--neutral-600);
+    margin-bottom: 1.5rem;
+  }
+
+  .faq-section {
+    background-color: white;
+    border-radius: var(--card-radius);
+    padding: 2rem;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 3rem;
+  }
+
+  .faq-section h2 {
+    color: var(--primary-700);
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .accordion-item {
+    border-color: var(--neutral-200);
+    margin-bottom: 1rem;
+    border-radius: 0.5rem !important;
+    overflow: hidden;
+  }
+
+  .accordion-button {
+    font-weight: 600;
+    color: var(--neutral-700);
+    background-color: var(--neutral-50);
+    box-shadow: none !important;
+  }
+
+  .accordion-button:not(.collapsed) {
+    color: var(--primary-700);
+    background-color: var(--primary-50);
+  }
+
+  .accordion-body {
+    color: var(--neutral-600);
+    padding: 1.5rem;
+  }
+
+  .chat-widget {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 350px;
+    height: 450px;
+    background-color: white;
+    border-radius: var(--card-radius);
+    box-shadow: var(--hover-shadow);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 1000;
+  }
+
+  .chat-header {
+    background-color: var(--primary-600);
+    color: white;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .chat-header h6 {
+    margin: 0;
+    font-weight: 600;
+  }
+
+  .chat-body {
+    flex: 1;
+    padding: 1rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .message {
+    max-width: 80%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .message.user {
+    align-self: flex-end;
+  }
+
+  .message.support {
+    align-self: flex-start;
+  }
+
+  .message-content {
+    padding: 0.75rem 1rem;
+    border-radius: 1rem;
+    font-size: 0.9rem;
+  }
+
+  .message.user .message-content {
+    background-color: var(--primary-600);
+    color: white;
+    border-bottom-right-radius: 0.25rem;
+  }
+
+  .message.support .message-content {
+    background-color: var(--neutral-100);
+    color: var(--neutral-800);
+    border-bottom-left-radius: 0.25rem;
+  }
+
+  .message-time {
+    font-size: 0.7rem;
+    color: var(--neutral-500);
+    margin-top: 0.25rem;
+    align-self: flex-end;
+  }
+
+  .message.support .message-time {
+    align-self: flex-start;
+  }
+
+  .chat-footer {
+    display: flex;
+    padding: 0.75rem;
+    border-top: 1px solid var(--neutral-200);
+    background-color: white;
+  }
+
+  .chat-footer input {
+    flex: 1;
+    margin-right: 0.5rem;
+    border-radius: 20px;
+  }
+
+  .chat-footer button {
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .btn-primary {
+    background-color: var(--primary-600);
+    border-color: var(--primary-600);
+  }
+
+  .btn-primary:hover {
+    background-color: var(--primary-700);
+    border-color: var(--primary-700);
+  }
+
+  @media (max-width: 768px) {
+    .support-container {
+      padding: 1rem;
+    }
+
+    .chat-widget {
+      width: 100%;
+      height: 100%;
+      bottom: 0;
+      right: 0;
+      border-radius: 0;
+    }
+  }
+</style>
 
 <%- include('../partials/footer') %>
 

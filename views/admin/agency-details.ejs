@@ -5,7 +5,7 @@
         <i class="fas fa-arrow-left"></i> Back to Agencies
       </a>
     </div>
-    
+
     <!-- Agency Header -->
     <div class="agency-header">
       <div class="agency-logo">
@@ -17,17 +17,26 @@
           </div>
         <% } %>
       </div>
-      
+
       <div class="agency-title">
         <h2><%= agency.name %></h2>
         <div class="agency-meta">
-          <span class="agency-id">ID: <%= agency.agencyId %></span>
-          <span class="status-badge status-<%= agency.status %>">
-            <%= agency.status.charAt(0).toUpperCase() + agency.status.slice(1) %>
+          <span class="agency-id">ID: <%= agency._id %></span>
+          <span class="status-badge status-<%= agency.status || 'pending' %>">
+            <%= agency.status ? (agency.status.charAt(0).toUpperCase() + agency.status.slice(1)) : 'Pending' %>
           </span>
+          <% if (agency.isVerified) { %>
+            <span class="status-badge status-approved verification-badge">
+              <i class="fas fa-check-circle"></i> Verified
+            </span>
+          <% } else { %>
+            <span class="status-badge status-pending verification-badge">
+              <i class="fas fa-clock"></i> Not Verified
+            </span>
+          <% } %>
         </div>
       </div>
-      
+
       <div class="agency-actions">
         <% if (agency.status === 'pending') { %>
           <button class="btn btn-success" data-toggle="modal" data-target="#approveModal">
@@ -47,7 +56,7 @@
         <% } %>
       </div>
     </div>
-    
+
     <!-- Agency Details -->
     <div class="agency-details-grid">
       <!-- Basic Information -->
@@ -71,13 +80,13 @@
             </div>
             <div class="info-item">
               <span class="info-label">Business Type</span>
-              <span class="info-value"><%= agency.businessType %></span>
+              <span class="info-value"><%= agency.businessType || (agency.agencyDetails && agency.agencyDetails.businessType) || 'Not provided' %></span>
             </div>
             <div class="info-item">
               <span class="info-label">Website</span>
               <span class="info-value">
-                <% if (agency.website) { %>
-                  <a href="<%= agency.website %>" target="_blank"><%= agency.website %></a>
+                <% if (agency.website || (agency.agencyDetails && agency.agencyDetails.website)) { %>
+                  <a href="<%= agency.website || agency.agencyDetails.website %>" target="_blank"><%= agency.website || agency.agencyDetails.website %></a>
                 <% } else { %>
                   Not provided
                 <% } %>
@@ -85,12 +94,12 @@
             </div>
             <div class="info-item">
               <span class="info-label">Description</span>
-              <span class="info-value"><%= agency.description || 'Not provided' %></span>
+              <span class="info-value"><%= agency.description || (agency.agencyDetails && agency.agencyDetails.businessDescription) || 'Not provided' %></span>
             </div>
           </div>
         </div>
       </div>
-      
+
       <!-- Address Information -->
       <div class="dashboard-card">
         <div class="card-header">
@@ -100,28 +109,28 @@
           <div class="info-group">
             <div class="info-item">
               <span class="info-label">Street</span>
-              <span class="info-value"><%= agency.address.street || 'Not provided' %></span>
+              <span class="info-value"><%= agency.address && agency.address.street ? agency.address.street : 'Not provided' %></span>
             </div>
             <div class="info-item">
               <span class="info-label">City</span>
-              <span class="info-value"><%= agency.address.city || 'Not provided' %></span>
+              <span class="info-value"><%= agency.address && agency.address.city ? agency.address.city : 'Not provided' %></span>
             </div>
             <div class="info-item">
               <span class="info-label">State</span>
-              <span class="info-value"><%= agency.address.state || 'Not provided' %></span>
+              <span class="info-value"><%= agency.address && agency.address.state ? agency.address.state : 'Not provided' %></span>
             </div>
             <div class="info-item">
               <span class="info-label">ZIP Code</span>
-              <span class="info-value"><%= agency.address.zip || 'Not provided' %></span>
+              <span class="info-value"><%= agency.address && agency.address.zip ? agency.address.zip : 'Not provided' %></span>
             </div>
             <div class="info-item">
               <span class="info-label">Country</span>
-              <span class="info-value"><%= agency.address.country || 'Not provided' %></span>
+              <span class="info-value"><%= agency.address && agency.address.country ? agency.address.country : 'Not provided' %></span>
             </div>
           </div>
         </div>
       </div>
-      
+
       <!-- Social Media -->
       <div class="dashboard-card">
         <div class="card-header">
@@ -129,41 +138,41 @@
         </div>
         <div class="card-body">
           <div class="social-links">
-            <% if (agency.socialMedia.facebook) { %>
+            <% if (agency.socialMedia && agency.socialMedia.facebook) { %>
               <a href="<%= agency.socialMedia.facebook %>" target="_blank" class="social-link facebook">
                 <i class="fab fa-facebook"></i>
                 <span>Facebook</span>
               </a>
             <% } %>
-            
-            <% if (agency.socialMedia.instagram) { %>
+
+            <% if (agency.socialMedia && agency.socialMedia.instagram) { %>
               <a href="<%= agency.socialMedia.instagram %>" target="_blank" class="social-link instagram">
                 <i class="fab fa-instagram"></i>
                 <span>Instagram</span>
               </a>
             <% } %>
-            
-            <% if (agency.socialMedia.twitter) { %>
+
+            <% if (agency.socialMedia && agency.socialMedia.twitter) { %>
               <a href="<%= agency.socialMedia.twitter %>" target="_blank" class="social-link twitter">
                 <i class="fab fa-twitter"></i>
                 <span>Twitter</span>
               </a>
             <% } %>
-            
-            <% if (agency.socialMedia.linkedin) { %>
+
+            <% if (agency.socialMedia && agency.socialMedia.linkedin) { %>
               <a href="<%= agency.socialMedia.linkedin %>" target="_blank" class="social-link linkedin">
                 <i class="fab fa-linkedin"></i>
                 <span>LinkedIn</span>
               </a>
             <% } %>
-            
-            <% if (!agency.socialMedia.facebook && !agency.socialMedia.instagram && !agency.socialMedia.twitter && !agency.socialMedia.linkedin) { %>
+
+            <% if (!agency.socialMedia || (!agency.socialMedia.facebook && !agency.socialMedia.instagram && !agency.socialMedia.twitter && !agency.socialMedia.linkedin)) { %>
               <p class="no-data">No social media links provided</p>
             <% } %>
           </div>
         </div>
       </div>
-      
+
       <!-- Bank Details -->
       <div class="dashboard-card">
         <div class="card-header">
@@ -173,12 +182,12 @@
           <div class="info-group">
             <div class="info-item">
               <span class="info-label">Account Name</span>
-              <span class="info-value"><%= agency.bankDetails.accountName || 'Not provided' %></span>
+              <span class="info-value"><%= agency.bankDetails && agency.bankDetails.accountName ? agency.bankDetails.accountName : 'Not provided' %></span>
             </div>
             <div class="info-item">
               <span class="info-label">Account Number</span>
               <span class="info-value">
-                <% if (agency.bankDetails.accountNumber) { %>
+                <% if (agency.bankDetails && agency.bankDetails.accountNumber) { %>
                   <%= agency.bankDetails.accountNumber.replace(/\d(?=\d{4})/g, "*") %>
                 <% } else { %>
                   Not provided
@@ -187,72 +196,190 @@
             </div>
             <div class="info-item">
               <span class="info-label">Bank Name</span>
-              <span class="info-value"><%= agency.bankDetails.bankName || 'Not provided' %></span>
+              <span class="info-value"><%= agency.bankDetails && agency.bankDetails.bankName ? agency.bankDetails.bankName : 'Not provided' %></span>
             </div>
             <div class="info-item">
               <span class="info-label">IFSC Code</span>
-              <span class="info-value"><%= agency.bankDetails.ifscCode || 'Not provided' %></span>
+              <span class="info-value"><%= agency.bankDetails && agency.bankDetails.ifscCode ? agency.bankDetails.ifscCode : 'Not provided' %></span>
             </div>
           </div>
         </div>
       </div>
-      
+
       <!-- Documents -->
       <div class="dashboard-card">
         <div class="card-header">
-          <h3>Documents</h3>
+          <h3>Verification Documents</h3>
         </div>
         <div class="card-body">
           <div class="documents-grid">
-            <% if (agency.documents.businessRegistration) { %>
+            <!-- Business Registration -->
+            <% if (agency.documents && agency.documents.businessRegistration && agency.documents.businessRegistration.path) { %>
               <div class="document-card">
                 <div class="document-icon">
                   <i class="fas fa-file-alt"></i>
                 </div>
                 <div class="document-info">
                   <h4>Business Registration</h4>
-                  <a href="<%= agency.documents.businessRegistration %>" target="_blank" class="btn btn-sm btn-outline">
-                    <i class="fas fa-eye"></i> View
-                  </a>
+                  <div class="document-status status-<%= agency.documents.businessRegistration.status %>">
+                    <% if (agency.documents.businessRegistration.status === 'approved') { %>
+                      <i class="fas fa-check-circle"></i> Approved
+                    <% } else if (agency.documents.businessRegistration.status === 'rejected') { %>
+                      <i class="fas fa-times-circle"></i> Rejected
+                      <% if (agency.documents.businessRegistration.rejectionReason) { %>
+                        <div class="rejection-reason">
+                          Reason: <%= agency.documents.businessRegistration.rejectionReason %>
+                        </div>
+                      <% } %>
+                    <% } else { %>
+                      <i class="fas fa-clock"></i> Pending
+                    <% } %>
+                  </div>
+                  <div class="document-actions">
+                    <a href="<%= agency.documents.businessRegistration.path %>" target="_blank" class="btn btn-sm btn-outline">
+                      <i class="fas fa-eye"></i> View
+                    </a>
+                    <% if (agency.documents.businessRegistration.status === 'pending') { %>
+                      <div class="approval-actions">
+                        <form action="/admin/agencies/<%= agency._id %>/documents/businessRegistration/approve" method="POST" style="display:inline;">
+                          <button type="submit" class="btn btn-sm btn-success">Approve</button>
+                        </form>
+                        <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#rejectDocumentModal" data-document-type="businessRegistration">Reject</button>
+                      </div>
+                    <% } %>
+                  </div>
                 </div>
               </div>
             <% } %>
-            
-            <% if (agency.documents.taxId) { %>
+
+            <!-- Tax ID -->
+            <% if (agency.documents && agency.documents.taxId && agency.documents.taxId.path) { %>
               <div class="document-card">
                 <div class="document-icon">
                   <i class="fas fa-file-invoice"></i>
                 </div>
                 <div class="document-info">
                   <h4>Tax ID</h4>
-                  <a href="<%= agency.documents.taxId %>" target="_blank" class="btn btn-sm btn-outline">
-                    <i class="fas fa-eye"></i> View
-                  </a>
+                  <div class="document-status status-<%= agency.documents.taxId.status %>">
+                    <% if (agency.documents.taxId.status === 'approved') { %>
+                      <i class="fas fa-check-circle"></i> Approved
+                    <% } else if (agency.documents.taxId.status === 'rejected') { %>
+                      <i class="fas fa-times-circle"></i> Rejected
+                      <% if (agency.documents.taxId.rejectionReason) { %>
+                        <div class="rejection-reason">
+                          Reason: <%= agency.documents.taxId.rejectionReason %>
+                        </div>
+                      <% } %>
+                    <% } else { %>
+                      <i class="fas fa-clock"></i> Pending
+                    <% } %>
+                  </div>
+                  <div class="document-actions">
+                    <a href="<%= agency.documents.taxId.path %>" target="_blank" class="btn btn-sm btn-outline">
+                      <i class="fas fa-eye"></i> View
+                    </a>
+                    <% if (agency.documents.taxId.status === 'pending') { %>
+                      <div class="approval-actions">
+                        <form action="/admin/agencies/<%= agency._id %>/documents/taxId/approve" method="POST" style="display:inline;">
+                          <button type="submit" class="btn btn-sm btn-success">Approve</button>
+                        </form>
+                        <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#rejectDocumentModal" data-document-type="taxId">Reject</button>
+                      </div>
+                    <% } %>
+                  </div>
                 </div>
               </div>
             <% } %>
-            
-            <% if (agency.documents.identityProof) { %>
+
+            <!-- Identity Proof -->
+            <% if (agency.documents && agency.documents.identityProof && agency.documents.identityProof.path) { %>
               <div class="document-card">
                 <div class="document-icon">
                   <i class="fas fa-id-card"></i>
                 </div>
                 <div class="document-info">
                   <h4>Identity Proof</h4>
-                  <a href="<%= agency.documents.identityProof %>" target="_blank" class="btn btn-sm btn-outline">
-                    <i class="fas fa-eye"></i> View
-                  </a>
+                  <div class="document-status status-<%= agency.documents.identityProof.status %>">
+                    <% if (agency.documents.identityProof.status === 'approved') { %>
+                      <i class="fas fa-check-circle"></i> Approved
+                    <% } else if (agency.documents.identityProof.status === 'rejected') { %>
+                      <i class="fas fa-times-circle"></i> Rejected
+                      <% if (agency.documents.identityProof.rejectionReason) { %>
+                        <div class="rejection-reason">
+                          Reason: <%= agency.documents.identityProof.rejectionReason %>
+                        </div>
+                      <% } %>
+                    <% } else { %>
+                      <i class="fas fa-clock"></i> Pending
+                    <% } %>
+                  </div>
+                  <div class="document-actions">
+                    <a href="<%= agency.documents.identityProof.path %>" target="_blank" class="btn btn-sm btn-outline">
+                      <i class="fas fa-eye"></i> View
+                    </a>
+                    <% if (agency.documents.identityProof.status === 'pending') { %>
+                      <div class="approval-actions">
+                        <form action="/admin/agencies/<%= agency._id %>/documents/identityProof/approve" method="POST" style="display:inline;">
+                          <button type="submit" class="btn btn-sm btn-success">Approve</button>
+                        </form>
+                        <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#rejectDocumentModal" data-document-type="identityProof">Reject</button>
+                      </div>
+                    <% } %>
+                  </div>
                 </div>
               </div>
             <% } %>
-            
-            <% if (!agency.documents.businessRegistration && !agency.documents.taxId && !agency.documents.identityProof) { %>
+
+            <!-- Address Proof -->
+            <% if (agency.documents && agency.documents.addressProof && agency.documents.addressProof.path) { %>
+              <div class="document-card">
+                <div class="document-icon">
+                  <i class="fas fa-home"></i>
+                </div>
+                <div class="document-info">
+                  <h4>Address Proof</h4>
+                  <div class="document-status status-<%= agency.documents.addressProof.status %>">
+                    <% if (agency.documents.addressProof.status === 'approved') { %>
+                      <i class="fas fa-check-circle"></i> Approved
+                    <% } else if (agency.documents.addressProof.status === 'rejected') { %>
+                      <i class="fas fa-times-circle"></i> Rejected
+                      <% if (agency.documents.addressProof.rejectionReason) { %>
+                        <div class="rejection-reason">
+                          Reason: <%= agency.documents.addressProof.rejectionReason %>
+                        </div>
+                      <% } %>
+                    <% } else { %>
+                      <i class="fas fa-clock"></i> Pending
+                    <% } %>
+                  </div>
+                  <div class="document-actions">
+                    <a href="<%= agency.documents.addressProof.path %>" target="_blank" class="btn btn-sm btn-outline">
+                      <i class="fas fa-eye"></i> View
+                    </a>
+                    <% if (agency.documents.addressProof.status === 'pending') { %>
+                      <div class="approval-actions">
+                        <form action="/admin/agencies/<%= agency._id %>/documents/addressProof/approve" method="POST" style="display:inline;">
+                          <button type="submit" class="btn btn-sm btn-success">Approve</button>
+                        </form>
+                        <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#rejectDocumentModal" data-document-type="addressProof">Reject</button>
+                      </div>
+                    <% } %>
+                  </div>
+                </div>
+              </div>
+            <% } %>
+
+            <% if (!agency.documents ||
+                  (!agency.documents.businessRegistration || !agency.documents.businessRegistration.path) &&
+                  (!agency.documents.taxId || !agency.documents.taxId.path) &&
+                  (!agency.documents.identityProof || !agency.documents.identityProof.path) &&
+                  (!agency.documents.addressProof || !agency.documents.addressProof.path)) { %>
               <p class="no-data">No documents uploaded</p>
             <% } %>
           </div>
         </div>
       </div>
-      
+
       <!-- Status History -->
       <div class="dashboard-card">
         <div class="card-header">
@@ -274,7 +401,7 @@
                 </div>
               </div>
             </div>
-            
+
             <% if (agency.reviewedAt) { %>
               <div class="timeline-item">
                 <div class="timeline-point"></div>
@@ -283,12 +410,12 @@
                     <%= new Date(agency.reviewedAt).toLocaleString() %>
                   </div>
                   <div class="timeline-status">
-                    <span class="status-badge status-<%= agency.status %>">
-                      <%= agency.status.charAt(0).toUpperCase() + agency.status.slice(1) %>
+                    <span class="status-badge status-<%= agency.status || 'approved' %>">
+                      <%= agency.status ? (agency.status.charAt(0).toUpperCase() + agency.status.slice(1)) : 'Approved' %>
                     </span>
                   </div>
                   <div class="timeline-note">
-                    <%= agency.statusReason || `Agency ${agency.status}` %>
+                    <%= agency.statusReason || (agency.status ? `Agency ${agency.status}` : 'Agency approved') %>
                   </div>
                 </div>
               </div>
@@ -298,7 +425,7 @@
       </div>
     </div>
   </div>
-  
+
   <!-- Approve Modal -->
   <div class="modal" id="approveModal">
     <div class="modal-dialog">
@@ -307,20 +434,20 @@
           <h4 class="modal-title">Approve Agency</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
-        
+
         <form action="/admin/agencies/<%= agency._id %>/update-status" method="POST">
           <div class="modal-body">
             <p>Are you sure you want to approve <strong><%= agency.name %></strong>?</p>
             <p>This will allow the agency to log in and start selling products on the platform.</p>
-            
+
             <div class="form-group">
               <label for="approveNote">Note (Optional)</label>
               <textarea id="approveNote" name="statusReason" class="form-control" rows="3" placeholder="Add a note about this approval..."></textarea>
             </div>
-            
+
             <input type="hidden" name="status" value="approved">
           </div>
-          
+
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
             <button type="submit" class="btn btn-success">Approve Agency</button>
@@ -329,7 +456,7 @@
       </div>
     </div>
   </div>
-  
+
   <!-- Reject Modal -->
   <div class="modal" id="rejectModal">
     <div class="modal-dialog">
@@ -340,23 +467,23 @@
           </h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
-        
+
         <form action="/admin/agencies/<%= agency._id %>/update-status" method="POST">
           <div class="modal-body">
             <p>
-              Are you sure you want to 
+              Are you sure you want to
               <%= agency.status === 'approved' ? 'suspend' : 'reject' %>
               <strong><%= agency.name %></strong>?
             </p>
-            
+
             <div class="form-group">
               <label for="rejectReason">Reason (Required)</label>
               <textarea id="rejectReason" name="statusReason" class="form-control" rows="3" placeholder="Provide a reason..." required></textarea>
             </div>
-            
+
             <input type="hidden" name="status" value="rejected">
           </div>
-          
+
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
             <button type="submit" class="btn btn-danger">
@@ -367,7 +494,36 @@
       </div>
     </div>
   </div>
-  
+
+  <!-- Reject Document Modal -->
+  <div class="modal" id="rejectDocumentModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Reject Document</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+        <form id="rejectDocumentForm" action="/admin/agencies/<%= agency._id %>/documents/placeholder/reject" method="POST">
+          <div class="modal-body">
+            <p>Are you sure you want to reject this document?</p>
+            <p>Please provide a reason for rejection:</p>
+
+            <div class="form-group">
+              <label for="rejectionReason">Reason (Required)</label>
+              <textarea id="rejectionReason" name="reason" class="form-control" rows="3" placeholder="Provide a reason for rejection..." required></textarea>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-danger">Reject Document</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <script>
     // Initialize modals
     document.addEventListener('DOMContentLoaded', function() {
@@ -375,17 +531,25 @@
       const modals = document.querySelectorAll('.modal');
       const modalTogglers = document.querySelectorAll('[data-toggle="modal"]');
       const modalClosers = document.querySelectorAll('[data-dismiss="modal"]');
-      
+
       // Show modal
       modalTogglers.forEach(toggler => {
         toggler.addEventListener('click', function() {
           const targetModal = document.querySelector(this.dataset.target);
           if (targetModal) {
             targetModal.classList.add('show');
+
+            // If this is the reject document modal, update the form action
+            if (targetModal.id === 'rejectDocumentModal') {
+              const documentType = this.dataset.documentType;
+              const form = targetModal.querySelector('#rejectDocumentForm');
+              const action = form.action;
+              form.action = action.replace('placeholder', documentType);
+            }
           }
         });
       });
-      
+
       // Close modal
       modalClosers.forEach(closer => {
         closer.addEventListener('click', function() {
@@ -395,7 +559,7 @@
           }
         });
       });
-      
+
       // Close modal when clicking outside
       modals.forEach(modal => {
         modal.addEventListener('click', function(event) {
@@ -406,5 +570,4 @@
       });
     });
   </script>
-  
-  
+

@@ -6,6 +6,8 @@
   <title><%= title %> | SETU</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/animations.css">
+  <link rel="stylesheet" href="/css/buttons.css">
   <style>
     .form-group {
   margin-bottom: 1.5rem;
@@ -87,7 +89,7 @@
       <%= success_msg %>
     </div>
   <% } %>
-  
+
   <% if(error_msg && error_msg.length > 0) { %>
     <div class="notification error visible">
       <%= error_msg %>
@@ -97,12 +99,19 @@
   <!-- Home Page -->
   <% if(page === 'home') { %>
     <div class="min-h-screen flex flex-col">
-      <!-- Navigation -->
-      <%- include('partials/header') %>
+      <!-- Animated Background -->
+      <div class="animated-background">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+      </div>
 
+      <!-- Navigation removed -->
 
       <div class="flex-1 max-w-7xl mx-auto px-8 py-8 flex flex-col justify-center">
-        <header class="text-center mb-14">
+        <header class="text-center mb-14 fade-in">
           <h1 class="text-4xl font-bold text-gray-900 mb-4 tracking-tight">Welcome to Our Portal</h1>
           <p class="text-lg text-gray-600 max-w-xl mx-auto">
             Select your account type to access your personalized dashboard experience
@@ -110,7 +119,7 @@
         </header>
 
         <div class="flex justify-center gap-8 flex-wrap">
-          <div class="portal-card customer-portal">
+          <div class="portal-card customer-portal slide-in-left delay-200">
             <div class="portal-image">
               <div class="portal-icon">
                 <i class="fas fa-user-circle"></i>
@@ -121,14 +130,14 @@
               <p class="portal-description">
                 Access your account information, view reports, and manage your services in one place.
               </p>
-              <a href="auth/customer/login" class="btn btn-primary">
+              <a href="auth/customer/login" class="btn btn-primary btn-animated">
                 <i class="fas fa-sign-in-alt"></i>
                 <span>Access Dashboard</span>
               </a>
             </div>
           </div>
 
-          <div class="portal-card agency-portal">
+          <div class="portal-card agency-portal slide-in-right delay-300">
             <div class="portal-image">
               <div class="portal-icon">
                 <i class="fas fa-building"></i>
@@ -139,7 +148,7 @@
               <p class="portal-description">
                 Manage clients, access agency tools, and view performance metrics for your team.
               </p>
-              <a href="auth/agency/login" class="btn btn-primary">
+              <a href="auth/agency/login" class="btn btn-primary btn-animated">
                 <i class="fas fa-sign-in-alt"></i>
                 <span>Access Dashboard</span>
               </a>
@@ -147,25 +156,56 @@
           </div>
         </div>
 
-        <div class="help-card">
-          <h3 class="help-title">Need Help?</h3>
+        <div class="help-card fade-in delay-500">
+          <h3 class="help-title">Need Help? <span class="animated-icon pulse"><i class="fas fa-question-circle"></i></span></h3>
           <p class="help-description">Not sure which portal to choose or having trouble logging in?</p>
           <div class="help-actions">
-            <button class="btn btn-secondary">
-              <i class="fas fa-question-circle"></i>
+            <a href="/support" class="btn btn-secondary btn-animated">
+              <i class="fas fa-headset"></i>
               <span>Get Support</span>
-            </button>
-            <button class="btn btn-secondary">
+            </a>
+            <a href="/support/contact" class="btn btn-secondary btn-animated">
               <i class="fas fa-envelope"></i>
               <span>Contact Us</span>
-            </button>
+            </a>
           </div>
         </div>
       </div>
 
-      <!-- Footer -->
-      <%- include('partials/footer') %>'
+      <!-- Footer removed -->
     </div>
+
+    <!-- Animation Script -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Add scroll-triggered animations
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+            }
+          });
+        }, { threshold: 0.1 });
+
+        // Observe all animated elements
+        document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right').forEach(el => {
+          observer.observe(el);
+        });
+
+        // Add hover effects to buttons
+        document.querySelectorAll('.btn').forEach(btn => {
+          btn.addEventListener('mouseenter', function() {
+            const icon = this.querySelector('i');
+            if (icon) icon.style.transform = 'translateX(3px)';
+          });
+
+          btn.addEventListener('mouseleave', function() {
+            const icon = this.querySelector('i');
+            if (icon) icon.style.transform = 'translateX(0)';
+          });
+        });
+      });
+    </script>
   <% } %>
 
   <!-- Customer Login Page -->
@@ -261,7 +301,7 @@
             <div class="form-group">
               <label for="confirmPassword" class="form-label">Confirm Password</label>
               <input id="confirmPassword" name="confirmPassword" type="password" class="form-input confirmPassword" placeholder="Confirm your password" required>
-              <div id="confirm-password-error" class="error-message"></div> 
+              <div id="confirm-password-error" class="error-message"></div>
             </div>
 
             <div class="form-checkbox">
@@ -294,60 +334,60 @@
             <span class="logo-text">SETU</span>
           </a>
         </div>
-    
+
         <div class="auth-content">
           <div class="auth-header">
             <h1 class="auth-title">Customer Registration</h1>
             <p class="auth-description">Create an account to start shopping</p>
           </div>
-    
-         
+
+
           <% if(typeof errors !== 'undefined' && errors.length > 0) { %>
             <% errors.forEach(function(error) { %>
               <div class="alert alert-danger"><%= error.msg %></div>
             <% }); %>
           <% } %>
-    
-         
+
+
           <div id="success-message" class="alert alert-success hidden">
             Registration successful! You can now log in.
           </div>
-    
+
           <form id="registration-form" action="/auth/customer/register" method="POST" class="auth-form">
             <div class="form-group">
               <label for="name">Full Name</label>
               <input type="text" id="name" name="name" class="form-control" value="<%= typeof name != 'undefined' ? name : '' %>">
               <div id="name-error" class="error-message"></div>
             </div>
-    
+
             <div class="form-group">
               <label for="email">Email Address</label>
               <input type="email" id="email" name="email" class="form-control" value="<%= typeof email != 'undefined' ? email : '' %>">
               <div id="email-error" class="error-message"></div>
             </div>
-    
+
             <div class="form-group">
               <label for="password">Password</label>
               <input type="password" id="password" name="password" class="form-control">
               <div id="password-error" class="error-message"></div>
             </div>
-    
+
             <div class="form-group">
               <label for="confirm-password">Confirm Password</label>
               <input type="password" id="confirm-password" name="confirmPassword" class="form-control">
               <div id="confirm-password-error" class="error-message"></div>
             </div>
-    
+
             <div class="form-checkbox">
               <input type="checkbox" id="terms" name="terms" class="checkbox" required>
               <label for="terms" class="checkbox-label">
                 I agree to the <a href="/terms" class="form-link">Terms of Service</a> and <a href="/privacy" class="form-link">Privacy Policy</a>
               </label>
             </div>
-    
+
             <button type="submit" class="btn btn-primary btn-block">Create Account</button>
           </form>
-    
+
           <div class="auth-footer">
             <p class="auth-footer-text">
               Already have an account? <a href="/auth/customer/login" class="form-link">Log in</a>
@@ -627,10 +667,10 @@
                       <h3 class="product-title"><%= product.name %></h3>
                       <div class="product-price">$<%= product.price.toFixed(2) %></div>
                       <div class="product-actions">
-                        <button class="btn btn-primary add-to-cart add-to-cart-btn" 
-                          data-id="<%= product._id %>" 
-                          data-name="<%= product.name %>" 
-                          data-price="<%= product.price %>" 
+                        <button class="btn btn-primary add-to-cart add-to-cart-btn"
+                          data-id="<%= product._id %>"
+                          data-name="<%= product.name %>"
+                          data-price="<%= product.price %>"
                           data-image="<%= product.image %>">
                           <i class="fas fa-shopping-cart"></i> Add to Cart
                         </button>
@@ -686,7 +726,7 @@
                 <h2 class="card-title">Cart Items</h2>
               </div>
               <div class="card-content">
-               
+
                 <div class="cart-items" id="cartItems">
                   <% if (cart.length > 0) { %>
                     <% cart.forEach(item => { %>
@@ -699,7 +739,7 @@
                     <div class="cart-empty">Your cart is empty.</div>
                   <% } %>
                 </div>
-                
+
 
               </div>
             </div>
@@ -1063,108 +1103,108 @@
 
         // Sample data - would be replaced with API calls in a real implementation
         // const documents = [
-        //     { 
-        //         id: 'DOC-001', 
-        //         agency: 'Travel Agency Ltd', 
-        //         type: 'Business License', 
-        //         date: '2025-03-20', 
-        //         status: 'pending', 
+        //     {
+        //         id: 'DOC-001',
+        //         agency: 'Travel Agency Ltd',
+        //         type: 'Business License',
+        //         date: '2025-03-20',
+        //         status: 'pending',
         //         fileType: 'pdf',
         //         fileUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
-        //         notes: '' 
+        //         notes: ''
         //     },
-        //     { 
-        //         id: 'DOC-002', 
-        //         agency: 'Holiday Experts', 
-        //         type: 'Tax Certificate', 
-        //         date: '2025-03-19', 
-        //         status: 'pending', 
+        //     {
+        //         id: 'DOC-002',
+        //         agency: 'Holiday Experts',
+        //         type: 'Tax Certificate',
+        //         date: '2025-03-19',
+        //         status: 'pending',
         //         fileType: 'image',
         //         fileUrl: 'https://via.placeholder.com/800x600?text=Tax+Certificate',
-        //         notes: '' 
+        //         notes: ''
         //     },
-        //     { 
-        //         id: 'DOC-003', 
-        //         agency: 'Adventure Tours', 
-        //         type: 'Insurance Policy', 
-        //         date: '2025-03-18', 
-        //         status: 'pending', 
+        //     {
+        //         id: 'DOC-003',
+        //         agency: 'Adventure Tours',
+        //         type: 'Insurance Policy',
+        //         date: '2025-03-18',
+        //         status: 'pending',
         //         fileType: 'pdf',
         //         fileUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
-        //         notes: '' 
+        //         notes: ''
         //     },
-        //     { 
-        //         id: 'DOC-004', 
-        //         agency: 'Global Vacations', 
-        //         type: 'Business License', 
-        //         date: '2025-03-15', 
-        //         status: 'approved', 
-        //         verifiedDate: '2025-03-16', 
+        //     {
+        //         id: 'DOC-004',
+        //         agency: 'Global Vacations',
+        //         type: 'Business License',
+        //         date: '2025-03-15',
+        //         status: 'approved',
+        //         verifiedDate: '2025-03-16',
         //         fileType: 'image',
         //         fileUrl: 'https://via.placeholder.com/800x600?text=Business+License',
         //         notes: 'All documents appear to be in order. Business license is valid for 2 years.',
         //         verifiedBy: 'Admin User'
         //     },
-        //     { 
-        //         id: 'DOC-005', 
-        //         agency: 'Dream Holidays', 
-        //         type: 'Tax Certificate', 
-        //         date: '2025-03-12', 
-        //         status: 'rejected', 
-        //         verifiedDate: '2025-03-13', 
+        //     {
+        //         id: 'DOC-005',
+        //         agency: 'Dream Holidays',
+        //         type: 'Tax Certificate',
+        //         date: '2025-03-12',
+        //         status: 'rejected',
+        //         verifiedDate: '2025-03-13',
         //         fileType: 'pdf',
         //         fileUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
         //         notes: 'Tax certificate is expired. Please upload the most recent version.',
         //         verifiedBy: 'Admin User'
         //     }
         // ];
-        
+
         // const agencyFunctions = [
-        //     { 
-        //         id: 'FUNC-001', 
-        //         name: 'Automated Booking System', 
-        //         agency: 'Travel Agency Ltd', 
+        //     {
+        //         id: 'FUNC-001',
+        //         name: 'Automated Booking System',
+        //         agency: 'Travel Agency Ltd',
         //         description: 'This function provides an automated booking system for travel packages. It integrates with payment gateways and sends confirmation emails to customers.',
         //         dateAdded: '2025-03-10',
         //         status: 'active',
         //         notes: ''
         //     },
-        //     { 
-        //         id: 'FUNC-002', 
-        //         name: 'Customer Feedback Collection', 
-        //         agency: 'Holiday Experts', 
+        //     {
+        //         id: 'FUNC-002',
+        //         name: 'Customer Feedback Collection',
+        //         agency: 'Holiday Experts',
         //         description: 'This module collects and analyzes customer feedback after trips, generating satisfaction reports and improvement suggestions.',
         //         dateAdded: '2025-03-15',
         //         status: 'pending',
         //         notes: ''
         //     },
-        //     { 
-        //         id: 'FUNC-003', 
-        //         name: 'Dynamic Pricing Algorithm', 
-        //         agency: 'Adventure Tours', 
+        //     {
+        //         id: 'FUNC-003',
+        //         name: 'Dynamic Pricing Algorithm',
+        //         agency: 'Adventure Tours',
         //         description: 'An algorithm that adjusts package prices based on demand, seasonality, and competitor pricing. Helps maximize bookings and revenue.',
         //         dateAdded: '2025-03-18',
         //         status: 'active',
         //         notes: 'Approved after testing with sample data'
         //     }
         // ];
-        
+
         // // Initialize the page
         // document.addEventListener('DOMContentLoaded', function() {
         //     populatePendingDocuments();
         //     populateVerifiedDocuments();
         //     populateAgencyFunctions();
-            
+
         //     // Close document modal when clicking the X
         //     document.querySelector('#documentModal .close').addEventListener('click', function() {
         //         document.getElementById('documentModal').style.display = 'none';
         //     });
-            
+
         //     // Close modals when clicking outside of them
         //     window.addEventListener('click', function(event) {
         //         const docModal = document.getElementById('documentModal');
         //         const funcModal = document.getElementById('functionModal');
-                
+
         //         if (event.target == docModal) {
         //             docModal.style.display = 'none';
         //         }
@@ -1173,7 +1213,7 @@
         //         }
         //     });
         // });
-        
+
         // // Tab switching function
         // function openTab(tabName) {
         //     // Hide all tab contents
@@ -1181,25 +1221,25 @@
         //     for (let i = 0; i < tabContents.length; i++) {
         //         tabContents[i].style.display = 'none';
         //     }
-            
+
         //     // Remove active class from all tabs
         //     const tabs = document.getElementsByClassName('tab');
         //     for (let i = 0; i < tabs.length; i++) {
         //         tabs[i].classList.remove('active');
         //     }
-            
+
         //     // Show the selected tab content and set it as active
         //     document.getElementById(tabName).style.display = 'block';
         //     document.querySelector(⁠ .tab[onclick="openTab('${tabName}')"] ⁠).classList.add('active');
         // }
-        
+
         // // Populate tables with data
         // function populatePendingDocuments() {
         //     const tableBody = document.getElementById('pending-documents');
         //     tableBody.innerHTML = '';
-            
+
         //     const pendingDocs = documents.filter(doc => doc.status === 'pending');
-            
+
         //     pendingDocs.forEach(doc => {
         //         const row = document.createElement('tr');
         //         row.innerHTML = `
@@ -1217,18 +1257,18 @@
         //         tableBody.appendChild(row);
         //     });
         // }
-        
+
         // function populateVerifiedDocuments() {
         //     const tableBody = document.getElementById('verified-documents');
         //     tableBody.innerHTML = '';
-            
+
         //     const verifiedDocs = documents.filter(doc => doc.status === 'approved' || doc.status === 'rejected');
-            
+
         //     verifiedDocs.forEach(doc => {
         //         const row = document.createElement('tr');
         //         const badgeClass = doc.status === 'approved' ? 'badge-approved' : 'badge-rejected';
         //         const statusText = doc.status.charAt(0).toUpperCase() + doc.status.slice(1);
-                
+
         //         row.innerHTML = `
         //             <td>${doc.id}</td>
         //             <td>${doc.agency}</td>
@@ -1244,19 +1284,19 @@
         //         tableBody.appendChild(row);
         //     });
         // }
-        
+
         // function populateAgencyFunctions() {
         //     const functionsContainer = document.getElementById('agency-functions');
         //     functionsContainer.innerHTML = '';
-            
+
         //     agencyFunctions.forEach(func => {
         //         const functionCard = document.createElement('div');
         //         functionCard.className = 'function-card';
-                
-        //         const statusBadge = func.status === 'active' ? 
-        //             '<span class="badge badge-approved">Active</span>' : 
+
+        //         const statusBadge = func.status === 'active' ?
+        //             '<span class="badge badge-approved">Active</span>' :
         //             '<span class="badge badge-pending">Pending</span>';
-                
+
         //         functionCard.innerHTML = `
         //             <div class="function-header">
         //                 <h3>${func.name}</h3>
@@ -1276,11 +1316,11 @@
         //                 </button>` : ''}
         //             </div>
         //         `;
-                
+
         //         functionsContainer.appendChild(functionCard);
         //     });
         // }
-        
+
         // // Helper function to get appropriate icon for document type
         // function getDocumentIcon(docType) {
         //     if (docType.includes('License')) return 'fa-file-contract';
@@ -1288,14 +1328,14 @@
         //     if (docType.includes('Policy')) return 'fa-file-signature';
         //     return 'fa-file-alt';
         // }
-        
+
         // // Document view and verification functions
         // let currentDocumentId = null;
-        
+
         // function viewDocument(documentId) {
         //     currentDocumentId = documentId;
         //     const document = documents.find(doc => doc.id === documentId);
-            
+
         //     if (document) {
         //         // Set modal title and basic info
         //         document.getElementById('modal-title').textContent = ⁠ ${document.type}: ${document.id} ⁠;
@@ -1303,40 +1343,40 @@
         //         document.getElementById('document-agency').textContent = document.agency;
         //         document.getElementById('document-type').textContent = document.type;
         //         document.getElementById('document-date').textContent = document.date;
-                
+
         //         // Set status with appropriate badge
         //         const statusEl = document.getElementById('document-status');
         //         statusEl.textContent = document.status.charAt(0).toUpperCase() + document.status.slice(1);
         //         statusEl.className = '';
-        //         statusEl.classList.add('badge', document.status === 'approved' ? 'badge-approved' : 
+        //         statusEl.classList.add('badge', document.status === 'approved' ? 'badge-approved' :
         //                               document.status === 'rejected' ? 'badge-rejected' : 'badge-pending');
-                
+
         //         // Show/hide verification info based on status
         //         const verifiedByContainer = document.getElementById('verified-by-container');
         //         const notesDisplayContainer = document.getElementById('verification-notes-container');
         //         const verificationForm = document.getElementById('verification-form-container');
         //         const verificationFooter = document.getElementById('verification-footer');
-                
+
         //         if (document.status !== 'pending') {
         //             verifiedByContainer.style.display = 'block';
         //             notesDisplayContainer.style.display = 'block';
         //             verificationForm.style.display = 'none';
         //             verificationFooter.style.display = 'none';
-                    
+
         //             document.getElementById('verification-notes-display').textContent = document.notes || 'No notes provided';
         //         } else {
         //             verifiedByContainer.style.display = 'none';
         //             notesDisplayContainer.style.display = 'none';
         //             verificationForm.style.display = 'block';
         //             verificationFooter.style.display = 'flex';
-                    
+
         //             document.getElementById('verification-notes-input').value = '';
         //         }
-                
+
         //         // Load document preview based on file type
         //         const previewContainer = document.getElementById('document-preview-container');
         //         previewContainer.innerHTML = '';
-                
+
         //         if (document.fileType === 'image') {
         //             const img = document.createElement('img');
         //             img.src = document.fileUrl;
@@ -1351,7 +1391,7 @@
         //             embed.style.width = '100%';
         //             embed.style.height = '400px';
         //             previewContainer.appendChild(embed);
-                    
+
         //             const downloadLink = document.createElement('a');
         //             downloadLink.href = document.fileUrl;
         //             downloadLink.textContent = 'Download PDF';
@@ -1364,61 +1404,61 @@
         //         } else {
         //             previewContainer.innerHTML = ⁠ <p>Preview not available for this file type. <a href="${document.fileUrl}" class="btn btn-view" target="_blank">Download File</a></p> ⁠;
         //         }
-                
+
         //         // Show the modal
         //         document.getElementById('documentModal').style.display = 'block';
         //     }
         // }
-        
+
         // function approveDocument() {
         //     if (!currentDocumentId) return;
-            
+
         //     const documentIndex = documents.findIndex(doc => doc.id === currentDocumentId);
         //     if (documentIndex !== -1) {
         //         const notes = document.getElementById('verification-notes-input').value;
-                
+
         //         documents[documentIndex].status = 'approved';
         //         documents[documentIndex].verifiedDate = new Date().toISOString().split('T')[0];
         //         documents[documentIndex].notes = notes;
         //         documents[documentIndex].verifiedBy = 'Admin User';
-                
+
         //         // In a real app, this would be an API call
         //         alert(⁠ Document ${currentDocumentId} has been approved. ⁠);
-                
+
         //         document.getElementById('documentModal').style.display = 'none';
         //         populatePendingDocuments();
         //         populateVerifiedDocuments();
         //     }
         // }
-        
+
         // function rejectDocument() {
         //     if (!currentDocumentId) return;
-            
+
         //     const documentIndex = documents.findIndex(doc => doc.id === currentDocumentId);
         //     if (documentIndex !== -1) {
         //         const notes = document.getElementById('verification-notes-input').value;
-                
+
         //         documents[documentIndex].status = 'rejected';
         //         documents[documentIndex].verifiedDate = new Date().toISOString().split('T')[0];
         //         documents[documentIndex].notes = notes;
         //         documents[documentIndex].verifiedBy = 'Admin User';
-                
+
         //         // In a real app, this would be an API call
         //         alert(⁠ Document ${currentDocumentId} has been rejected. ⁠);
-                
+
         //         document.getElementById('documentModal').style.display = 'none';
         //         populatePendingDocuments();
         //         populateVerifiedDocuments();
         //     }
         // }
-        
+
         // // Function management
         // let currentFunctionId = null;
-        
+
         // function viewFunctionDetails(functionId) {
         //     currentFunctionId = functionId;
         //     const func = agencyFunctions.find(f => f.id === functionId);
-            
+
         //     if (func) {
         //         document.getElementById('function-modal-title').textContent = func.name;
         //         document.getElementById('function-id').textContent = func.id;
@@ -1426,12 +1466,12 @@
         //         document.getElementById('function-agency').textContent = func.agency;
         //         document.getElementById('function-date').textContent = func.dateAdded;
         //         document.getElementById('function-description-text').textContent = func.description;
-                
+
         //         const statusEl = document.getElementById('function-status');
         //         statusEl.textContent = func.status.charAt(0).toUpperCase() + func.status.slice(1);
         //         statusEl.className = '';
         //         statusEl.classList.add('badge', func.status === 'active' ? 'badge-approved' : 'badge-pending');
-                
+
         //         // Hide approval section for already approved functions
         //         if (func.status === 'active') {
         //             document.getElementById('function-verification-container').style.display = 'none';
@@ -1440,34 +1480,34 @@
         //             document.getElementById('function-verification-container').style.display = 'block';
         //             document.getElementById('approve-function-btn').style.display = 'inline-block';
         //         }
-                
+
         //         document.getElementById('functionModal').style.display = 'block';
         //     }
         // }
-        
+
         // function openFunctionApproval(functionId) {
         //     currentFunctionId = functionId;
         //     viewFunctionDetails(functionId);
         // }
-        
+
         // function closeFunctionModal() {
         //     document.getElementById('functionModal').style.display = 'none';
         // }
-        
+
         // function approveFunction() {
         //     if (!currentFunctionId) return;
-            
+
         //     const functionIndex = agencyFunctions.findIndex(f => f.id === currentFunctionId);
-            
+
         //     if (functionIndex !== -1) {
         //         const notes = document.getElementById('function-notes-input').value;
-                
+
         //         agencyFunctions[functionIndex].status = 'active';
         //         agencyFunctions[functionIndex].notes = notes;
-                
+
         //         // In a real app, this would be an API call
         //         alert(⁠ Function ${currentFunctionId} has been approved and is now active. ⁠);
-                
+
         //         document.getElementById('functionModal').style.display = 'none';
         //         populateAgencyFunctions();
         //     }
@@ -1477,7 +1517,7 @@
         document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('registration-form');
   const successMessage = document.getElementById('success-message');
-  
+
   // Get all form inputs
   const nameInput = document.getElementById('name');
   const emailInput = document.getElementById('email');
@@ -1631,10 +1671,12 @@
 });
 
 
-
-
     </script>
   <script src="/js/script.js"></script>
   <script src="/js/customer.js"></script>
+  <!-- Chatbot Widget -->
+  <%- include('partials/chatbot') %>
+  <link rel="stylesheet" href="/css/chatbot.css">
+  <script src="/js/chatbot.js"></script>
 </body>
 </html>

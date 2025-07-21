@@ -15,8 +15,15 @@
             <li class="<%= page === 'orders' ? 'active' : '' %>">
                 <a href="/agency/orders"><i class="fas fa-shopping-cart"></i> <span>Orders</span></a>
             </li>
-            <li class="<%= page === 'verification' ? 'active' : '' %>">
-                <a href="/agency/verification"><i class="fas fa-check-circle"></i> <span>Verification</span></a>
+            <li class="<%= page === 'verification' ? 'active' : '' %> <%= !locals.user || !user.isVerified ? 'needs-verification' : '' %>">
+                <a href="/agency/verification">
+                    <% if (!locals.user || !user.isVerified) { %>
+                        <i class="fas fa-exclamation-circle"></i> <span>Verification</span>
+                        <span class="verification-badge">Required</span>
+                    <% } else { %>
+                        <i class="fas fa-check-circle"></i> <span>Verification</span>
+                    <% } %>
+                </a>
             </li>
             <li class="<%= page === 'settings' ? 'active' : '' %>">
                 <a href="/agency/settings"><i class="fas fa-cog"></i> <span>Settings</span></a>
@@ -27,4 +34,3 @@
         </ul>
     </nav>
 </div>
-

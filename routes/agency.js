@@ -9,8 +9,8 @@ const multer = require("multer")
 const path = require("path")
 const fs = require("fs")
 
-// Set up multer for file uploads
-const storage = multer.diskStorage({
+// Set up multer for product image uploads
+const productStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "public/uploads/products")
   },
@@ -20,7 +20,7 @@ const storage = multer.diskStorage({
 })
 
 const upload = multer({
-  storage,
+  storage: productStorage,
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
   fileFilter: (req, file, cb) => {
     const filetypes = /jpeg|jpg|png|gif/
@@ -31,6 +31,36 @@ const upload = multer({
       return cb(null, true)
     } else {
       cb(new Error("Only image files are allowed!"))
+    }
+  },
+})
+
+// Set up multer for document uploads
+const documentStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    // Create directory if it doesn't exist
+    const dir = "public/uploads/documents"
+    if (!fs.existsSync(dir)){
+      fs.mkdirSync(dir, { recursive: true })
+    }
+    cb(null, dir)
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`)
+  },
+})
+
+const documentUpload = multer({
+  storage: documentStorage,
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
+  fileFilter: (req, file, cb) => {
+    const filetypes = /pdf|doc|docx|jpg|jpeg|png/
+    const extname = filetypes.test(path.extname(file.originalname).toLowerCase())
+
+    if (extname) {
+      return cb(null, true)
+    } else {
+      cb(new Error("Only PDF, DOC, DOCX, JPG, JPEG, or PNG files are allowed!"))
     }
   },
 })
@@ -84,7 +114,7 @@ console.log("User ID:", req.session.user ? req.session.user._id : "No user ID fo
     res.render("agency/dashboard", {
       page: "dashboard",
       title: "Agency Dashboard",
-      user : req.session.user,
+      user: user, // Pass the full user object with isVerified property
       productCount,
       orderCount,
       revenue,
@@ -102,6 +132,7 @@ console.log("User ID:", req.session.user ? req.session.user._id : "No user ID fo
 // Products management
 router.get("/products", isAuthenticated, isAgency, async (req, res) => {
   try {
+    const user = await User.findById(req.session.user._id)
     const products = await Product.find({ agency: req.session.user._id }).sort({ createdAt: -1 })
 
     // Get notification count
@@ -114,7 +145,7 @@ router.get("/products", isAuthenticated, isAgency, async (req, res) => {
       page: "products",
       title: "Manage Products",
       products,
-      user: req.session.user,
+      user: user, // Pass the full user object
       notificationCount,
     })
   } catch (error) {
@@ -125,18 +156,40 @@ router.get("/products", isAuthenticated, isAgency, async (req, res) => {
 })
 
 // Add product form
-router.get("/products/add", isAuthenticated, isAgency, (req, res) => {
-  res.render("agency/add-product", {
-    page: "products",
-    title: "Add New Product",
-    user: req.session.user,
-  })
+router.get("/products/add", isAuthenticated, isAgency, async (req, res) => {
+  try {
+    const user = await User.findById(req.session.user._id)
+
+    // Check if agency is verified
+    if (!user.isVerified) {
+      req.flash("error_msg", "Your agency needs to be verified before adding products")
+      return res.redirect("/agency/verification")
+    }
+
+    res.render("agency/add-product", {
+      page: "products",
+      title: "Add New Product",
+      user: user,
+    })
+  } catch (error) {
+    console.error("Error loading add product page:", error)
+    req.flash("error_msg", "Failed to load add product page")
+    res.redirect("/agency/products")
+  }
 })
 
 // Add product process
 router.post("/products/add", isAuthenticated, isAgency, upload.single("image"), async (req, res) => {
   try {
     console.log('product-add-route-hit-on-agency-side');
+
+    // Check if agency is verified
+    const user = await User.findById(req.session.user._id)
+    if (!user.isVerified) {
+      req.flash("error_msg", "Your agency needs to be verified before adding products")
+      return res.redirect("/agency/verification")
+    }
+
     const { name, description, category, condition, price, stock, seizureProof, source } = req.body
 
     // Validation
@@ -301,6 +354,7 @@ router.post("/products/delete/:id", isAuthenticated, isAgency, async (req, res) 
 // Orders management
 router.get("/orders", isAuthenticated, isAgency, async (req, res) => {
   try {
+    const user = await User.findById(req.session.user._id)
     // Find orders that contain products from this agency
     const agencyProducts = await Product.find({ agency: req.session.user._id })
     const productIds = agencyProducts.map((product) => product._id)
@@ -319,7 +373,7 @@ router.get("/orders", isAuthenticated, isAgency, async (req, res) => {
       page: "orders",
       title: "Manage Orders",
       orders,
-      user: req.session.user,
+      user: user,
       notificationCount,
     })
   } catch (error) {
@@ -332,6 +386,7 @@ router.get("/orders", isAuthenticated, isAgency, async (req, res) => {
 // Order details
 router.get("/orders/:id", isAuthenticated, isAgency, async (req, res) => {
   try {
+    const user = await User.findById(req.session.user._id)
     const order = await Order.findById(req.params.id).populate("user").populate("items.product")
 
     if (!order) {
@@ -361,7 +416,7 @@ router.get("/orders/:id", isAuthenticated, isAgency, async (req, res) => {
       title: `Order #${order.orderId}`,
       order,
       agencyItems,
-      user: req.session.user,
+      user: user,
       notificationCount,
     })
   } catch (error) {
@@ -430,13 +485,71 @@ router.get("/verification", isAuthenticated, isAgency, async (req, res) => {
     res.render("agency/verification", {
       page: "verification",
       title: "Agency Verification",
-      user: req.session.user,
+      user: user, // Pass the full user object with documents
       notificationCount,
     })
   } catch (error) {
     console.error("Error fetching verification data:", error)
     req.flash("error_msg", "Failed to load verification page")
     res.redirect("/agency/dashboard")
+  }
+})
+
+// Upload verification document
+router.post("/verification/upload", isAuthenticated, isAgency, documentUpload.single("document"), async (req, res) => {
+  try {
+    const { documentType } = req.body
+
+    if (!req.file) {
+      req.flash("error_msg", "Please select a file to upload")
+      return res.redirect("/agency/verification")
+    }
+
+    // Validate document type
+    const validTypes = ["businessRegistration", "taxId", "identityProof", "addressProof"]
+    if (!validTypes.includes(documentType)) {
+      req.flash("error_msg", "Invalid document type")
+      return res.redirect("/agency/verification")
+    }
+
+    // Get user
+    const user = await User.findById(req.session.user._id)
+
+    // Initialize documents object if it doesn't exist
+    if (!user.documents) {
+      user.documents = {}
+    }
+
+    // Set document path and status
+    user.documents[documentType] = {
+      path: `/uploads/documents/${req.file.filename}`,
+      uploadedAt: new Date(),
+      status: "pending"
+    }
+
+    await user.save()
+
+    // Create notification for admin
+    const adminUsers = await User.find({ role: "admin" })
+    if (adminUsers.length > 0) {
+      const notification = new Notification({
+        recipient: adminUsers[0]._id,
+        title: "New Document Uploaded",
+        message: `${user.name} uploaded a new document for verification: ${documentType}`,
+        type: "verification",
+        relatedId: user._id,
+        onModel: "User",
+      })
+
+      await notification.save()
+    }
+
+    req.flash("success_msg", "Document uploaded successfully and pending approval")
+    res.redirect("/agency/verification")
+  } catch (error) {
+    console.error("Error uploading document:", error)
+    req.flash("error_msg", "Failed to upload document")
+    res.redirect("/agency/verification")
   }
 })
 
@@ -454,7 +567,7 @@ router.get("/settings", isAuthenticated, isAgency, async (req, res) => {
     res.render("agency/settings", {
       page: "settings",
       title: "Agency Settings",
-      user : req.session.user,
+      user: user,
       notificationCount,
     })
   } catch (error) {
@@ -536,19 +649,34 @@ router.post("/settings/password", isAuthenticated, isAgency, async (req, res) =>
 })
 
 // Support page
-router.get("/support", isAuthenticated, isAgency, (req, res) => {
-  res.render("agency/support", {
-    page: "support",
-    title: "Agency Support",
-    user: req.session.user,
-  })
+router.get("/support", isAuthenticated, isAgency, async (req, res) => {
+  try {
+    const user = await User.findById(req.session.user._id)
+
+    // Get notification count
+    const notificationCount = await Notification.countDocuments({
+      recipient: req.session.user._id,
+      read: false,
+    })
+
+    res.render("agency/support", {
+      page: "support",
+      title: "Agency Support",
+      user: user,
+      notificationCount,
+    })
+  } catch (error) {
+    console.error("Error fetching support data:", error)
+    req.flash("error_msg", "Failed to load support page")
+    res.redirect("/agency/dashboard")
+  }
 })
 
 // Agency orders route
 router.get('/orders', isAuthenticated, isAgency, async (req, res) => {
   try {
     const agencyId = req.session.user._id;
-    
+
     // Find all orders that contain products from this agency
     const orders = await Order.aggregate([
       {
@@ -572,12 +700,12 @@ router.get('/orders', isAuthenticated, isAgency, async (req, res) => {
         $sort: { createdAt: -1 }
       }
     ]);
-    
+
     // Get customer details for each order
     for (let order of orders) {
       order.customer = await User.findById(order.user, 'name email');
     }
-    
+
     res.render('agency/orders', {
       title: 'Agency Orders',
       page: 'orders',
@@ -595,35 +723,35 @@ router.get('/orders/:id', isAuthenticated, isAgency, async (req, res) => {
   try {
     const agencyId = req.session.user._id;
     const orderId = req.params.id;
-    
+
     // Find the order and filter items to only show this agency's products
     const order = await Order.findById(orderId);
-    
+
     if (!order) {
       req.flash('error_msg', 'Order not found');
       return res.redirect('/agency/orders');
     }
-    
+
     // Check if this order contains any products from this agency
-    const agencyItems = order.items.filter(item => 
+    const agencyItems = order.items.filter(item =>
       item.agency && item.agency.toString() === agencyId.toString()
     );
-    
+
     if (agencyItems.length === 0) {
       req.flash('error_msg', 'You do not have permission to view this order');
       return res.redirect('/agency/orders');
     }
-    
+
     // Get customer details
     const customer = await User.findById(order.user, 'name email phone');
-    
+
     // Create a modified order object with only this agency's items
     const agencyOrder = {
       ...order.toObject(),
       items: agencyItems,
       customer
     };
-    
+
     res.render('agency/order-details', {
       title: `Order #${order.orderId}`,
       page: 'orders',
@@ -642,36 +770,36 @@ router.post('/orders/:id/update-status', isAuthenticated, isAgency, async (req, 
     const { status, note } = req.body;
     const orderId = req.params.id;
     const agencyId = req.session.user._id;
-    
+
     const order = await Order.findById(orderId);
-    
+
     if (!order) {
       req.flash('error_msg', 'Order not found');
       return res.redirect('/agency/orders');
     }
-    
+
     // Check if this order contains any products from this agency
-    const hasAgencyItems = order.items.some(item => 
+    const hasAgencyItems = order.items.some(item =>
       item.agency && item.agency.toString() === agencyId.toString()
     );
-    
+
     if (!hasAgencyItems) {
       req.flash('error_msg', 'You do not have permission to update this order');
       return res.redirect('/agency/orders');
     }
-    
+
     // Update order status
     order.status = status;
-    
+
     // Add to timeline
     order.timeline.push({
       status,
       timestamp: Date.now(),
       note: note || `Order status updated to ${status}`
     });
-    
+
     await order.save();
-    
+
     // Create notification for customer
     const notification = new Notification({
       recipient: order.user,
@@ -685,9 +813,9 @@ router.post('/orders/:id/update-status', isAuthenticated, isAgency, async (req, 
       },
       read: false
     });
-    
+
     await notification.save();
-    
+
     req.flash('success_msg', 'Order status updated successfully');
     res.redirect(`/agency/orders/${orderId}`);
   } catch (error) {

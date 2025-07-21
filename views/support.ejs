@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support | SETU</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/animations.css">
+  <link rel="stylesheet" href="/css/buttons.css">
+  <style>
+    .support-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .support-header {
+      text-align: center;
+      margin-bottom: 3rem;
+      animation: fadeIn 1s ease;
+    }
+
+    .support-header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--neutral-900);
+      margin-bottom: 1rem;
+    }
+
+    .support-header p {
+      font-size: 1.125rem;
+      color: var(--neutral-600);
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .support-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .support-card {
+      background-color: white;
+      border-radius: 1rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+      transition: all 0.3s ease;
+      animation: fadeIn 1s ease;
+      animation-fill-mode: both;
+      border: 1px solid var(--neutral-200);
+    }
+
+    .support-card:nth-child(1) {
+      animation-delay: 0.1s;
+    }
+
+    .support-card:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .support-card:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+
+    .support-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .support-card-icon {
+      width: 60px;
+      height: 60px;
+      background-image: linear-gradient(135deg, var(--primary-500), var(--primary-700));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      color: white;
+      font-size: 1.5rem;
+    }
+
+    .support-card h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--neutral-900);
+    }
+
+    .support-card p {
+      color: var(--neutral-600);
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+
+    .faq-section {
+      margin-bottom: 3rem;
+      animation: fadeIn 1s ease;
+      animation-delay: 0.4s;
+      animation-fill-mode: both;
+    }
+
+    .faq-section h2 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: var(--neutral-900);
+      text-align: center;
+    }
+
+    .faq-item {
+      margin-bottom: 1rem;
+      border: 1px solid var(--neutral-200);
+      border-radius: 0.5rem;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 1.25rem;
+      background-color: white;
+      font-weight: 600;
+      color: var(--neutral-900);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.3s ease;
+    }
+
+    .faq-question:hover {
+      background-color: var(--neutral-50);
+    }
+
+    .faq-question i {
+      transition: transform 0.3s ease;
+    }
+
+    .faq-question.active i {
+      transform: rotate(180deg);
+    }
+
+    .faq-answer {
+      padding: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      background-color: var(--neutral-50);
+    }
+
+    .faq-answer.active {
+      padding: 1.25rem;
+      max-height: 500px;
+    }
+
+    .faq-answer p {
+      margin: 0;
+      color: var(--neutral-600);
+      line-height: 1.6;
+    }
+
+    .contact-section {
+      background-color: white;
+      border-radius: 1rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+      animation: fadeIn 1s ease;
+      animation-delay: 0.5s;
+      animation-fill-mode: both;
+      border: 1px solid var(--neutral-200);
+    }
+
+    .contact-section h2 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: var(--neutral-900);
+      text-align: center;
+    }
+
+    .contact-form {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--neutral-700);
+    }
+
+    .form-input,
+    .form-textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--neutral-300);
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus {
+      outline: none;
+      border-color: var(--primary-500);
+      box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+    }
+
+    .form-textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    @media (max-width: 768px) {
+      .support-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .support-header h1 {
+        font-size: 2rem;
+      }
+
+      .support-header p {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation removed -->
+
+  <div class="support-container">
+    <div class="support-header">
+      <h1>How Can We Help You?</h1>
+      <p>We're here to help you with any questions or issues you might have. Browse our support resources or contact us directly.</p>
+    </div>
+
+    <div class="support-grid">
+      <div class="support-card">
+        <div class="support-card-icon">
+          <i class="fas fa-book"></i>
+        </div>
+        <h3>Knowledge Base</h3>
+        <p>Browse our comprehensive guides and tutorials to find answers to common questions and learn how to use our platform effectively.</p>
+        <a href="#" class="btn btn-primary btn-animated">
+          <i class="fas fa-arrow-right"></i>
+          <span>Browse Articles</span>
+        </a>
+      </div>
+
+      <div class="support-card">
+        <div class="support-card-icon">
+          <i class="fas fa-headset"></i>
+        </div>
+        <h3>Customer Support</h3>
+        <p>Our support team is available to help you with any technical issues or questions you might have about our services.</p>
+        <a href="#contact-form" class="btn btn-primary btn-animated">
+          <i class="fas fa-arrow-right"></i>
+          <span>Contact Support</span>
+        </a>
+      </div>
+
+      <div class="support-card">
+        <div class="support-card-icon">
+          <i class="fas fa-comments"></i>
+        </div>
+        <h3>Community Forum</h3>
+        <p>Join our community forum to connect with other users, share experiences, and get advice from our community experts.</p>
+        <a href="#" class="btn btn-primary btn-animated">
+          <i class="fas fa-arrow-right"></i>
+          <span>Join Discussion</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="faq-section">
+      <h2>Frequently Asked Questions</h2>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>How do I create an account?</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+          <p>To create an account, click on the "Sign Up" button on the homepage. You can choose between a Customer account or an Agency account depending on your needs. Fill in the required information and follow the verification steps to complete your registration.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>What's the difference between Customer and Agency accounts?</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+          <p>Customer accounts are for individuals who want to browse and purchase products from our platform. Agency accounts are for businesses that want to sell their products on our platform. Each account type has different features and capabilities tailored to their specific needs.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>How do I reset my password?</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+          <p>If you've forgotten your password, click on the "Forgot Password" link on the login page. Enter your email address, and we'll send you a link to reset your password. Follow the instructions in the email to create a new password.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>How do I contact customer support?</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+          <p>You can contact our customer support team by filling out the contact form below. Alternatively, you can email us directly at support@setu.com or call our support hotline at +1-800-SETU-HELP during business hours.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>How long does it take to get approved as an agency?</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+          <p>The agency approval process typically takes 3-5 business days. Our team reviews your application and verifies your business information. You'll receive an email notification once your application has been approved or if we need additional information.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-section" id="contact-form">
+      <h2>Contact Us</h2>
+
+      <form class="contact-form" action="/support/contact" method="POST">
+        <div class="form-group">
+          <label for="name" class="form-label">Your Name</label>
+          <input type="text" id="name" name="name" class="form-input" placeholder="Enter your name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="email" class="form-label">Email Address</label>
+          <input type="email" id="email" name="email" class="form-input" placeholder="Enter your email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="subject" class="form-label">Subject</label>
+          <input type="text" id="subject" name="subject" class="form-input" placeholder="Enter subject" required>
+        </div>
+
+        <div class="form-group">
+          <label for="message" class="form-label">Message</label>
+          <textarea id="message" name="message" class="form-textarea" placeholder="Enter your message" required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-animated btn-block">
+          <i class="fas fa-paper-plane"></i>
+          <span>Send Message</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer removed -->
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // FAQ Accordion
+      const faqQuestions = document.querySelectorAll('.faq-question');
+
+      faqQuestions.forEach(question => {
+        question.addEventListener('click', function() {
+          const answer = this.nextElementSibling;
+          const isActive = this.classList.contains('active');
+
+          // Close all other answers
+          document.querySelectorAll('.faq-question').forEach(q => {
+            q.classList.remove('active');
+            q.nextElementSibling.classList.remove('active');
+          });
+
+          // Toggle current answer
+          if (!isActive) {
+            this.classList.add('active');
+            answer.classList.add('active');
+          }
+        });
+      });
+
+      // Smooth scroll for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+
+          const targetId = this.getAttribute('href');
+          if (targetId === '#') return;
+
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            window.scrollTo({
+              top: targetElement.offsetTop - 100,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

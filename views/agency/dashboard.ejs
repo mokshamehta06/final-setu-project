@@ -62,7 +62,7 @@
    <div class="app-container">
        <!-- Sidebar -->
        <%- include('../partials/agency-sidebar', { page: 'dashboard' }) %>
-       
+
        <!-- Main Content -->
        <div class="main-content">
            <!-- Header -->
@@ -108,11 +108,25 @@
                    </div>
                </div>
            </header>
-           
+
            <!-- Dashboard Content -->
            <div class="dashboard-content">
                <h1>Dashboard</h1>
-               
+
+               <% if (!user.isVerified) { %>
+               <!-- Verification Alert -->
+               <div class="verification-alert">
+                   <div class="alert-icon">
+                       <i class="fas fa-exclamation-triangle"></i>
+                   </div>
+                   <div class="alert-content">
+                       <h3>Your agency needs verification</h3>
+                       <p>Please upload your documents for verification to start selling products on our platform.</p>
+                       <a href="/agency/verification" class="btn-primary"><i class="fas fa-upload"></i> Upload Documents for Verification</a>
+                   </div>
+               </div>
+               <% } %>
+
                <!-- Stats Cards -->
                <div class="stats-container">
                    <div class="stat-card">
@@ -140,11 +154,16 @@
                        <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
                        <div class="stat-info">
                            <h3>Verification</h3>
-                           <p class="verified">Verified</p>
+                           <% if (user.isVerified) { %>
+                               <p class="verified">Verified</p>
+                           <% } else { %>
+                               <p class="pending">Pending</p>
+                               <a href="/agency/verification" class="btn-small btn-warning">Complete Verification</a>
+                           <% } %>
                        </div>
                    </div>
                </div>
-               
+
                <!-- Recent Orders -->
                <div class="recent-orders">
                    <div class="section-header">
@@ -204,14 +223,18 @@
                        </table>
                    </div>
                </div>
-               
+
                <!-- Product Management -->
                <div class="product-management">
                    <div class="section-header">
                        <h2>Product Management</h2>
                        <div class="section-actions">
                            <button class="btn-secondary front-page-view"><i class="fas fa-eye"></i> Front Page View</button>
-                           <button class="btn-primary" id="addProductBtn"><i class="fas fa-plus"></i> Add New Product</button>
+                           <% if (user.isVerified) { %>
+                               <button class="btn-primary" id="addProductBtn"><i class="fas fa-plus"></i> Add New Product</button>
+                           <% } else { %>
+                               <button class="btn-primary disabled" disabled title="Verification required to add products"><i class="fas fa-plus"></i> Add New Product</button>
+                           <% } %>
                        </div>
                    </div>
                    <div class="product-grid">
@@ -244,6 +267,11 @@
    </div>
 
    <script src="/js/agency.js"></script>
+
+   <!-- Chatbot Widget -->
+   <%- include('../partials/chatbot') %>
+   <link rel="stylesheet" href="/css/chatbot.css">
+   <script src="/js/chatbot.js"></script>
 </body>
 </html>
 

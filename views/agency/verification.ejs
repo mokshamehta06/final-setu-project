@@ -12,7 +12,7 @@
    <div class="app-container">
        <!-- Sidebar -->
        <%- include('../partials/agency-sidebar', { page: 'verification' }) %>
-       
+
        <!-- Main Content -->
        <div class="main-content">
            <!-- Header -->
@@ -59,95 +59,257 @@
                    </div>
                </div>
            </header>
-           
+
            <!-- Verification Content -->
            <div class="dashboard-content">
                <h1>Agency Verification</h1>
-               
+
+               <% if (!user.isVerified) { %>
+               <!-- Verification Instructions -->
+               <div class="verification-instructions">
+                   <h2>Document Verification Process</h2>
+                   <p>To start selling products on our platform, please upload the following documents for verification:</p>
+                   <ol>
+                       <li>Business Registration Certificate</li>
+                       <li>Tax Identification Document</li>
+                       <li>Identity Proof (Government-issued ID)</li>
+                       <li>Address Proof (Utility bill, lease agreement, etc.)</li>
+                   </ol>
+                   <p>Once you upload your documents, our team will review them and approve your agency within 1-2 business days.</p>
+               </div>
+               <% } %>
+
                <div class="card">
                    <div class="card-header">
                        <h2 class="card-title">Verification Status</h2>
                    </div>
                    <div class="card-content">
                        <div class="verification-status">
-                           <div class="verification-icon verified">
-                               <i class="fas fa-check-circle"></i>
-                           </div>
-                           <div class="verification-details">
-                               <h3>Your agency is verified</h3>
-                               <p>Your agency has been verified and approved to sell products on our platform.</p>
-                               <div class="verification-date">
-                                   <strong>Verified on:</strong> <%= new Date().toLocaleDateString() %>
+                           <% if (user.isVerified) { %>
+                               <div class="verification-icon verified">
+                                   <i class="fas fa-check-circle"></i>
                                </div>
-                           </div>
+                               <div class="verification-details">
+                                   <h3>Your agency is verified</h3>
+                                   <p>Your agency has been verified and approved to sell products on our platform.</p>
+                                   <div class="verification-date">
+                                       <strong>Verified on:</strong> <%= new Date().toLocaleDateString() %>
+                                   </div>
+                               </div>
+                           <% } else { %>
+                               <div class="verification-icon pending">
+                                   <i class="fas fa-clock"></i>
+                               </div>
+                               <div class="verification-details">
+                                   <h3>Verification in progress</h3>
+                                   <p>Please upload all required documents for verification. Our team will review your documents and approve your agency.</p>
+                               </div>
+                           <% } %>
                        </div>
                    </div>
                </div>
-               
+
                <div class="card">
                    <div class="card-header">
                        <h2 class="card-title">Verification Documents</h2>
                    </div>
                    <div class="card-content">
                        <div class="document-list">
+                           <!-- Business Registration -->
                            <div class="document-item">
                                <div class="document-icon">
                                    <i class="fas fa-file-pdf"></i>
                                </div>
                                <div class="document-details">
                                    <h4>Business Registration</h4>
-                                   <p>Uploaded on: <%= new Date().toLocaleDateString() %></p>
-                                   <div class="document-status verified">
-                                       <i class="fas fa-check-circle"></i> Verified
-                                   </div>
+                                   <% if (user.documents && user.documents.businessRegistration && user.documents.businessRegistration.path) { %>
+                                       <p>Uploaded on: <%= new Date(user.documents.businessRegistration.uploadedAt).toLocaleDateString() %></p>
+                                       <div class="document-status <%= user.documents.businessRegistration.status === 'approved' ? 'verified' : user.documents.businessRegistration.status === 'rejected' ? 'rejected' : 'pending' %>">
+                                           <% if (user.documents.businessRegistration.status === 'approved') { %>
+                                               <i class="fas fa-check-circle"></i> Verified
+                                           <% } else if (user.documents.businessRegistration.status === 'rejected') { %>
+                                               <i class="fas fa-times-circle"></i> Rejected
+                                               <% if (user.documents.businessRegistration.rejectionReason) { %>
+                                                   <div class="rejection-reason">
+                                                       <strong>Reason:</strong> <%= user.documents.businessRegistration.rejectionReason %>
+                                                   </div>
+                                               <% } %>
+                                           <% } else { %>
+                                               <i class="fas fa-clock"></i> Waiting for Approval
+                                           <% } %>
+                                       </div>
+                                   <% } else { %>
+                                       <p>Not uploaded yet</p>
+                                   <% } %>
                                </div>
                                <div class="document-actions">
-                                   <button class="btn-small"><i class="fas fa-eye"></i> View</button>
-                                   <button class="btn-small"><i class="fas fa-download"></i> Download</button>
+                                   <% if (user.documents && user.documents.businessRegistration && user.documents.businessRegistration.path) { %>
+                                       <a href="<%= user.documents.businessRegistration.path %>" target="_blank" class="btn-small"><i class="fas fa-eye"></i> View</a>
+                                       <a href="<%= user.documents.businessRegistration.path %>" download class="btn-small"><i class="fas fa-download"></i> Download</a>
+                                       <% if (user.documents.businessRegistration.status === 'rejected') { %>
+                                           <form action="/agency/verification/upload" method="POST" enctype="multipart/form-data" class="document-upload-form">
+                                               <input type="hidden" name="documentType" value="businessRegistration">
+                                               <input type="file" name="document" id="businessRegistration" class="document-file-input" required>
+                                               <button type="submit" class="btn-small btn-warning"><i class="fas fa-upload"></i> Re-upload</button>
+                                           </form>
+                                       <% } %>
+                                   <% } else { %>
+                                       <form action="/agency/verification/upload" method="POST" enctype="multipart/form-data" class="document-upload-form">
+                                           <input type="hidden" name="documentType" value="businessRegistration">
+                                           <input type="file" name="document" id="businessRegistration" class="document-file-input" required>
+                                           <button type="submit" class="btn-small"><i class="fas fa-upload"></i> Upload</button>
+                                       </form>
+                                   <% } %>
                                </div>
                            </div>
-                           
+
+                           <!-- Tax Identification -->
                            <div class="document-item">
                                <div class="document-icon">
                                    <i class="fas fa-file-pdf"></i>
                                </div>
                                <div class="document-details">
                                    <h4>Tax Identification</h4>
-                                   <p>Uploaded on: <%= new Date().toLocaleDateString() %></p>
-                                   <div class="document-status verified">
-                                       <i class="fas fa-check-circle"></i> Verified
-                                   </div>
+                                   <% if (user.documents && user.documents.taxId && user.documents.taxId.path) { %>
+                                       <p>Uploaded on: <%= new Date(user.documents.taxId.uploadedAt).toLocaleDateString() %></p>
+                                       <div class="document-status <%= user.documents.taxId.status === 'approved' ? 'verified' : user.documents.taxId.status === 'rejected' ? 'rejected' : 'pending' %>">
+                                           <% if (user.documents.taxId.status === 'approved') { %>
+                                               <i class="fas fa-check-circle"></i> Verified
+                                           <% } else if (user.documents.taxId.status === 'rejected') { %>
+                                               <i class="fas fa-times-circle"></i> Rejected
+                                               <% if (user.documents.taxId.rejectionReason) { %>
+                                                   <div class="rejection-reason">
+                                                       <strong>Reason:</strong> <%= user.documents.taxId.rejectionReason %>
+                                                   </div>
+                                               <% } %>
+                                           <% } else { %>
+                                               <i class="fas fa-clock"></i> Waiting for Approval
+                                           <% } %>
+                                       </div>
+                                   <% } else { %>
+                                       <p>Not uploaded yet</p>
+                                   <% } %>
                                </div>
                                <div class="document-actions">
-                                   <button class="btn-small"><i class="fas fa-eye"></i> View</button>
-                                   <button class="btn-small"><i class="fas fa-download"></i> Download</button>
+                                   <% if (user.documents && user.documents.taxId && user.documents.taxId.path) { %>
+                                       <a href="<%= user.documents.taxId.path %>" target="_blank" class="btn-small"><i class="fas fa-eye"></i> View</a>
+                                       <a href="<%= user.documents.taxId.path %>" download class="btn-small"><i class="fas fa-download"></i> Download</a>
+                                       <% if (user.documents.taxId.status === 'rejected') { %>
+                                           <form action="/agency/verification/upload" method="POST" enctype="multipart/form-data" class="document-upload-form">
+                                               <input type="hidden" name="documentType" value="taxId">
+                                               <input type="file" name="document" id="taxId" class="document-file-input" required>
+                                               <button type="submit" class="btn-small btn-warning"><i class="fas fa-upload"></i> Re-upload</button>
+                                           </form>
+                                       <% } %>
+                                   <% } else { %>
+                                       <form action="/agency/verification/upload" method="POST" enctype="multipart/form-data" class="document-upload-form">
+                                           <input type="hidden" name="documentType" value="taxId">
+                                           <input type="file" name="document" id="taxId" class="document-file-input" required>
+                                           <button type="submit" class="btn-small"><i class="fas fa-upload"></i> Upload</button>
+                                       </form>
+                                   <% } %>
                                </div>
                            </div>
-                           
+
+                           <!-- ID Verification -->
                            <div class="document-item">
                                <div class="document-icon">
                                    <i class="fas fa-file-pdf"></i>
                                </div>
                                <div class="document-details">
                                    <h4>ID Verification</h4>
-                                   <p>Uploaded on: <%= new Date().toLocaleDateString() %></p>
-                                   <div class="document-status verified">
-                                       <i class="fas fa-check-circle"></i> Verified
-                                   </div>
+                                   <% if (user.documents && user.documents.identityProof && user.documents.identityProof.path) { %>
+                                       <p>Uploaded on: <%= new Date(user.documents.identityProof.uploadedAt).toLocaleDateString() %></p>
+                                       <div class="document-status <%= user.documents.identityProof.status === 'approved' ? 'verified' : user.documents.identityProof.status === 'rejected' ? 'rejected' : 'pending' %>">
+                                           <% if (user.documents.identityProof.status === 'approved') { %>
+                                               <i class="fas fa-check-circle"></i> Verified
+                                           <% } else if (user.documents.identityProof.status === 'rejected') { %>
+                                               <i class="fas fa-times-circle"></i> Rejected
+                                               <% if (user.documents.identityProof.rejectionReason) { %>
+                                                   <div class="rejection-reason">
+                                                       <strong>Reason:</strong> <%= user.documents.identityProof.rejectionReason %>
+                                                   </div>
+                                               <% } %>
+                                           <% } else { %>
+                                               <i class="fas fa-clock"></i> Waiting for Approval
+                                           <% } %>
+                                       </div>
+                                   <% } else { %>
+                                       <p>Not uploaded yet</p>
+                                   <% } %>
                                </div>
                                <div class="document-actions">
-                                   <button class="btn-small"><i class="fas fa-eye"></i> View</button>
-                                   <button class="btn-small"><i class="fas fa-download"></i> Download</button>
+                                   <% if (user.documents && user.documents.identityProof && user.documents.identityProof.path) { %>
+                                       <a href="<%= user.documents.identityProof.path %>" target="_blank" class="btn-small"><i class="fas fa-eye"></i> View</a>
+                                       <a href="<%= user.documents.identityProof.path %>" download class="btn-small"><i class="fas fa-download"></i> Download</a>
+                                       <% if (user.documents.identityProof.status === 'rejected') { %>
+                                           <form action="/agency/verification/upload" method="POST" enctype="multipart/form-data" class="document-upload-form">
+                                               <input type="hidden" name="documentType" value="identityProof">
+                                               <input type="file" name="document" id="identityProof" class="document-file-input" required>
+                                               <button type="submit" class="btn-small btn-warning"><i class="fas fa-upload"></i> Re-upload</button>
+                                           </form>
+                                       <% } %>
+                                   <% } else { %>
+                                       <form action="/agency/verification/upload" method="POST" enctype="multipart/form-data" class="document-upload-form">
+                                           <input type="hidden" name="documentType" value="identityProof">
+                                           <input type="file" name="document" id="identityProof" class="document-file-input" required>
+                                           <button type="submit" class="btn-small"><i class="fas fa-upload"></i> Upload</button>
+                                       </form>
+                                   <% } %>
+                               </div>
+                           </div>
+
+                           <!-- Address Proof -->
+                           <div class="document-item">
+                               <div class="document-icon">
+                                   <i class="fas fa-file-pdf"></i>
+                               </div>
+                               <div class="document-details">
+                                   <h4>Address Verification</h4>
+                                   <% if (user.documents && user.documents.addressProof && user.documents.addressProof.path) { %>
+                                       <p>Uploaded on: <%= new Date(user.documents.addressProof.uploadedAt).toLocaleDateString() %></p>
+                                       <div class="document-status <%= user.documents.addressProof.status === 'approved' ? 'verified' : user.documents.addressProof.status === 'rejected' ? 'rejected' : 'pending' %>">
+                                           <% if (user.documents.addressProof.status === 'approved') { %>
+                                               <i class="fas fa-check-circle"></i> Verified
+                                           <% } else if (user.documents.addressProof.status === 'rejected') { %>
+                                               <i class="fas fa-times-circle"></i> Rejected
+                                               <% if (user.documents.addressProof.rejectionReason) { %>
+                                                   <div class="rejection-reason">
+                                                       <strong>Reason:</strong> <%= user.documents.addressProof.rejectionReason %>
+                                                   </div>
+                                               <% } %>
+                                           <% } else { %>
+                                               <i class="fas fa-clock"></i> Waiting for Approval
+                                           <% } %>
+                                       </div>
+                                   <% } else { %>
+                                       <p>Not uploaded yet</p>
+                                   <% } %>
+                               </div>
+                               <div class="document-actions">
+                                   <% if (user.documents && user.documents.addressProof && user.documents.addressProof.path) { %>
+                                       <a href="<%= user.documents.addressProof.path %>" target="_blank" class="btn-small"><i class="fas fa-eye"></i> View</a>
+                                       <a href="<%= user.documents.addressProof.path %>" download class="btn-small"><i class="fas fa-download"></i> Download</a>
+                                       <% if (user.documents.addressProof.status === 'rejected') { %>
+                                           <form action="/agency/verification/upload" method="POST" enctype="multipart/form-data" class="document-upload-form">
+                                               <input type="hidden" name="documentType" value="addressProof">
+                                               <input type="file" name="document" id="addressProof" class="document-file-input" required>
+                                               <button type="submit" class="btn-small btn-warning"><i class="fas fa-upload"></i> Re-upload</button>
+                                           </form>
+                                       <% } %>
+                                   <% } else { %>
+                                       <form action="/agency/verification/upload" method="POST" enctype="multipart/form-data" class="document-upload-form">
+                                           <input type="hidden" name="documentType" value="addressProof">
+                                           <input type="file" name="document" id="addressProof" class="document-file-input" required>
+                                           <button type="submit" class="btn-small"><i class="fas fa-upload"></i> Upload</button>
+                                       </form>
+                                   <% } %>
                                </div>
                            </div>
                        </div>
-                       
-                       <div class="upload-new-document">
-                           <button class="btn-primary"><i class="fas fa-upload"></i> Upload New Document</button>
-                       </div>
                    </div>
                </div>
-               
+
                <div class="card">
                    <div class="card-header">
                        <h2 class="card-title">Verification Requirements</h2>
@@ -163,7 +325,7 @@
                                    <p>Official business registration document or certificate</p>
                                </div>
                            </div>
-                           
+
                            <div class="requirement-item completed">
                                <div class="requirement-status">
                                    <i class="fas fa-check-circle"></i>
@@ -173,7 +335,7 @@
                                    <p>Tax ID number or certificate</p>
                                </div>
                            </div>
-                           
+
                            <div class="requirement-item completed">
                                <div class="requirement-status">
                                    <i class="fas fa-check-circle"></i>
@@ -183,7 +345,7 @@
                                    <p>Government-issued ID of the business owner or representative</p>
                                </div>
                            </div>
-                           
+
                            <div class="requirement-item completed">
                                <div class="requirement-status">
                                    <i class="fas fa-check-circle"></i>

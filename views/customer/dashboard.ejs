@@ -216,7 +216,7 @@
               <div class="address-item <%= address.isDefault ? 'default' : '' %>">
                 <div class="address-info">
                   <h4>
-                    <%= address.name %> 
+                    <%= address.name %>
                     <% if (address.isDefault) { %>
                       <span class="default-badge">Default</span>
                     <% } %>
@@ -367,6 +367,13 @@
   </div>
 </div>
 
+<!-- Chatbot Widget -->
+<%- include('../partials/chatbot') %>
+<link rel="stylesheet" href="/css/chatbot.css">
+<script src="/js/chatbot.js"></script>
+
+<%- include('../partials/footer') %>
+
 <style>
  /* Modern Professional Dashboard Styling */
 :root {
@@ -381,7 +388,7 @@
   --primary-700: #0060a1;
   --primary-800: #004f85;
   --primary-900: #003e6e;
-  
+
   /* Refined neutral colors */
   --neutral-50: #f9fafb;
   --neutral-100: #f3f4f6;
@@ -393,36 +400,36 @@
   --neutral-700: #374151;
   --neutral-800: #1f2937;
   --neutral-900: #111827;
-  
+
   /* Status colors with better contrast */
   --success-100: #dcfce7;
   --success-500: #16a34a;
   --success-700: #166534;
-  
+
   --warning-100: #fef3c7;
   --warning-500: #f59e0b;
   --warning-700: #92400e;
-  
+
   --danger-100: #fee2e2;
   --danger-500: #ef4444;
   --danger-700: #991b1b;
-  
+
   --info-100: #dbeafe;
   --info-500: #3b82f6;
   --info-700: #1e40af;
-  
+
   /* Improved shadows for better depth */
   --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05), 0 1px 5px rgba(0, 0, 0, 0.08);
   --hover-shadow: 0 10px 20px rgba(0, 0, 0, 0.08), 0 4px 8px rgba(0, 0, 0, 0.1);
-  
+
   /* Consistent border radius */
   --card-radius: 0.875rem;
   --btn-radius: 0.5rem;
   --badge-radius: 2rem;
-  
+
   /* Smooth transitions */
   --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  
+
   /* Font settings */
   --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   --font-mono: 'SF Mono', SFMono-Regular, ui-monospace, Monaco, Consolas, monospace;
@@ -500,7 +507,7 @@ body {
   .greeting-banner {
     padding: 2rem;
   }
-  
+
   .greeting-content {
     flex-direction: row;
     justify-content: space-between;

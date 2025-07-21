@@ -1,11 +1,99 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= typeof title !== 'undefined' ? title + ' - SETU' : 'SETU E-commerce Platform' %></title>
-  <link rel="stylesheet" href="/css/styles.css">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-</head>
-<body>
+<header class="bg-white shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-16">
+      <div class="flex">
+        <button class="mobile-menu-button md:hidden mr-2">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="flex-shrink-0 flex items-center">
+          <a href="/" class="flex items-center">
+            <div class="w-10 h-10 bg-primary-600 rounded-lg flex items-center justify-center text-white mr-2">
+              <i class="fas fa-shopping-bag"></i>
+            </div>
+            <span class="text-xl font-bold text-gray-900">SETU</span>
+          </a>
+        </div>
+        <nav class="hidden md:ml-6 md:flex md:space-x-8">
+          <a href="/" class="<%= page === 'home' ? 'border-primary-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' %> inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+            Home
+          </a>
+          <a href="/about" class="<%= page === 'about' ? 'border-primary-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' %> inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+            About
+          </a>
+          <a href="/solutions" class="<%= page === 'solutions' ? 'border-primary-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' %> inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+            Solutions
+          </a>
+          <a href="/support" class="<%= page === 'support' ? 'border-primary-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' %> inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+            Support
+          </a>
+          <a href="/support/contact" class="<%= page === 'contact' ? 'border-primary-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' %> inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+            Contact
+          </a>
+        </nav>
+      </div>
+      <div class="flex items-center">
+        <% if (typeof user !== 'undefined' && user) { %>
+          <div class="hidden md:ml-4 md:flex-shrink-0 md:flex md:items-center">
+            <div class="ml-3 relative">
+              <div>
+                <a href="<%= user.role === 'customer' ? '/customer/dashboard' : (user.role === 'agency' ? '/agency/dashboard' : '/admin/dashboard') %>" class="max-w-xs bg-white flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                  <span class="sr-only">Open user menu</span>
+                  <div class="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center text-primary-600">
+                    <i class="fas fa-user"></i>
+                  </div>
+                  <span class="ml-2 text-gray-700"><%= user.name %></span>
+                </a>
+              </div>
+            </div>
+            <a href="/auth/logout" class="ml-4 px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">
+              Logout
+            </a>
+          </div>
+        <% } else { %>
+          <div class="flex-shrink-0">
+            <a href="/auth/customer/login" class="relative inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+              <i class="fas fa-sign-in-alt -ml-1 mr-2 h-5 w-5"></i>
+              <span>Sign In</span>
+            </a>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
 
+  <!-- Mobile Menu -->
+  <div class="mobile-menu">
+    <a href="/" class="<%= page === 'home' ? 'active' : '' %>">
+      <i class="fas fa-home mr-2"></i> Home
+    </a>
+    <a href="/about" class="<%= page === 'about' ? 'active' : '' %>">
+      <i class="fas fa-info-circle mr-2"></i> About
+    </a>
+    <a href="/solutions" class="<%= page === 'solutions' ? 'active' : '' %>">
+      <i class="fas fa-lightbulb mr-2"></i> Solutions
+    </a>
+    <a href="/support" class="<%= page === 'support' ? 'active' : '' %>">
+      <i class="fas fa-headset mr-2"></i> Support
+    </a>
+    <a href="/support/contact" class="<%= page === 'contact' ? 'active' : '' %>">
+      <i class="fas fa-envelope mr-2"></i> Contact
+    </a>
+
+    <% if (typeof user !== 'undefined' && user) { %>
+      <div class="border-t border-gray-200 my-2 pt-2">
+        <a href="<%= user.role === 'customer' ? '/customer/dashboard' : (user.role === 'agency' ? '/agency/dashboard' : '/admin/dashboard') %>">
+          <i class="fas fa-tachometer-alt mr-2"></i> Dashboard
+        </a>
+        <a href="/auth/logout" class="text-red-600">
+          <i class="fas fa-sign-out-alt mr-2"></i> Logout
+        </a>
+      </div>
+    <% } else { %>
+      <div class="border-t border-gray-200 my-2 pt-2">
+        <a href="/auth/customer/login" class="bg-primary-600 text-white">
+          <i class="fas fa-sign-in-alt mr-2"></i> Sign In
+        </a>
+      </div>
+    <% } %>
+  </div>
+</header>
