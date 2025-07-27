@@ -114,11 +114,7 @@ npm run dev
 
 Project Maintainer - Mayank Lovevanshi(mayanklowanshi2005@gmail.com)
 
-Project Repository: https://github.com/todoroki24/solution-challenge-final-setu
-
-## 🏆 Hackathon Submission
-
-This project is our submission for Solution Challenge 2025. Our team addresses dual challenges: increasing access to affordable technology while reducing electronic waste.
+Project Repository: https://github.com/mokshamehta06/final-setu-project
 
 ### 💡 Problem Statement
 Legally seized electronic goods often remain inaccessible to everyday consumers despite their value and usability, while contributing to growing e-waste problems when unsold.
