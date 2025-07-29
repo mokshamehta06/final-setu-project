@@ -43,11 +43,42 @@ const MONGODB_DB = process.env.MONGODB_DB || "setu_ecommerce"
 
 // Connect to MongoD
 
+async function initializeDefaultAdmin() {
+  try {
+    const adminEmail = "admin@example.com";
+
+    // Check if admin already exists
+    const existingAdmin = await User.findOne({ email: adminEmail, role: "admin" });
+    if (existingAdmin) {
+      console.log("✅ Default admin already exists.");
+      return;
+    }
+
+    // Create default admin
+    const adminUser = new User({
+      name: "Default Admin",
+      email: adminEmail,
+      password: "admin123", // will be hashed by the pre-save hook
+      role: "admin",
+      isVerified: true,
+    });
+
+    await adminUser.save();
+    console.log("✅ Default admin created successfully.");
+  } catch (error) {
+    console.error("❌ Error creating default admin:", error.message);
+  }
+}
+
+
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
-.then(() => console.log("MongoDB connected"))
+.then(async () => {
+  console.log("MongoDB connected ✅");
+  await initializeDefaultAdmin(); // 👈 Add this line
+})
 .catch(err => console.error("MongoDB connection error:", err));
 
 //B
