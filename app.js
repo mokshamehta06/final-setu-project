@@ -480,6 +480,36 @@ const initializeProducts = async () => {
       await Product.insertMany(defaultProducts)
       console.log("Default products initialized")
 
+
+      
+
+async function initializeDefaultAdmin() {
+  try {
+    const adminEmail = "admin@example.com";
+
+    // Check if admin already exists
+    const existingAdmin = await User.findOne({ email: adminEmail, role: "admin" });
+    if (existingAdmin) {
+      console.log("✅ Default admin already exists.");
+      return;
+    }
+
+    // Create default admin
+    const adminUser = new User({
+      name: "Default Admin",
+      email: adminEmail,
+      password: "admin123", // will be hashed by the pre-save hook
+      role: "admin",
+      isVerified: true,
+    });
+
+    await adminUser.save();
+    console.log("✅ Default admin created successfully.");
+  } catch (error) {
+    console.error("❌ Error creating default admin:", error.message);
+  }
+}
+
       // Create some default orders
       const customerUser =
         (await User.findOne({ role: "customer" })) ||
