@@ -20,6 +20,7 @@
   <!-- Custom CSS -->
   <link rel="stylesheet" href="/css/styles.css">
   <link rel="stylesheet" href="/css/dashboard-variables.css">
+  <link rel="stylesheet" href="/css/ui-enhancements.css">
 
   <!-- Page-specific CSS -->
   <% if (typeof page !== 'undefined') { %>
@@ -27,8 +28,10 @@
   <% } %>
 </head>
 <body>
-  <!-- Navbar removed -->
-  <main>
+  <% if (typeof hideHeader === 'undefined' || !hideHeader) { %>
+    <%- include('partials/header') %>
+  <% } %>
+  <main class="main-content-wrapper">
     <% if (typeof success_msg !== 'undefined' && success_msg.length > 0) { %>
       <div class="alert alert-success">
         <%= success_msg %>
@@ -57,5 +60,7 @@
   <% if (typeof page !== 'undefined') { %>
     <script src="/js/<%= page %>.js"></script>
   <% } %>
+
+  <%- include('partials/voice-assistant') %>
 </body>
 </html>

@@ -7,6 +7,10 @@ document.addEventListener('DOMContentLoaded', function() {
   const userInput = document.getElementById('user-message');
   const sendButton = document.getElementById('send-message');
 
+  if (!chatbotToggle || !chatbotBox || !closeChat || !messagesContainer || !userInput || !sendButton) {
+    return;
+  }
+
   // Toggle chat box
   chatbotToggle.addEventListener('click', function() {
     chatbotBox.classList.toggle('active');

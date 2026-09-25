@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="/css/styles.css">
   <link rel="stylesheet" href="/css/animations.css">
   <link rel="stylesheet" href="/css/buttons.css">
+  <link rel="stylesheet" href="/css/ui-enhancements.css">
   <style>
     .form-group {
   margin-bottom: 1.5rem;
@@ -96,10 +97,259 @@
     </div>
   <% } %>
 
+  <style>
+    <% if(page === 'customer-browsing') { %>
+      .storefront-shell {
+        display: grid !important;
+        grid-template-columns: 260px minmax(0, 1fr) !important;
+        gap: 1.5rem !important;
+        max-width: 1380px !important;
+        margin: 2rem auto 3rem !important;
+        padding: 0 1rem 2rem !important;
+        align-items: start !important;
+      }
+
+      .storefront-shell > .sidebar {
+        position: sticky !important;
+        top: 1.25rem !important;
+        min-height: calc(100vh - 6rem) !important;
+        border: 1px solid rgba(148, 163, 184, 0.18) !important;
+        border-radius: 24px !important;
+        background: rgba(255,255,255,0.95) !important;
+        box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08) !important;
+        overflow: hidden !important;
+      }
+
+      .storefront-shell > .sidebar .logo {
+        display: flex !important;
+        align-items: center !important;
+        gap: 0.7rem !important;
+        background: linear-gradient(135deg, #0c4a6e, #0369a1) !important;
+        color: white !important;
+        border-radius: 18px !important;
+        padding: 0.8rem 0.9rem !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.08em !important;
+        text-transform: uppercase !important;
+        box-shadow: 0 12px 24px rgba(3, 105, 161, 0.18) !important;
+      }
+
+      .storefront-shell > .sidebar .sidebar-nav-link {
+        display: flex !important;
+        align-items: center !important;
+        gap: 0.8rem !important;
+        padding: 0.8rem 0.95rem !important;
+        border-radius: 14px !important;
+        color: #334155 !important;
+        font-weight: 600 !important;
+        transition: all 0.2s ease !important;
+      }
+
+      .storefront-shell > .sidebar .sidebar-nav-link:hover,
+      .storefront-shell > .sidebar .sidebar-nav-link.active {
+        background: linear-gradient(135deg, rgba(14,165,233,0.12), rgba(125,211,252,0.08)) !important;
+        color: #0369a1 !important;
+        transform: translateX(2px) !important;
+      }
+
+      .storefront-shell > .main-content {
+        margin-left: 0 !important;
+        background: rgba(255,255,255,0.82) !important;
+        border: 1px solid rgba(148,163,184,0.18) !important;
+        border-radius: 30px !important;
+        box-shadow: 0 18px 40px rgba(15,23,42,0.08) !important;
+        padding: 1.5rem !important;
+        min-height: calc(100vh - 6rem) !important;
+      }
+
+      .storefront-shell .page-title {
+        font-size: clamp(2.2rem, 3vw, 3rem) !important;
+        letter-spacing: -0.06em !important;
+        font-weight: 800 !important;
+        color: #0f172a !important;
+        margin: 0 0 0.35rem !important;
+      }
+
+      .storefront-shell .page-description {
+        color: #64748b !important;
+        font-size: 1rem !important;
+        margin: 0 !important;
+      }
+
+      .storefront-shell .search-container {
+        margin-bottom: 1.25rem !important;
+      }
+
+      .storefront-shell .search-input {
+        width: 100% !important;
+        height: 3.2rem !important;
+        border-radius: 18px !important;
+        border: 1.5px solid rgba(148, 163, 184, 0.26) !important;
+        background: rgba(255,255,255,0.95) !important;
+        box-shadow: 0 6px 16px rgba(15,23,42,0.04) !important;
+        padding: 0.9rem 1rem 0.9rem 3rem !important;
+      }
+
+      .storefront-shell .search-input:focus {
+        border-color: #0ea5e9 !important;
+        box-shadow: 0 0 0 4px rgba(14,165,233,0.12) !important;
+        outline: none !important;
+      }
+
+      .storefront-shell .tab-list {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 0.55rem !important;
+        padding: 0.6rem !important;
+        border: 1px solid rgba(148,163,184,0.2) !important;
+        border-radius: 18px !important;
+        background: rgba(248,250,252,0.9) !important;
+        margin-bottom: 1.5rem !important;
+      }
+
+      .storefront-shell .tab-item {
+        margin: 0 !important;
+        padding: 0.55rem 1rem !important;
+        border-radius: 12px !important;
+        transition: all 0.2s ease !important;
+      }
+
+      .storefront-shell .tab-item a {
+        color: #475569 !important;
+        font-weight: 700 !important;
+        text-decoration: none !important;
+      }
+
+      .storefront-shell .tab-item.active {
+        background: linear-gradient(135deg, #0369a1, #0ea5e9) !important;
+        box-shadow: 0 10px 18px rgba(14,165,233,0.20) !important;
+      }
+
+      .storefront-shell .tab-item.active a {
+        color: white !important;
+      }
+
+      .storefront-shell .product-grid {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fit, minmax(238px, 1fr)) !important;
+        gap: 1.4rem !important;
+      }
+
+      .storefront-shell .product-card {
+        background: white !important;
+        border: 1px solid rgba(148,163,184,0.18) !important;
+        border-radius: 18px !important;
+        overflow: hidden !important;
+        box-shadow: 0 10px 20px rgba(15,23,42,0.04) !important;
+        min-height: 0 !important;
+      }
+
+      .storefront-shell .product-card:hover {
+        transform: translateY(-4px) !important;
+        border-color: rgba(14,165,233,0.18) !important;
+        box-shadow: 0 14px 24px rgba(15,23,42,0.08) !important;
+      }
+
+      .storefront-shell .product-card > div:first-child {
+        position: relative !important;
+        height: 170px !important;
+        overflow: hidden !important;
+        background: linear-gradient(135deg, #f0f9ff, #e2e8f0) !important;
+      }
+
+      .storefront-shell .product-image {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+      }
+
+      .storefront-shell .product-badge {
+        position: absolute !important;
+        top: 0.9rem !important;
+        right: 0.9rem !important;
+        background: linear-gradient(135deg, #0ea5e9, #0369a1) !important;
+        color: white !important;
+        font-size: 0.7rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.06em !important;
+        text-transform: uppercase !important;
+        padding: 0.35rem 0.55rem !important;
+        border-radius: 999px !important;
+      }
+
+      .storefront-shell .product-content {
+        padding: 0.9rem 0.9rem 1rem !important;
+      }
+
+      .storefront-shell .product-category {
+        color: #0ea5e9 !important;
+        font-size: 0.7rem !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.09em !important;
+        text-transform: uppercase !important;
+      }
+
+      .storefront-shell .product-title {
+        margin: 0.45rem 0 0.55rem !important;
+        font-size: 0.98rem !important;
+        color: #0f172a !important;
+        font-weight: 700 !important;
+        line-height: 1.4 !important;
+      }
+
+      .storefront-shell .product-price {
+        color: #0369a1 !important;
+        font-size: 1.2rem !important;
+        font-weight: 800 !important;
+        margin-bottom: 0.75rem !important;
+      }
+
+      .storefront-shell .btn,
+      .storefront-shell .btn-primary,
+      .storefront-shell .add-to-cart-btn {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 100% !important;
+        border-radius: 12px !important;
+        background: linear-gradient(135deg, #0369a1, #0ea5e9) !important;
+        border: none !important;
+        color: white !important;
+        padding: 0.72rem 1rem !important;
+        font-weight: 700 !important;
+        box-shadow: 0 10px 18px rgba(14,165,233,0.18) !important;
+      }
+
+      .storefront-shell .btn:hover,
+      .storefront-shell .btn-primary:hover,
+      .storefront-shell .add-to-cart-btn:hover {
+        background: linear-gradient(135deg, #075985, #0284c7) !important;
+        color: white !important;
+        transform: translateY(-1px) !important;
+      }
+
+      @media (max-width: 980px) {
+        .storefront-shell {
+          grid-template-columns: 1fr !important;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .storefront-shell {
+          padding-left: 0.75rem !important;
+          padding-right: 0.75rem !important;
+        }
+
+        .storefront-shell .product-grid {
+          grid-template-columns: 1fr !important;
+        }
+      }
+    <% } %>
+  </style>
+
   <!-- Home Page -->
   <% if(page === 'home') { %>
-    <div class="min-h-screen flex flex-col">
-      <!-- Animated Background -->
+    <div class="landing-shell">
       <div class="animated-background">
         <div class="shape"></div>
         <div class="shape"></div>
@@ -108,91 +358,196 @@
         <div class="shape"></div>
       </div>
 
-      <!-- Navigation removed -->
+      <nav class="landing-navbar">
+        <div class="brand">
+          <div class="brand-mark">
+            <i class="fas fa-leaf"></i>
+          </div>
+          <span>SETU</span>
+        </div>
 
-      <div class="flex-1 max-w-7xl mx-auto px-8 py-8 flex flex-col justify-center">
-        <header class="text-center mb-14 fade-in">
-          <h1 class="text-4xl font-bold text-gray-900 mb-4 tracking-tight">Welcome to Our Portal</h1>
-          <p class="text-lg text-gray-600 max-w-xl mx-auto">
-            Select your account type to access your personalized dashboard experience
+        <div class="nav-links">
+          <a href="/about">About</a>
+          <a href="/support">Support</a>
+          <a href="/solutions">Solutions</a>
+        </div>
+
+        <div class="nav-actions">
+          <a href="/support/contact" class="nav-ghost">Contact</a>
+          <a href="/auth/customer/login" class="nav-primary">Login</a>
+        </div>
+      </nav>
+
+      <div class="landing-hero">
+        <div class="hero-copy fade-in">
+          <span class="eyebrow">Smarter commerce for modern marketplaces</span>
+          <h1>Buy, sell, and manage with confidence.</h1>
+          <p>
+            SETU connects customers and agencies in one secure digital marketplace designed
+            for transparent orders, better service, and smarter growth.
           </p>
-        </header>
 
-        <div class="flex justify-center gap-8 flex-wrap">
-          <div class="portal-card customer-portal slide-in-left delay-200">
-            <div class="portal-image">
-              <div class="portal-icon">
-                <i class="fas fa-user-circle"></i>
-              </div>
-            </div>
-            <div class="portal-content">
-              <h3 class="portal-title">Customer Portal</h3>
-              <p class="portal-description">
-                Access your account information, view reports, and manage your services in one place.
-              </p>
-              <a href="auth/customer/login" class="btn btn-primary btn-animated">
-                <i class="fas fa-sign-in-alt"></i>
-                <span>Access Dashboard</span>
-              </a>
-            </div>
+          <div class="hero-actions">
+            <a href="/auth/customer/login" class="btn btn-primary btn-animated">
+              <i class="fas fa-arrow-right"></i>
+              <span>Get Started</span>
+            </a>
+            <a href="/support" class="btn btn-secondary btn-animated">
+              <i class="fas fa-headset"></i>
+              <span>Talk to Support</span>
+            </a>
           </div>
 
-          <div class="portal-card agency-portal slide-in-right delay-300">
-            <div class="portal-image">
-              <div class="portal-icon">
-                <i class="fas fa-building"></i>
-              </div>
+          <div class="stats-row">
+            <div class="stat-item">
+              <strong>15k+</strong>
+              <span>Orders delivered</span>
             </div>
-            <div class="portal-content">
-              <h3 class="portal-title">Agency Portal</h3>
-              <p class="portal-description">
-                Manage clients, access agency tools, and view performance metrics for your team.
-              </p>
-              <a href="auth/agency/login" class="btn btn-primary btn-animated">
-                <i class="fas fa-sign-in-alt"></i>
-                <span>Access Dashboard</span>
-              </a>
+            <div class="stat-item">
+              <strong>96%</strong>
+              <span>Citizen satisfaction</span>
+            </div>
+            <div class="stat-item">
+              <strong>24/7</strong>
+              <span>Support coverage</span>
             </div>
           </div>
         </div>
 
-        <div class="help-card fade-in delay-500">
-          <h3 class="help-title">Need Help? <span class="animated-icon pulse"><i class="fas fa-question-circle"></i></span></h3>
-          <p class="help-description">Not sure which portal to choose or having trouble logging in?</p>
-          <div class="help-actions">
-            <a href="/support" class="btn btn-secondary btn-animated">
-              <i class="fas fa-headset"></i>
-              <span>Get Support</span>
+        <div class="hero-visual fade-in delay-200">
+          <div class="dashboard-panel">
+            <div class="panel-header">
+              <span class="dot green"></span>
+              <span class="dot amber"></span>
+              <span class="dot blue"></span>
+            </div>
+
+            <div class="panel-body">
+              <div class="mini-card primary-card">
+                <span class="label">Revenue</span>
+                <strong>$84.2K</strong>
+                <small>+18.4% this month</small>
+              </div>
+
+              <div class="mini-grid">
+                <div class="mini-card">
+                  <span class="label">Sales</span>
+                  <strong>2,430</strong>
+                </div>
+                <div class="mini-card">
+                  <span class="label">Alerts</span>
+                  <strong>12</strong>
+                </div>
+              </div>
+
+              <div class="progress-block">
+                <div class="progress-title">
+                  <span>Fulfillment</span>
+                  <strong>89%</strong>
+                </div>
+                <div class="progress-bar">
+                  <span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="portal-grid">
+        <div class="portal-card customer-portal slide-in-left delay-200">
+          <div class="portal-image">
+            <div class="portal-icon">
+              <i class="fas fa-user-circle"></i>
+            </div>
+          </div>
+          <div class="portal-content">
+            <h3 class="portal-title">Customer Portal</h3>
+            <p class="portal-description">
+              Access your account information, manage orders, and stay informed with quick service updates.
+            </p>
+            <a href="/auth/customer/login" class="btn btn-primary btn-animated">
+              <i class="fas fa-sign-in-alt"></i>
+              <span>Access Dashboard</span>
             </a>
-            <a href="/support/contact" class="btn btn-secondary btn-animated">
-              <i class="fas fa-envelope"></i>
-              <span>Contact Us</span>
+          </div>
+        </div>
+
+        <div class="portal-card agency-portal slide-in-right delay-300">
+          <div class="portal-image">
+            <div class="portal-icon">
+              <i class="fas fa-building"></i>
+            </div>
+          </div>
+          <div class="portal-content">
+            <h3 class="portal-title">Agency Portal</h3>
+            <p class="portal-description">
+              Manage clients, track performance, and streamline operations with a clearer operational view.
+            </p>
+            <a href="/auth/agency/login" class="btn btn-primary btn-animated">
+              <i class="fas fa-sign-in-alt"></i>
+              <span>Access Dashboard</span>
             </a>
           </div>
         </div>
       </div>
 
-      <!-- Footer removed -->
+      <div class="feature-grid fade-in delay-500">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <h3>Secure transactions</h3>
+          <p>Built with trusted workflows and clear operational visibility for every order.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-bolt"></i>
+          </div>
+          <h3>Fast fulfillment</h3>
+          <p>Keep inventory, processing, and updates moving with smoother end-to-end coordination.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-headset"></i>
+          </div>
+          <h3>Dedicated support</h3>
+          <p>Get hands-on help when needed through responsive assistance and clear communication.</p>
+        </div>
+      </div>
+
+      <div class="help-card fade-in delay-500">
+        <h3 class="help-title">Need Help? <span class="animated-icon pulse"><i class="fas fa-question-circle"></i></span></h3>
+        <p class="help-description">Not sure which portal to choose or having trouble logging in?</p>
+        <div class="help-actions">
+          <a href="/support" class="btn btn-secondary btn-animated">
+            <i class="fas fa-headset"></i>
+            <span>Get Support</span>
+          </a>
+          <a href="/support/contact" class="btn btn-secondary btn-animated">
+            <i class="fas fa-envelope"></i>
+            <span>Contact Us</span>
+          </a>
+        </div>
+      </div>
     </div>
 
-    <!-- Animation Script -->
     <script>
       document.addEventListener('DOMContentLoaded', function() {
-        // Add scroll-triggered animations
         const observer = new IntersectionObserver((entries) => {
           entries.forEach(entry => {
             if (entry.isIntersecting) {
               entry.target.classList.add('visible');
             }
           });
-        }, { threshold: 0.1 });
+        }, { threshold: 0.15 });
 
-        // Observe all animated elements
         document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right').forEach(el => {
           observer.observe(el);
         });
 
-        // Add hover effects to buttons
         document.querySelectorAll('.btn').forEach(btn => {
           btn.addEventListener('mouseenter', function() {
             const icon = this.querySelector('i');
@@ -210,51 +565,55 @@
 
   <!-- Customer Login Page -->
   <% if(page === 'customer-login') { %>
-    <div class="auth-container">
-      <div class="auth-card">
-        <div class="auth-logo">
-          <a href="/" class="logo">
-            <div class="logo-icon">
-              <i class="fas fa-shopping-bag"></i>
-            </div>
-            <span class="logo-text">SETU</span>
+    <div class="auth-shell">
+      <div class="auth-visual">
+        <span class="auth-badge"><i class="fas fa-shopping-basket"></i> Customer Portal</span>
+        <h1>Welcome back to SETU.</h1>
+        <p>Discover curated products, track orders, and manage your account from one seamless shopping experience.</p>
+        <ul class="auth-features">
+          <li><i class="fas fa-check-circle"></i> Personalized recommendations</li>
+          <li><i class="fas fa-check-circle"></i> Fast order tracking</li>
+          <li><i class="fas fa-check-circle"></i> Secure shopping experience</li>
+        </ul>
+      </div>
+
+      <div class="auth-panel">
+        <div class="auth-panel-header">
+          <a href="/" class="auth-logo-mark">
+            <span class="logo-icon"><i class="fas fa-shopping-bag"></i></span>
+            <span>SETU</span>
           </a>
         </div>
 
-        <div class="auth-content">
-          <div class="auth-header">
-            <h1 class="auth-title">Customer Login</h1>
-            <p class="auth-description">Welcome back! Please enter your details</p>
+        <div class="auth-form-header">
+          <h2>Customer Login</h2>
+          <p>Welcome back! Please enter your details.</p>
+        </div>
+
+        <form action="/auth/customer/login" method="POST" class="auth-form">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" placeholder="Enter your email" required>
           </div>
 
-          <form action="/auth/customer/login" method="POST" class="auth-form">
-            <div class="form-group">
-              <label for="email" class="form-label">Email</label>
-              <input id="email" name="email" type="email" class="form-input" placeholder="Enter your email" required>
+          <div class="form-group">
+            <div class="auth-inline-row" style="align-items:end;">
+              <label for="password">Password</label>
+              <a href="/auth/customer/forgot-password" class="form-link" style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.05em;">Forgot password?</a>
             </div>
-
-            <div class="form-group">
-              <div class="form-label-group">
-                <label for="password" class="form-label">Password</label>
-                <a href="/auth/customer/forgot-password" class="form-link">Forgot password?</a>
-              </div>
-              <input id="password" name="password" type="password" class="form-input" placeholder="Enter your password" required>
-            </div>
-
-            <div class="form-checkbox">
-              <input type="checkbox" id="remember" name="remember" class="checkbox">
-              <label for="remember" class="checkbox-label">Remember me for 30 days</label>
-            </div>
-
-            <button type="submit" class="btn btn-primary btn-block">Sign in</button>
-          </form>
-
-          <div class="auth-footer">
-            <p class="auth-footer-text">
-              Don't have an account?
-              <a href="/auth/customer/register" class="auth-footer-link">Sign up</a>
-            </p>
+            <input id="password" name="password" type="password" placeholder="Enter your password" required>
           </div>
+
+          <label class="auth-remember" for="remember">
+            <input type="checkbox" id="remember" name="remember">
+            <span>Remember me for 30 days</span>
+          </label>
+
+          <button type="submit" class="btn btn-primary">Sign in</button>
+        </form>
+
+        <div class="auth-footer">
+          <p>Don't have an account? <a href="/auth/customer/register">Sign up</a></p>
         </div>
       </div>
     </div>
@@ -262,64 +621,64 @@
 
   <!-- Customer Register Page -->
   <% if(page === 'customer-register') { %>
-    <div class="auth-container">
-      <div class="auth-card">
-        <div class="auth-logo">
-          <a href="/" class="logo">
-            <div class="logo-icon">
-              <i class="fas fa-shopping-bag"></i>
-            </div>
-            <span class="logo-text">SETU</span>
+    <div class="auth-shell">
+      <div class="auth-visual">
+        <span class="auth-badge"><i class="fas fa-user-plus"></i> New Customer</span>
+        <h1>Start shopping with SETU.</h1>
+        <p>Join today to save favorites, track orders, and explore premium products from trusted sellers.</p>
+        <ul class="auth-features">
+          <li><i class="fas fa-check-circle"></i> One-click checkout</li>
+          <li><i class="fas fa-check-circle"></i> Exclusive deals</li>
+          <li><i class="fas fa-check-circle"></i> Secure account management</li>
+        </ul>
+      </div>
+
+      <div class="auth-panel">
+        <div class="auth-panel-header">
+          <a href="/" class="auth-logo-mark">
+            <span class="logo-icon"><i class="fas fa-shopping-bag"></i></span>
+            <span>SETU</span>
           </a>
         </div>
 
-        <div class="auth-content">
-          <div class="auth-header">
-            <h1 class="auth-title">Create Customer Account</h1>
-            <p class="auth-description">Fill in your details to get started</p>
+        <div class="auth-form-header">
+          <h2>Create Account</h2>
+          <p>Fill in your details to get started.</p>
+        </div>
+
+        <form action="/auth/customer/register" method="POST" class="auth-form">
+          <div class="form-group">
+            <label for="name">Full Name</label>
+            <input id="name" name="name" type="text" placeholder="Enter your full name" required value="<%= typeof name != 'undefined' ? name : '' %>">
           </div>
 
-          <form action="/auth/customer/register" method="POST" class="auth-form">
-            <div class="form-group">
-              <label for="name" class="form-label">Full Name</label>
-              <input id="name" name="name" type="text" class="form-input" placeholder="Enter your full name" required value="<%= typeof name != 'undefined' ? name : '' %>">
-              <div id="name-error" class="error-message"></div>
-            </div>
-
-            <div class="form-group">
-              <label for="email" class="form-label">Email</label>
-              <input id="email" name="email" type="email" class="form-input" placeholder="Enter your email" required value="<%= typeof email != 'undefined' ? email : '' %>">
-              <div id="email-error" class="error-message"></div>
-            </div>
-
-            <div class="form-group">
-              <label for="password" class="form-label">Password</label>
-              <input id="password" name="password" type="password" class="form-input" placeholder="Create a password" required>
-              <div id="password-error" class="error-message"></div>
-            </div>
-
-            <div class="form-group">
-              <label for="confirmPassword" class="form-label">Confirm Password</label>
-              <input id="confirmPassword" name="confirmPassword" type="password" class="form-input confirmPassword" placeholder="Confirm your password" required>
-              <div id="confirm-password-error" class="error-message"></div>
-            </div>
-
-            <div class="form-checkbox">
-              <input type="checkbox" id="terms" name="terms" class="checkbox" required>
-              <label for="terms" class="checkbox-label">
-                I agree to the <a href="/terms" class="form-link">Terms of Service</a> and <a href="/privacy" class="form-link">Privacy Policy</a>
-              </label>
-            </div>
-
-            <button type="submit" class="btn btn-primary btn-block">Create Account</button>
-          </form>
-
-          <div class="auth-footer">
-            <p class="auth-footer-text">
-              Already have an account?
-              <a href="/auth/customer/login" class="auth-footer-link">Sign in</a>
-            </p>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" placeholder="Enter your email" required value="<%= typeof email != 'undefined' ? email : '' %>">
           </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input id="password" name="password" type="password" placeholder="Create a password" required>
+            </div>
+
+            <div class="form-group">
+              <label for="confirmPassword">Confirm</label>
+              <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm password" required>
+            </div>
+          </div>
+
+          <label class="auth-remember" for="terms">
+            <input type="checkbox" id="terms" name="terms" required>
+            <span>I agree to the <a href="/terms">Terms</a> and <a href="/privacy">Privacy Policy</a></span>
+          </label>
+
+          <button type="submit" class="btn btn-primary">Create Account</button>
+        </form>
+
+        <div class="auth-footer">
+          <p>Already have an account? <a href="/auth/customer/login">Sign in</a></p>
         </div>
       </div>
     </div>
@@ -401,51 +760,55 @@
 
   <!-- Agency Login Page -->
   <% if(page === 'agency-login') { %>
-    <div class="auth-container">
-      <div class="auth-card">
-        <div class="auth-logo">
-          <a href="/" class="logo">
-            <div class="logo-icon">
-              <i class="fas fa-building"></i>
-            </div>
-            <span class="logo-text">SETU</span>
+    <div class="auth-shell">
+      <div class="auth-visual">
+        <span class="auth-badge"><i class="fas fa-building"></i> Agency Portal</span>
+        <h1>Grow your business on SETU.</h1>
+        <p>Manage your listings, track orders, and expand your digital storefront with a dedicated agency dashboard.</p>
+        <ul class="auth-features">
+          <li><i class="fas fa-check-circle"></i> Inventory management</li>
+          <li><i class="fas fa-check-circle"></i> Order visibility</li>
+          <li><i class="fas fa-check-circle"></i> Growth insights</li>
+        </ul>
+      </div>
+
+      <div class="auth-panel">
+        <div class="auth-panel-header">
+          <a href="/" class="auth-logo-mark">
+            <span class="logo-icon"><i class="fas fa-building"></i></span>
+            <span>SETU</span>
           </a>
         </div>
 
-        <div class="auth-content">
-          <div class="auth-header">
-            <h1 class="auth-title">Agency Login</h1>
-            <p class="auth-description">Sign in to your agency account</p>
+        <div class="auth-form-header">
+          <h2>Agency Login</h2>
+          <p>Sign in to your agency account.</p>
+        </div>
+
+        <form action="/auth/agency/login" method="POST" class="auth-form">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" placeholder="Enter your email" required>
           </div>
 
-          <form action="/auth/agency/login" method="POST" class="auth-form">
-            <div class="form-group">
-              <label for="email" class="form-label">Email</label>
-              <input id="email" name="email" type="email" class="form-input" placeholder="Enter your email" required>
+          <div class="form-group">
+            <div class="auth-inline-row" style="align-items:end;">
+              <label for="password">Password</label>
+              <a href="/auth/agency/forgot-password" class="form-link" style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.05em;">Forgot password?</a>
             </div>
-
-            <div class="form-group">
-              <div class="form-label-group">
-                <label for="password" class="form-label">Password</label>
-                <a href="/auth/agency/forgot-password" class="form-link">Forgot password?</a>
-              </div>
-              <input id="password" name="password" type="password" class="form-input" placeholder="Enter your password" required>
-            </div>
-
-            <div class="form-checkbox">
-              <input type="checkbox" id="remember" name="remember" class="checkbox">
-              <label for="remember" class="checkbox-label">Remember me for 30 days</label>
-            </div>
-
-            <button type="submit" class="btn btn-primary btn-block">Sign in</button>
-          </form>
-
-          <div class="auth-footer">
-            <p class="auth-footer-text">
-              Don't have an agency account?
-              <a href="/auth/agency/register" class="auth-footer-link">Apply now</a>
-            </p>
+            <input id="password" name="password" type="password" placeholder="Enter your password" required>
           </div>
+
+          <label class="auth-remember" for="remember">
+            <input type="checkbox" id="remember" name="remember">
+            <span>Remember me for 30 days</span>
+          </label>
+
+          <button type="submit" class="btn btn-primary">Sign in</button>
+        </form>
+
+        <div class="auth-footer">
+          <p>Don't have an agency account? <a href="/auth/agency/register">Apply now</a></p>
         </div>
       </div>
     </div>
@@ -453,133 +816,112 @@
 
   <!-- Agency Register Page -->
   <% if(page === 'agency-register') { %>
-    <div class="auth-container">
-      <div class="auth-card wide-card">
-        <div class="auth-logo">
-          <a href="/" class="logo">
-            <div class="logo-icon">
-              <i class="fas fa-building"></i>
-            </div>
-            <span class="logo-text">SETU</span>
+    <div class="auth-shell" style="grid-template-columns: 1fr; max-width: 960px;">
+      <div class="auth-panel" style="padding:2rem;">
+        <div class="auth-panel-header">
+          <a href="/" class="auth-logo-mark">
+            <span class="logo-icon"><i class="fas fa-building"></i></span>
+            <span>SETU</span>
           </a>
         </div>
 
-        <div class="auth-content">
-          <div class="auth-header">
-            <h1 class="auth-title">Agency Registration</h1>
-            <p class="auth-description">Create an agency account to start selling on our platform</p>
-          </div>
+        <div class="auth-form-header">
+          <h2>Agency Registration</h2>
+          <p>Create an agency account to start selling on our platform.</p>
+        </div>
 
-          <form action="/auth/agency/register" method="POST" class="auth-form">
-            <div class="form-section">
-              <h2 class="form-section-title">Agency Information</h2>
-
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="agencyName" class="form-label">Agency Name</label>
-                  <input id="agencyName" name="agencyName" type="text" class="form-input" placeholder="Enter your agency name" required>
-                </div>
-
-                <div class="form-group">
-                  <label for="businessType" class="form-label">Business Type</label>
-                  <select id="businessType" name="businessType" class="form-input" required>
-                    <option value="">Select business type</option>
-                    <option value="sole_proprietorship">Sole Proprietorship</option>
-                    <option value="partnership">Partnership</option>
-                    <option value="llc">Limited Liability Company (LLC)</option>
-                    <option value="corporation">Corporation</option>
-                    <option value="other">Other</option>
-                  </select>
-                </div>
-              </div>
-
+        <form action="/auth/agency/register" method="POST" class="auth-form">
+          <div class="auth-section">
+            <h3>Agency Information</h3>
+            <div class="form-row">
               <div class="form-group">
-                <label for="businessDescription" class="form-label">Business Description</label>
-                <textarea id="businessDescription" name="businessDescription" class="form-textarea" placeholder="Briefly describe your business and the products you sell" required></textarea>
+                <label for="agencyName">Agency Name</label>
+                <input id="agencyName" name="agencyName" type="text" placeholder="Enter your agency name" required>
               </div>
-
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="website" class="form-label">Website (Optional)</label>
-                  <input id="website" name="website" type="url" class="form-input" placeholder="https://www.example.com">
-                </div>
-
-                <div class="form-group">
-                  <label for="phone" class="form-label">Business Phone</label>
-                  <input id="phone" name="phone" type="tel" class="form-input" placeholder="Enter business phone number" required>
-                </div>
-              </div>
-            </div>
-
-            <div class="form-section">
-              <h2 class="form-section-title">Contact Information</h2>
-
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="firstName" class="form-label">First Name</label>
-                  <input id="firstName" name="firstName" type="text" class="form-input" placeholder="Enter your first name" required>
-                </div>
-
-                <div class="form-group">
-                  <label for="lastName" class="form-label">Last Name</label>
-                  <input id="lastName" name="lastName" type="text" class="form-input" placeholder="Enter your last name" required>
-                </div>
-              </div>
-
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="email" class="form-label">Email Address</label>
-                  <input id="email" name="email" type="email" class="form-input" placeholder="Enter your email" required>
-                </div>
-
-                <div class="form-group">
-                  <label for="position" class="form-label">Position/Title</label>
-                  <input id="position" name="position" type="text" class="form-input" placeholder="Enter your position" required>
-                </div>
+              <div class="form-group">
+                <label for="businessType">Business Type</label>
+                <select id="businessType" name="businessType" required>
+                  <option value="">Select business type</option>
+                  <option value="sole_proprietorship">Sole Proprietorship</option>
+                  <option value="partnership">Partnership</option>
+                  <option value="llc">Limited Liability Company (LLC)</option>
+                  <option value="corporation">Corporation</option>
+                  <option value="other">Other</option>
+                </select>
               </div>
             </div>
 
-            <div class="form-section">
-              <h2 class="form-section-title">Account Information</h2>
-
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="password" class="form-label">Password</label>
-                  <input id="password" name="password" type="password" class="form-input" placeholder="Create a password" required>
-                </div>
-
-                <div class="form-group">
-                  <label for="confirmPassword" class="form-label">Confirm Password</label>
-                  <input id="confirmPassword" name="confirmPassword" type="password" class="form-input" placeholder="Confirm your password" required>
-                </div>
-              </div>
+            <div class="form-group">
+              <label for="businessDescription">Business Description</label>
+              <textarea id="businessDescription" name="businessDescription" rows="3" placeholder="Briefly describe your business and the products you sell" required></textarea>
             </div>
 
-            <div class="form-section">
-              <div class="form-checkbox">
-                <input type="checkbox" id="terms" name="terms" class="checkbox" required>
-                <label for="terms" class="checkbox-label">
-                  I agree to the <a href="/terms" class="form-link">Terms of Service</a> and <a href="/privacy" class="form-link">Privacy Policy</a>
-                </label>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="website">Website (Optional)</label>
+                <input id="website" name="website" type="url" placeholder="https://www.example.com">
               </div>
-
-              <div class="form-checkbox">
-                <input type="checkbox" id="marketing" name="marketing" class="checkbox">
-                <label for="marketing" class="checkbox-label">
-                  I agree to receive marketing communications from SETU
-                </label>
+              <div class="form-group">
+                <label for="phone">Business Phone</label>
+                <input id="phone" name="phone" type="tel" placeholder="Enter business phone number" required>
               </div>
             </div>
-
-            <button type="submit" class="btn btn-primary btn-block">Submit Application</button>
-          </form>
-
-          <div class="auth-footer">
-            <p class="auth-footer-text">
-              Already have an agency account?
-              <a href="/auth/agency/login" class="auth-footer-link">Sign in</a>
-            </p>
           </div>
+
+          <div class="auth-section">
+            <h3>Contact Information</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input id="firstName" name="firstName" type="text" placeholder="Enter your first name" required>
+              </div>
+              <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input id="lastName" name="lastName" type="text" placeholder="Enter your last name" required>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="email">Email Address</label>
+                <input id="email" name="email" type="email" placeholder="Enter your email" required>
+              </div>
+              <div class="form-group">
+                <label for="position">Position / Title</label>
+                <input id="position" name="position" type="text" placeholder="Enter your position" required>
+              </div>
+            </div>
+          </div>
+
+          <div class="auth-section">
+            <h3>Account Information</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input id="password" name="password" type="password" placeholder="Create a password" required>
+              </div>
+              <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm your password" required>
+              </div>
+            </div>
+          </div>
+
+          <label class="auth-remember" for="terms">
+            <input type="checkbox" id="terms" name="terms" required>
+            <span>I agree to the <a href="/terms">Terms of Service</a> and <a href="/privacy">Privacy Policy</a></span>
+          </label>
+
+          <label class="auth-remember" for="marketing">
+            <input type="checkbox" id="marketing" name="marketing">
+            <span>I agree to receive marketing communications from SETU</span>
+          </label>
+
+          <button type="submit" class="btn btn-primary">Submit Application</button>
+        </form>
+
+        <div class="auth-footer">
+          <p>Already have an agency account? <a href="/auth/agency/login">Sign in</a></p>
         </div>
       </div>
     </div>
@@ -587,7 +929,7 @@
 
   <!-- Customer Browsing Page -->
   <% if(page === 'customer-browsing') { %>
-    <div class="container">
+    <div class="container storefront-shell">
       <!-- Mobile Sidebar Toggle -->
       <button class="mobile-sidebar-toggle" id="sidebarToggle">
         <i class="fas fa-bars"></i>

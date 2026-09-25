@@ -21,36 +21,55 @@
     </div>
 
     <!-- Category Tabs -->
-    <div class="category-tabs">
-      <a href="/customer/browsing" class="category-tab <%= !category || category === 'all' ? 'active' : '' %>">All</a>
-      <a href="/customer/browsing/electronics" class="category-tab <%= category === 'electronics' ? 'active' : '' %>">Electronics</a>
-      <a href="/customer/browsing/clothing" class="category-tab <%= category === 'clothing' ? 'active' : '' %>">Clothing</a>
-      <a href="/customer/browsing/books" class="category-tab <%= category === 'books' ? 'active' : '' %>">Books</a>
-      <a href="/customer/browsing/home" class="category-tab <%= category === 'home' ? 'active' : '' %>">Home</a>
+    <div class="category-tabs mb-4">
+      <a href="/customer/browsing" class="category-tab <%= (typeof category === 'undefined' || !category || category === 'all') ? 'active' : '' %>">All Items</a>
+      <a href="/customer/browsing/electronics" class="category-tab <%= (typeof category !== 'undefined' && category === 'electronics') ? 'active' : '' %>">Electronics</a>
+      <a href="/customer/browsing/clothing" class="category-tab <%= (typeof category !== 'undefined' && category === 'clothing') ? 'active' : '' %>">Clothing</a>
+      <a href="/customer/browsing/books" class="category-tab <%= (typeof category !== 'undefined' && category === 'books') ? 'active' : '' %>">Books</a>
+      <a href="/customer/browsing/home" class="category-tab <%= (typeof category !== 'undefined' && category === 'home') ? 'active' : '' %>">Home & Living</a>
     </div>
 
     <!-- Product Grid -->
-    <div class="product-grid">
-      <% products.forEach(product => { %>
-        <div class="product-card">
-          <img src="<%= product.image %>" alt="<%= product.name %>" class="product-image">
-          <div class="product-content">
-            <div class="product-category"><%= product.category %></div>
-            <h3 class="product-title"><%= product.name %></h3>
-            <p class="product-description"><%= product.description %></p>
-            <div class="product-price">₹<%= product.price %></div>
-            <div class="product-actions">
-              <button class="btn btn-primary add-to-cart" data-product-id="<%= product._id %>">
-                <i class="fas fa-shopping-cart"></i> Add to Cart
-              </button>
-              <button class="btn btn-icon add-to-wishlist" data-product-id="<%= product._id %>">
-                <i class="fas fa-heart"></i>
-              </button>
+    <% if (typeof products !== 'undefined' && products && products.length > 0) { %>
+      <div class="product-grid">
+        <% products.forEach(product => { %>
+          <div class="product-card">
+            <div class="product-image-container">
+              <img src="<%= product.image || '/images/placeholder.png' %>" alt="<%= product.name %>" class="product-image" onerror="this.onerror=null; this.src='https://via.placeholder.com/300x200?text=Product+Image';">
+            </div>
+            <div class="product-content">
+              <div class="product-category"><%= product.category %></div>
+              <h3 class="product-title"><%= product.name %></h3>
+              <p class="product-description"><%= product.description %></p>
+              <div class="product-footer-row">
+                <div class="product-price">₹<%= typeof product.price === 'number' ? product.price.toLocaleString('en-IN') : product.price %></div>
+              </div>
+              <div class="product-actions mt-3">
+                <button class="btn btn-primary add-to-cart-btn flex-1" data-product-id="<%= product._id %>">
+                  <i class="fas fa-shopping-cart me-1"></i> Add to Cart
+                </button>
+                <button class="btn btn-icon add-to-wishlist" data-product-id="<%= product._id %>" title="Add to Wishlist">
+                  <i class="fas fa-heart"></i>
+                </button>
+              </div>
             </div>
           </div>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <div class="card p-5 text-center my-4 empty-state-card">
+        <div class="empty-state-icon mb-3 text-muted">
+          <i class="fas fa-box-open fa-3x"></i>
         </div>
-      <% }) %>
-    </div>
+        <h4>No Products Available</h4>
+        <p class="text-muted">There are currently no items matching this category. Please check back later or browse all items.</p>
+        <div>
+          <a href="/customer/browsing" class="btn btn-primary mt-2">
+            <i class="fas fa-store me-1"></i> Browse All Products
+          </a>
+        </div>
+      </div>
+    <% } %>
   </div>
 </div>
 
