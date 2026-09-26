@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Dashboard | SETU</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/ui-enhancements.css">
+  <style>
+    :root {
+      --dash-bg: #f8fafc;
+      --dash-card: #ffffff;
+      --dash-border: rgba(226, 232, 240, 0.8);
+      --dash-text-main: #0f172a;
+      --dash-text-muted: #64748b;
+      --dash-primary: #0284c7;
+      --dash-primary-dark: #0369a1;
+      --dash-primary-light: #e0f2fe;
+    }
+
+    body {
+      background-color: var(--dash-bg);
+      font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+      color: var(--dash-text-main);
+      min-height: 100vh;
+    }
+
+    .dash-wrapper {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+
+    .greeting-card {
+      background: linear-gradient(135deg, #0c4a6e 0%, #0369a1 50%, #0284c7 100%);
+      color: #ffffff;
+      border-radius: 20px;
+      padding: 2.25rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 16px 36px -10px rgba(3, 105, 161, 0.35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .greeting-card::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .stat-badge {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 14px;
+      padding: 1rem 1.4rem;
+      text-align: center;
+      min-width: 120px;
+    }
+
+    .stat-badge .val {
+      font-size: 1.75rem;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .stat-badge .lbl {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      opacity: 0.85;
+    }
+
+    .quick-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .quick-tile {
+      background: var(--dash-card);
+      border: 1px solid var(--dash-border);
+      border-radius: 16px;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      text-decoration: none;
+      color: var(--dash-text-main);
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .quick-tile:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 24px -4px rgba(15, 23, 42, 0.08);
+      border-color: var(--dash-primary);
+      color: var(--dash-primary);
+    }
+
+    .quick-tile .icon-wrap {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      background: var(--dash-primary-light);
+      color: var(--dash-primary-dark);
+    }
+
+    .card-modern {
+      background: var(--dash-card);
+      border: 1px solid var(--dash-border);
+      border-radius: 20px;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+      margin-bottom: 2rem;
+      overflow: hidden;
+    }
+
+    .card-modern-header {
+      padding: 1.25rem 1.75rem;
+      border-bottom: 1px solid var(--dash-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-modern-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .card-modern-body {
+      padding: 1.75rem;
+    }
+
+    .table-modern {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+
+    .table-modern th {
+      background: #f8fafc;
+      color: var(--dash-text-muted);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 0.85rem 1.25rem;
+      border-bottom: 1px solid var(--dash-border);
+    }
+
+    .table-modern td {
+      padding: 1.1rem 1.25rem;
+      border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+      vertical-align: middle;
+      font-size: 0.925rem;
+    }
+
+    .table-modern tr:hover td {
+      background: rgba(240, 249, 255, 0.5);
+    }
+
+    .badge-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: capitalize;
+    }
+
+    .badge-status.pending { background: #fef3c7; color: #b45309; }
+    .badge-status.processing { background: #e0f2fe; color: #0369a1; }
+    .badge-status.shipped { background: #e0e7ff; color: #4338ca; }
+    .badge-status.delivered { background: #dcfce7; color: #15803d; }
+    .badge-status.cancelled { background: #fee2e2; color: #b91c1c; }
+
+    .btn-brand {
+      background: linear-gradient(135deg, var(--dash-primary), var(--dash-primary-dark));
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 0.65rem 1.25rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+
+    .btn-brand:hover {
+      background: linear-gradient(135deg, var(--dash-primary-dark), #0c4a6e);
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(3, 105, 161, 0.25);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Global Header -->
+  <%- include('../partials/header') %>
+
+  <div class="dash-wrapper">
+    <!-- Greeting Banner -->
+    <div class="greeting-card">
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+        <div>
+          <span class="badge bg-white text-primary mb-2 px-3 py-1 fw-bold rounded-pill" style="font-size: 0.75rem; letter-spacing: 0.05em;">
+            <i class="fas fa-shield-alt me-1"></i> VERIFIED CUSTOMER PORTAL
+          </span>
+          <h1 class="h2 fw-bold mb-1">Welcome back, <%= user && user.name ? user.name : 'Customer' %>! 👋</h1>
+          <p class="mb-0 text-white-50">Manage your seized electronics orders, track deliveries, and manage your account.</p>
+        </div>
+        <div class="d-flex gap-3 flex-wrap">
+          <div class="stat-badge">
+            <div class="val"><%= (recentOrders && recentOrders.length) ? recentOrders.length : 0 %></div>
+            <div class="lbl">Orders</div>
+          </div>
+          <div class="stat-badge">
+            <div class="val"><%= (wishlist && wishlist.length) ? wishlist.length : 0 %></div>
+            <div class="lbl">Wishlist</div>
+          </div>
+          <div class="stat-badge">
+            <div class="val">₹<%= (stats && stats.totalSpent) ? stats.totalSpent.toLocaleString('en-IN') : 0 %></div>
+            <div class="lbl">Total Spent</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Navigation Tiles -->
+    <div class="quick-bar">
+      <a href="/customer/browsing" class="quick-tile">
+        <div class="icon-wrap"><i class="fas fa-store"></i></div>
+        <div>
+          <div class="fw-bold">Browse Catalog</div>
+          <small class="text-muted">Seized Electronics</small>
+        </div>
+      </a>
+      <a href="/customer/cart" class="quick-tile">
+        <div class="icon-wrap"><i class="fas fa-shopping-cart"></i></div>
+        <div>
+          <div class="fw-bold">My Cart</div>
+          <small class="text-muted">Checkout items</small>
+        </div>
+      </a>
+      <a href="/customer/orders" class="quick-tile">
+        <div class="icon-wrap"><i class="fas fa-box-open"></i></div>
+        <div>
+          <div class="fw-bold">Order History</div>
+          <small class="text-muted">Tracking & invoices</small>
+        </div>
+      </a>
+      <a href="/support" class="quick-tile">
+        <div class="icon-wrap"><i class="fas fa-headset"></i></div>
+        <div>
+          <div class="fw-bold">Help & Support</div>
+          <small class="text-muted">24/7 assistance</small>
+        </div>
+      </a>
+    </div>
+
+    <div class="row g-4">
+      <!-- Recent Orders Column -->
+      <div class="col-lg-8">
+        <div class="card-modern">
+          <div class="card-modern-header">
+            <h2 class="card-modern-title">
+              <i class="fas fa-clock text-primary"></i> Recent Seized Goods Orders
+            </h2>
+            <a href="/customer/orders" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold">
+              View All <i class="fas fa-arrow-right ms-1"></i>
+            </a>
+          </div>
+          <div class="card-modern-body p-0">
+            <% if (recentOrders && recentOrders.length > 0) { %>
+              <div class="table-responsive">
+                <table class="table-modern">
+                  <thead>
+                    <tr>
+                      <th>Order ID</th>
+                      <th>Date</th>
+                      <th>Total</th>
+                      <th>Status</th>
+                      <th class="text-end">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% recentOrders.slice(0, 5).forEach(order => { %>
+                      <tr>
+                        <td>
+                          <span class="fw-bold text-primary font-monospace">#<%= order.orderNumber || (order._id ? order._id.toString().substring(0, 8) : 'ORD') %></span>
+                        </td>
+                        <td class="text-muted">
+                          <%= new Date(order.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) %>
+                        </td>
+                        <td class="fw-bold">
+                          ₹<%= (order.totalAmount || order.total || 0).toLocaleString('en-IN') %>
+                        </td>
+                        <td>
+                          <span class="badge-status <%= order.status || 'pending' %>">
+                            <i class="fas fa-circle" style="font-size: 0.45rem;"></i>
+                            <%= order.status || 'Pending' %>
+                          </span>
+                        </td>
+                        <td class="text-end">
+                          <a href="/customer/orders/<%= order._id %>" class="btn btn-sm btn-light border rounded-pill px-3">
+                            <i class="fas fa-eye me-1"></i> View
+                          </a>
+                        </td>
+                      </tr>
+                    <% }) %>
+                  </tbody>
+                </table>
+              </div>
+            <% } else { %>
+              <div class="p-5 text-center">
+                <div class="text-muted mb-3">
+                  <i class="fas fa-shopping-bag fa-3x text-primary opacity-50"></i>
+                </div>
+                <h5 class="fw-bold mb-1">No orders placed yet</h5>
+                <p class="text-muted mb-4">Discover verified government seized goods at unbeatable fixed prices.</p>
+                <a href="/customer/browsing" class="btn-brand text-decoration-none">
+                  <i class="fas fa-search me-1"></i> Start Browsing
+                </a>
+              </div>
+            <% } %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Account Summary & Security Column -->
+      <div class="col-lg-4">
+        <div class="card-modern">
+          <div class="card-modern-header">
+            <h2 class="card-modern-title">
+              <i class="fas fa-user-circle text-primary"></i> Profile & Security
+            </h2>
+          </div>
+          <div class="card-modern-body">
+            <div class="d-flex align-items-center gap-3 mb-4">
+              <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold shadow-sm" style="width: 54px; height: 54px; font-size: 1.4rem;">
+                <%= (user && user.name) ? user.name.charAt(0).toUpperCase() : 'U' %>
+              </div>
+              <div>
+                <h5 class="fw-bold mb-0"><%= user && user.name ? user.name : 'Customer' %></h5>
+                <small class="text-muted"><%= user && user.email ? user.email : '' %></small>
+              </div>
+            </div>
+
+            <div class="p-3 bg-light rounded-3 mb-3 border">
+              <div class="d-flex justify-content-between mb-2">
+                <span class="text-muted small">Account Type</span>
+                <span class="badge bg-success rounded-pill px-2">Verified Citizen</span>
+              </div>
+              <div class="d-flex justify-content-between mb-2">
+                <span class="text-muted small">Escrow Protection</span>
+                <span class="text-success fw-bold small"><i class="fas fa-check-circle me-1"></i> Active</span>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span class="text-muted small">Member Since</span>
+                <span class="small fw-semibold"><%= user && user.createdAt ? new Date(user.createdAt).getFullYear() : '2025' %></span>
+              </div>
+            </div>
+
+            <div class="d-grid gap-2">
+              <a href="/customer/browsing" class="btn btn-primary rounded-pill fw-semibold py-2">
+                <i class="fas fa-shopping-bag me-1"></i> Shop Seized Products
+              </a>
+              <a href="/auth/customer/logout" class="btn btn-outline-danger rounded-pill fw-semibold py-2">
+                <i class="fas fa-sign-out-alt me-1"></i> Sign Out
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trust & Guarantee Widget -->
+        <div class="card-modern bg-primary text-white p-3 text-center" style="background: linear-gradient(135deg, #0369a1, #0c4a6e) !important;">
+          <i class="fas fa-certificate fa-2x mb-2 text-warning"></i>
+          <h6 class="fw-bold mb-1">100% Legal Seizure Guarantee</h6>
+          <small class="opacity-75">All listed goods carry verified government disposal clearance and authentic condition certificates.</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%- include('../partials/footer') %>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

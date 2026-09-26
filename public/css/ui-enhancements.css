@@ -1672,3 +1672,432 @@ footer.bg-gray-800 a:hover { color: #38bdf8 !important; }
   animation: shimmer 1.5s infinite;
   border-radius: var(--radius-md);
 }
+
+/* ===================================================================
+   MODERN HEADER & NAVIGATION SYSTEM
+   =================================================================== */
+.site-header {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 1000 !important;
+  background: rgba(255, 255, 255, 0.88) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.85) !important;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04) !important;
+  transition: all 0.3s ease !important;
+}
+
+.site-navbar {
+  max-width: 1360px !important;
+  margin: 0 auto !important;
+  padding: 0.85rem 1.5rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 1.5rem !important;
+}
+
+.site-brand {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
+  text-decoration: none !important;
+  color: inherit !important;
+}
+
+.site-brand-mark {
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 12px !important;
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important;
+  color: #ffffff !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 1.25rem !important;
+  box-shadow: 0 6px 14px rgba(2, 132, 199, 0.3) !important;
+  transition: transform 0.25s ease !important;
+}
+
+.site-brand:hover .site-brand-mark {
+  transform: scale(1.06) rotate(-3deg) !important;
+}
+
+.brand-text-col {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.brand-name {
+  font-size: 1.35rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.08em !important;
+  color: #0f172a !important;
+  line-height: 1.1 !important;
+}
+
+.brand-tagline {
+  font-size: 0.68rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  color: #0284c7 !important;
+}
+
+.site-nav-links {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+}
+
+.nav-link-item {
+  color: #475569 !important;
+  text-decoration: none !important;
+  font-weight: 600 !important;
+  font-size: 0.925rem !important;
+  padding: 0.55rem 1rem !important;
+  border-radius: 999px !important;
+  transition: all 0.2s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+.nav-link-item:hover {
+  color: #0284c7 !important;
+  background: rgba(2, 132, 199, 0.08) !important;
+}
+
+.nav-link-item.highlight {
+  color: #0284c7 !important;
+  background: rgba(2, 132, 199, 0.08) !important;
+  font-weight: 700 !important;
+}
+
+.site-nav-actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 1rem !important;
+}
+
+.nav-cart-link {
+  position: relative !important;
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 12px !important;
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 1.1rem !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease !important;
+}
+
+.nav-cart-link:hover {
+  background: #e2e8f0 !important;
+  color: #0284c7 !important;
+  transform: translateY(-2px) !important;
+}
+
+.nav-cart-link .cart-count {
+  position: absolute !important;
+  top: -6px !important;
+  right: -6px !important;
+  font-size: 0.72rem !important;
+  font-weight: 800 !important;
+  padding: 0.2rem 0.45rem !important;
+  border-radius: 999px !important;
+  border: 2px solid #ffffff !important;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+/* ===================================================================
+   FLOATING MODERN TOAST NOTIFICATIONS
+   =================================================================== */
+.setu-toast {
+  pointer-events: auto !important;
+  min-width: 290px !important;
+  max-width: 420px !important;
+  background: #ffffff !important;
+  border-radius: 16px !important;
+  padding: 0.9rem 1.25rem !important;
+  box-shadow: 0 16px 36px -4px rgba(15, 23, 42, 0.16), 0 4px 12px rgba(15, 23, 42, 0.08) !important;
+  border: 1px solid rgba(226, 232, 240, 0.9) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 1rem !important;
+  opacity: 0 !important;
+  transform: translateY(-12px) scale(0.96) !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.setu-toast.show {
+  opacity: 1 !important;
+  transform: translateY(0) scale(1) !important;
+}
+
+.setu-toast-success {
+  border-left: 4px solid #10b981 !important;
+}
+
+.setu-toast-error {
+  border-left: 4px solid #ef4444 !important;
+}
+
+.setu-toast-msg {
+  font-size: 0.9rem !important;
+  font-weight: 600 !important;
+  color: #0f172a !important;
+}
+
+.toast-close {
+  background: none !important;
+  border: none !important;
+  font-size: 1.25rem !important;
+  color: #94a3b8 !important;
+  cursor: pointer !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+}
+
+.toast-close:hover {
+  color: #0f172a !important;
+}
+
+/* ===================================================================
+   MODERN FOOTER
+   =================================================================== */
+.setu-main-footer {
+  background: #0b1120 !important;
+  color: #94a3b8 !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+  position: relative !important;
+  z-index: 10 !important;
+}
+
+.footer-brand {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
+}
+
+.footer-brand-mark {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 10px !important;
+  background: linear-gradient(135deg, #0284c7, #0369a1) !important;
+  color: white !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 1.1rem !important;
+}
+
+.footer-brand-name {
+  font-size: 1.4rem !important;
+  font-weight: 800 !important;
+  color: #ffffff !important;
+  letter-spacing: 0.08em !important;
+}
+
+.footer-heading {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  margin-bottom: 1.25rem !important;
+}
+
+.footer-links li {
+  margin-bottom: 0.65rem !important;
+}
+
+.footer-links a {
+  color: #94a3b8 !important;
+  text-decoration: none !important;
+  font-size: 0.88rem !important;
+  transition: all 0.2s ease !important;
+  display: inline-block !important;
+}
+
+.footer-links a:hover {
+  color: #38bdf8 !important;
+  transform: translateX(3px) !important;
+}
+
+.social-icon {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 50% !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #94a3b8 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-decoration: none !important;
+  margin-right: 0.5rem !important;
+  transition: all 0.2s ease !important;
+}
+
+.social-icon:hover {
+  background: #0284c7 !important;
+  color: #ffffff !important;
+  transform: translateY(-2px) !important;
+}
+
+/* ===================================================================
+   SHOPPING CART PAGE STYLING
+   =================================================================== */
+.cart-page-wrapper {
+  max-width: 1240px !important;
+  margin: 2.5rem auto 4.5rem !important;
+  padding: 0 1.25rem !important;
+}
+
+.cart-item-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 1.25rem !important;
+  padding: 1.25rem 0 !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+  transition: all 0.25s ease !important;
+}
+
+.cart-item-thumb {
+  width: 80px !important;
+  height: 80px !important;
+  border-radius: 14px !important;
+  object-fit: cover !important;
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+.cart-qty-ctrl {
+  display: inline-flex !important;
+  align-items: center !important;
+  border: 1.5px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  background: #ffffff !important;
+}
+
+.cart-qty-btn {
+  background: #f8fafc !important;
+  border: none !important;
+  width: 32px !important;
+  height: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-weight: 700 !important;
+  color: #475569 !important;
+  cursor: pointer !important;
+  transition: background 0.15s ease !important;
+}
+
+.cart-qty-btn:hover {
+  background: #e0f2fe !important;
+  color: #0284c7 !important;
+}
+
+.cart-qty-input {
+  width: 44px !important;
+  height: 32px !important;
+  border: none !important;
+  text-align: center !important;
+  font-weight: 700 !important;
+  font-size: 0.9rem !important;
+  background: transparent !important;
+}
+
+.cart-qty-input:focus {
+  outline: none !important;
+}
+
+.cart-item-remove-btn {
+  background: none !important;
+  border: none !important;
+  color: #94a3b8 !important;
+  font-size: 1rem !important;
+  padding: 0.5rem !important;
+  cursor: pointer !important;
+  border-radius: 8px !important;
+  transition: all 0.2s ease !important;
+}
+
+.cart-item-remove-btn:hover {
+  color: #ef4444 !important;
+  background: #fee2e2 !important;
+}
+
+/* ===================================================================
+   PRODUCT CARD OVERHAUL
+   =================================================================== */
+.product-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(226, 232, 240, 0.8) !important;
+  border-radius: 20px !important;
+  overflow: hidden !important;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.product-card:hover {
+  transform: translateY(-6px) !important;
+  box-shadow: 0 20px 35px -8px rgba(15, 23, 42, 0.10), 0 8px 16px -4px rgba(15, 23, 42, 0.06) !important;
+  border-color: rgba(2, 132, 199, 0.35) !important;
+}
+
+.product-image-container {
+  position: relative !important;
+  width: 100% !important;
+  height: 200px !important;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%) !important;
+  overflow: hidden !important;
+}
+
+.product-image {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  transition: transform 0.4s ease !important;
+}
+
+.product-card:hover .product-image {
+  transform: scale(1.06) !important;
+}
+
+.seizure-badge {
+  position: absolute !important;
+  top: 0.85rem !important;
+  left: 0.85rem !important;
+  background: rgba(15, 23, 42, 0.78) !important;
+  backdrop-filter: blur(8px) !important;
+  color: #ffffff !important;
+  font-size: 0.68rem !important;
+  font-weight: 700 !important;
+  padding: 0.3rem 0.65rem !important;
+  border-radius: 999px !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+}
+
+.product-discount-tag {
+  position: absolute !important;
+  top: 0.85rem !important;
+  right: 0.85rem !important;
+  background: linear-gradient(135deg, #10b981, #059669) !important;
+  color: #ffffff !important;
+  font-size: 0.7rem !important;
+  font-weight: 800 !important;
+  padding: 0.3rem 0.6rem !important;
+  border-radius: 999px !important;
+  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3) !important;
+}
+

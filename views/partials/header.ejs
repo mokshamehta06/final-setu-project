@@ -1,25 +1,62 @@
 <header class="site-header">
   <nav class="site-navbar" aria-label="Main navigation">
+    <!-- Brand -->
     <a href="/" class="site-brand">
       <span class="site-brand-mark">
-        <i class="fas fa-leaf"></i>
+        <i class="fas fa-shield-halved"></i>
       </span>
-      <span>SETU</span>
+      <div class="brand-text-col">
+        <span class="brand-name">SETU</span>
+        <span class="brand-tagline">Seized Goods Portal</span>
+      </div>
     </a>
 
+    <!-- Nav Links -->
     <div class="site-nav-links">
-      <a href="/about">About</a>
-      <a href="/solutions">Solutions</a>
-      <a href="/support">Support</a>
-      <a href="/customer/browsing">Browse</a>
+      <a href="/" class="nav-link-item"><i class="fas fa-home me-1"></i> Home</a>
+      <a href="/customer/browsing" class="nav-link-item highlight"><i class="fas fa-store me-1"></i> Browse Catalog</a>
+      <a href="/solutions" class="nav-link-item"><i class="fas fa-scale-balanced me-1"></i> Transparency</a>
+      <a href="/support" class="nav-link-item"><i class="fas fa-headset me-1"></i> Support</a>
     </div>
 
+    <!-- Actions -->
     <div class="site-nav-actions">
-      <a href="/support/contact">Contact</a>
+      <!-- Cart Icon with Live Badge -->
+      <a href="/customer/cart" class="nav-cart-link" title="View Shopping Cart">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-count badge bg-primary" id="navCartCount">0</span>
+      </a>
+
       <% if (typeof user !== 'undefined' && user) { %>
-        <a href="/customer/dashboard" class="site-nav-button primary">Dashboard</a>
+        <% if (user.role === 'admin') { %>
+          <a href="/admin/dashboard" class="btn btn-sm btn-dark rounded-pill px-3">
+            <i class="fas fa-user-shield me-1"></i> Admin Panel
+          </a>
+        <% } else if (user.role === 'agency') { %>
+          <a href="/agency/dashboard" class="btn btn-sm btn-primary rounded-pill px-3">
+            <i class="fas fa-building me-1"></i> Agency Portal
+          </a>
+        <% } else { %>
+          <div class="dropdown">
+            <button class="btn btn-sm btn-outline-primary dropdown-toggle rounded-pill px-3" type="button" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-user-circle me-1"></i> <%= user.name ? user.name.split(' ')[0] : 'Account' %>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-3 mt-2" aria-labelledby="userMenu">
+              <li><a class="dropdown-item py-2" href="/customer/dashboard"><i class="fas fa-tachometer-alt me-2 text-primary"></i> Dashboard</a></li>
+              <li><a class="dropdown-item py-2" href="/customer/orders"><i class="fas fa-box-open me-2 text-primary"></i> My Orders</a></li>
+              <li><a class="dropdown-item py-2" href="/customer/wishlist"><i class="fas fa-heart me-2 text-danger"></i> Wishlist</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item py-2 text-danger" href="/auth/customer/logout"><i class="fas fa-sign-out-alt me-2"></i> Log Out</a></li>
+            </ul>
+          </div>
+        <% } %>
       <% } else { %>
-        <a href="/auth/customer/login" class="site-nav-button primary">Login</a>
+        <a href="/auth/agency/login" class="nav-link-item d-none d-md-inline-block small text-muted">
+          Agency Portal
+        </a>
+        <a href="/auth/customer/login" class="btn btn-primary rounded-pill px-4 btn-sm fw-semibold shadow-sm">
+          <i class="fas fa-sign-in-alt me-1"></i> Sign In
+        </a>
       <% } %>
     </div>
   </nav>

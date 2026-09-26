@@ -6,6 +6,10 @@ const crypto = require('crypto');
 const { sendEmail } = require('../utils/emailSender');
 const Token = require('../models/token');
 
+// Fallback login/register redirects
+router.get('/login', (req, res) => res.redirect('/auth/customer/login'));
+router.get('/register', (req, res) => res.redirect('/auth/customer/register'));
+
 // Customer login page
 router.get('/customer/login', (req, res) => {
   res.render('index', {

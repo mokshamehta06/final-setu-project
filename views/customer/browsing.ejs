@@ -45,7 +45,12 @@
                 <div class="product-price">₹<%= typeof product.price === 'number' ? product.price.toLocaleString('en-IN') : product.price %></div>
               </div>
               <div class="product-actions mt-3">
-                <button class="btn btn-primary add-to-cart-btn flex-1" data-product-id="<%= product._id %>">
+                <button class="btn btn-primary add-to-cart add-to-cart-btn flex-1 rounded-pill" 
+                  data-id="<%= product._id %>"
+                  data-product-id="<%= product._id %>"
+                  data-name="<%= product.name %>"
+                  data-price="<%= product.price %>"
+                  data-image="<%= product.image %>">
                   <i class="fas fa-shopping-cart me-1"></i> Add to Cart
                 </button>
                 <button class="btn btn-icon add-to-wishlist" data-product-id="<%= product._id %>" title="Add to Wishlist">
