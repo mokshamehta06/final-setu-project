@@ -8,15 +8,16 @@ const MONGODB_DB = process.env.MONGODB_DB || "setu_ecommerce"
 const connectDB = async () => {
   try {
     const conn = await mongoose.connect(MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 5000,
     })
 
     console.log(`MongoDB Connected: ${conn.connection.host}`)
     return conn
   } catch (error) {
-    console.error(`Error connecting to MongoDB: ${error.message}`)
-    process.exit(1)
+    console.error(`\n❌ Error connecting to MongoDB: ${error.message}`)
+    console.error(`💡 Current MONGODB_URI: ${MONGODB_URI}`)
+    console.error("👉 Please ensure MongoDB is running or provide a valid MONGODB_URI (e.g., MongoDB Atlas) in your .env file.\n")
+    throw error
   }
 }
 

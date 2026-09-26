@@ -4,10 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= title %> | SETU</title>
+  <!-- Google Fonts & Font Awesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom Design Tokens & UI -->
   <link rel="stylesheet" href="/css/styles.css">
   <link rel="stylesheet" href="/css/animations.css">
   <link rel="stylesheet" href="/css/buttons.css">
+  <link rel="stylesheet" href="/css/ui-enhancements.css">
+  <link rel="stylesheet" href="/css/chatbot.css">
   <style>
     .form-group {
   margin-bottom: 1.5rem;
@@ -82,6 +93,9 @@
   </style>
 </head>
 <body>
+  <% if(page !== 'customer-login' && page !== 'customer-register' && page !== 'agency-login' && page !== 'agency-register') { %>
+    <%- include('partials/header') %>
+  <% } %>
 
   <!-- Flash Messages -->
   <% if(success_msg && success_msg.length > 0) { %>
@@ -98,163 +112,430 @@
 
   <!-- Home Page -->
   <% if(page === 'home') { %>
-    <div class="min-h-screen flex flex-col">
-      <!-- Animated Background -->
-      <div class="animated-background">
-        <div class="shape"></div>
-        <div class="shape"></div>
-        <div class="shape"></div>
-        <div class="shape"></div>
-        <div class="shape"></div>
+
+    <!-- Announcement Bar -->
+    <div class="announcement-bar">
+      <div class="container-fluid d-flex align-items-center justify-content-center gap-2 py-2 px-3 text-center text-white small fw-bold">
+        <span class="announcement-badge"><i class="fas fa-shield-halved text-warning me-1"></i> OFFICIAL DISPOSAL</span>
+        <span class="announcement-text">Direct Public Clearance Lot &bull; All Confiscated Assets 100% Inspected &bull; Free Express Delivery</span>
       </div>
-
-      <!-- Navigation removed -->
-
-      <div class="flex-1 max-w-7xl mx-auto px-8 py-8 flex flex-col justify-center">
-        <header class="text-center mb-14 fade-in">
-          <h1 class="text-4xl font-bold text-gray-900 mb-4 tracking-tight">Welcome to Our Portal</h1>
-          <p class="text-lg text-gray-600 max-w-xl mx-auto">
-            Select your account type to access your personalized dashboard experience
-          </p>
-        </header>
-
-        <div class="flex justify-center gap-8 flex-wrap">
-          <div class="portal-card customer-portal slide-in-left delay-200">
-            <div class="portal-image">
-              <div class="portal-icon">
-                <i class="fas fa-user-circle"></i>
-              </div>
-            </div>
-            <div class="portal-content">
-              <h3 class="portal-title">Customer Portal</h3>
-              <p class="portal-description">
-                Access your account information, view reports, and manage your services in one place.
-              </p>
-              <a href="auth/customer/login" class="btn btn-primary btn-animated">
-                <i class="fas fa-sign-in-alt"></i>
-                <span>Access Dashboard</span>
-              </a>
-            </div>
-          </div>
-
-          <div class="portal-card agency-portal slide-in-right delay-300">
-            <div class="portal-image">
-              <div class="portal-icon">
-                <i class="fas fa-building"></i>
-              </div>
-            </div>
-            <div class="portal-content">
-              <h3 class="portal-title">Agency Portal</h3>
-              <p class="portal-description">
-                Manage clients, access agency tools, and view performance metrics for your team.
-              </p>
-              <a href="auth/agency/login" class="btn btn-primary btn-animated">
-                <i class="fas fa-sign-in-alt"></i>
-                <span>Access Dashboard</span>
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <div class="help-card fade-in delay-500">
-          <h3 class="help-title">Need Help? <span class="animated-icon pulse"><i class="fas fa-question-circle"></i></span></h3>
-          <p class="help-description">Not sure which portal to choose or having trouble logging in?</p>
-          <div class="help-actions">
-            <a href="/support" class="btn btn-secondary btn-animated">
-              <i class="fas fa-headset"></i>
-              <span>Get Support</span>
-            </a>
-            <a href="/support/contact" class="btn btn-secondary btn-animated">
-              <i class="fas fa-envelope"></i>
-              <span>Contact Us</span>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Footer removed -->
     </div>
 
-    <!-- Animation Script -->
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        // Add scroll-triggered animations
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('visible');
-            }
-          });
-        }, { threshold: 0.1 });
+    <!-- E-Commerce Hero Section -->
+    <section class="ecom-hero-section position-relative overflow-hidden">
+      <div class="hero-bg-glow"></div>
+      <div class="container py-5 position-relative" style="z-index: 2;">
+        <div class="row align-items-center g-5">
+          <div class="col-lg-7">
+            <div class="hero-verified-badge mb-3">
+              <span class="pulse-dot"></span>
+              <i class="fas fa-certificate text-warning"></i>
+              <span class="text-uppercase">Direct Citizen Access &bull; Fixed Clearance Rates</span>
+            </div>
 
-        // Observe all animated elements
-        document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right').forEach(el => {
-          observer.observe(el);
-        });
+            <h1 class="hero-title">
+              Legally Seized Goods.<br>
+              <span class="hero-title-gradient">Direct Clearance Prices.</span>
+            </h1>
 
-        // Add hover effects to buttons
-        document.querySelectorAll('.btn').forEach(btn => {
-          btn.addEventListener('mouseenter', function() {
-            const icon = this.querySelector('i');
-            if (icon) icon.style.transform = 'translateX(3px)';
-          });
+            <p class="hero-subtitle mb-4">
+              Direct public resale of authentic goods confiscated during customs checks, tax enforcement, and court asset liquidations. Certified authentic, tested, and backed by escrow protection.
+            </p>
 
-          btn.addEventListener('mouseleave', function() {
-            const icon = this.querySelector('i');
-            if (icon) icon.style.transform = 'translateX(0)';
-          });
-        });
-      });
-    </script>
+            <!-- Search Bar in Hero -->
+            <form action="/customer/search" method="POST" class="hero-search-form mb-4">
+              <div class="hero-search-box">
+                <i class="fas fa-search hero-search-icon"></i>
+                <input type="text" name="searchTerm" class="hero-search-input" 
+                       placeholder="Search seized MacBooks, iPhones, cameras, consoles..." 
+                       aria-label="Search seized inventory">
+                <button type="submit" class="btn btn-hero-search">
+                  <span>Find Deals</span>
+                  <i class="fas fa-arrow-right ms-1"></i>
+                </button>
+              </div>
+            </form>
+
+            <!-- Popular Quick Filter Tags -->
+            <div class="hero-quick-tags d-flex align-items-center gap-2 flex-wrap">
+              <span class="tags-label"><i class="fas fa-fire text-warning me-1"></i> Popular:</span>
+              <a href="/customer/browsing/laptops" class="hero-chip">💻 MacBooks</a>
+              <a href="/customer/browsing/mobile" class="hero-chip">📱 iPhones</a>
+              <a href="/customer/browsing/electronics" class="hero-chip">🎧 Sony XM5</a>
+              <a href="/customer/browsing/cameras" class="hero-chip">📷 Canon R5</a>
+              <a href="/customer/browsing" class="hero-chip hero-chip-all">Explore All &rarr;</a>
+            </div>
+          </div>
+
+          <!-- Hero Spotlight Deal Card -->
+          <div class="col-lg-5">
+            <div class="spotlight-deal-card">
+              <div class="spotlight-image-wrapper">
+                <span class="spotlight-badge">
+                  <i class="fas fa-fire me-1"></i> TOP SEIZED DEAL
+                </span>
+                <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800&auto=format&fit=crop&q=80" 
+                     alt="Apple MacBook Pro 16 M2 Pro" 
+                     class="spotlight-img">
+              </div>
+              <div class="spotlight-content">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="spotlight-tag">Customs Seizure Lot</span>
+                  <div class="spotlight-rating">
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <span class="rating-val ms-1">4.9 (128 reviews)</span>
+                  </div>
+                </div>
+                <h4 class="spotlight-title">Apple MacBook Pro 16" M2 Pro (16GB / 512GB)</h4>
+                <div class="spotlight-pricing d-flex align-items-baseline gap-3 mb-3">
+                  <span class="current-price">₹84,999</span>
+                  <span class="original-price">₹1,69,900</span>
+                  <span class="discount-badge">Save 50%</span>
+                </div>
+                <div class="d-grid">
+                  <a href="/customer/browsing" class="btn btn-spotlight-cta">
+                    <i class="fas fa-shopping-cart me-2"></i> Browse All Seized Stock
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Category Quick Navigation Bar -->
+    <section class="category-nav-section py-4 bg-white border-bottom">
+      <div class="container">
+        <div class="row g-3 text-center justify-content-center">
+          <div class="col-6 col-md-4 col-lg-2">
+            <a href="/customer/browsing/laptops" class="category-card">
+              <div class="cat-icon-circle"><i class="fas fa-laptop"></i></div>
+              <div class="cat-name">Laptops & PCs</div>
+              <span class="cat-price-hint">From ₹64,999</span>
+            </a>
+          </div>
+          <div class="col-6 col-md-4 col-lg-2">
+            <a href="/customer/browsing/mobile" class="category-card">
+              <div class="cat-icon-circle"><i class="fas fa-mobile-alt"></i></div>
+              <div class="cat-name">Smartphones</div>
+              <span class="cat-price-hint">From ₹59,999</span>
+            </a>
+          </div>
+          <div class="col-6 col-md-4 col-lg-2">
+            <a href="/customer/browsing/electronics" class="category-card">
+              <div class="cat-icon-circle"><i class="fas fa-headphones"></i></div>
+              <div class="cat-name">Audio & Tech</div>
+              <span class="cat-price-hint">From ₹11,499</span>
+            </a>
+          </div>
+          <div class="col-6 col-md-4 col-lg-2">
+            <a href="/customer/browsing/cameras" class="category-card">
+              <div class="cat-icon-circle"><i class="fas fa-camera"></i></div>
+              <div class="cat-name">Cameras & Gear</div>
+              <span class="cat-price-hint">From ₹54,999</span>
+            </a>
+          </div>
+          <div class="col-6 col-md-4 col-lg-2">
+            <a href="/customer/browsing" class="category-card">
+              <div class="cat-icon-circle"><i class="fas fa-gamepad"></i></div>
+              <div class="cat-name">Gaming Gear</div>
+              <span class="cat-price-hint">From ₹29,999</span>
+            </a>
+          </div>
+          <div class="col-6 col-md-4 col-lg-2">
+            <a href="/customer/browsing" class="category-card category-card-highlight">
+              <div class="cat-icon-circle highlight"><i class="fas fa-store"></i></div>
+              <div class="cat-name">All Categories</div>
+              <span class="cat-price-hint highlight">Explore 200+ &rarr;</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Live Seized Products Showcase -->
+    <section class="products-showcase-section py-5">
+      <div class="container">
+        <div class="showcase-header d-flex justify-content-between align-items-end mb-4 flex-wrap gap-3">
+          <div>
+            <div class="showcase-badge mb-2">
+              <i class="fas fa-bolt text-warning me-1"></i> Authentic Confiscations
+            </div>
+            <h2 class="showcase-title mb-1">Today's Verified Seized Deals</h2>
+            <p class="showcase-subtitle mb-0">Inspected by accredited disposal agencies. Verified chain of custody.</p>
+          </div>
+          <a href="/customer/browsing" class="btn btn-view-all">
+            <span>View All <%= (typeof products !== 'undefined' && products) ? products.length : 12 %> Products</span>
+            <i class="fas fa-arrow-right ms-2"></i>
+          </a>
+        </div>
+
+        <% if (typeof products !== 'undefined' && products && products.length > 0) { %>
+          <div class="row g-4">
+            <% products.forEach(function(product) { %>
+              <div class="col-xl-3 col-lg-4 col-md-6">
+                <div class="product-card h-100">
+                  <div class="product-image-container">
+                    <a href="/customer/product/<%= product._id %>" class="product-image-link">
+                      <img src="<%= product.image || '/images/placeholder.png' %>" 
+                           alt="<%= product.name %>" 
+                           class="product-image" 
+                           onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=500&auto=format&fit=crop&q=60';">
+                    </a>
+                    <span class="seizure-badge">
+                      <i class="fas fa-gavel me-1"></i> Seized Asset
+                    </span>
+                    <span class="product-discount-tag"><%= product.condition || 'Verified' %></span>
+                  </div>
+                  <div class="product-content p-3 d-flex flex-column flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                      <span class="product-category">
+                        <%= product.category ? (product.category.charAt(0).toUpperCase() + product.category.slice(1)) : 'Electronics' %>
+                      </span>
+                      <button class="btn-wishlist add-to-wishlist" title="Save to Wishlist" aria-label="Save to Wishlist">
+                        <i class="far fa-heart"></i>
+                      </button>
+                    </div>
+
+                    <h3 class="product-title">
+                      <a href="/customer/product/<%= product._id %>">
+                        <%= product.name %>
+                      </a>
+                    </h3>
+
+                    <div class="agency-tag mb-3">
+                      <i class="fas fa-landmark me-1"></i>
+                      <span><%= product.agency && product.agency.name ? product.agency.name : 'Customs Disposal Authority' %></span>
+                    </div>
+
+                    <div class="product-footer mt-auto pt-2 border-top">
+                      <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <div class="product-price">
+                          ₹<%= typeof product.price === 'number' ? product.price.toLocaleString('en-IN') : product.price %>
+                        </div>
+                        <span class="stock-status-badge">
+                          <i class="fas fa-check-circle me-1"></i> Available
+                        </span>
+                      </div>
+
+                      <div class="d-flex gap-2">
+                        <button class="btn btn-add-cart add-to-cart add-to-cart-btn flex-grow-1"
+                          data-id="<%= product._id %>"
+                          data-name="<%= product.name %>"
+                          data-price="<%= product.price %>"
+                          data-image="<%= product.image %>">
+                          <i class="fas fa-shopping-cart me-1"></i> Add to Cart
+                        </button>
+                        <a href="/customer/product/<%= product._id %>" class="btn btn-quick-view" title="View Details" aria-label="View Details">
+                          <i class="fas fa-eye"></i>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% }); %>
+          </div>
+        <% } %>
+      </div>
+    </section>
+
+    <!-- Trust & Value Highlights Strip -->
+    <section class="trust-highlights-bar py-4">
+      <div class="container">
+        <div class="row g-4">
+          <div class="col-lg-3 col-md-6">
+            <div class="trust-item d-flex align-items-center gap-3">
+              <div class="trust-icon-box">
+                <i class="fas fa-scale-balanced"></i>
+              </div>
+              <div>
+                <h6 class="trust-title mb-0">100% Legally Seized</h6>
+                <p class="trust-desc mb-0">Confiscated by customs & courts</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="trust-item d-flex align-items-center gap-3">
+              <div class="trust-icon-box">
+                <i class="fas fa-lock"></i>
+              </div>
+              <div>
+                <h6 class="trust-title mb-0">Escrow Protected</h6>
+                <p class="trust-desc mb-0">Funds secured until verification</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="trust-item d-flex align-items-center gap-3">
+              <div class="trust-icon-box">
+                <i class="fas fa-tag"></i>
+              </div>
+              <div>
+                <h6 class="trust-title mb-0">Zero Auction Markup</h6>
+                <p class="trust-desc mb-0">Direct fixed clearance rates</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="trust-item d-flex align-items-center gap-3">
+              <div class="trust-icon-box">
+                <i class="fas fa-truck-fast"></i>
+              </div>
+              <div>
+                <h6 class="trust-title mb-0">Inspected Delivery</h6>
+                <p class="trust-desc mb-0">Free express insured courier</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How SETU Works Timeline Section -->
+    <section class="process-section py-5 bg-white border-top border-bottom">
+      <div class="container py-3">
+        <div class="text-center mb-5" style="max-width: 660px; margin: 0 auto;">
+          <div class="process-badge mb-2">Transparency Process</div>
+          <h2 class="process-heading">How Seized Goods Reach Citizens</h2>
+          <p class="process-subheading">A transparent, government-compliant bridge ensuring verified authentic goods, fixed clearance pricing, and buyer safety.</p>
+        </div>
+
+        <div class="row g-4 text-center position-relative">
+          <div class="col-md-4">
+            <div class="process-card h-100">
+              <span class="process-step-num">01</span>
+              <div class="process-icon-wrapper mx-auto mb-3">
+                <i class="fas fa-gavel"></i>
+              </div>
+              <h5 class="process-card-title mb-2">1. Official Confiscation</h5>
+              <p class="process-card-desc mb-0">High-value electronics confiscated during airport customs checks, tax raids, and court bankruptcy liquidations.</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="process-card h-100">
+              <span class="process-step-num">02</span>
+              <div class="process-icon-wrapper mx-auto mb-3">
+                <i class="fas fa-clipboard-check"></i>
+              </div>
+              <h5 class="process-card-title mb-2">2. Verification & Testing</h5>
+              <p class="process-card-desc mb-0">Disposal authorities inspect hardware, check serial numbers against police records, and issue clearance certificates.</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="process-card h-100">
+              <span class="process-step-num">03</span>
+              <div class="process-icon-wrapper mx-auto mb-3">
+                <i class="fas fa-shield-alt"></i>
+              </div>
+              <h5 class="process-card-title mb-2">3. Escrow Protected Resale</h5>
+              <p class="process-card-desc mb-0">Citizens buy items directly without auction markups. Funds remain in escrow until you inspect your item upon delivery.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Portals Access Section -->
+    <section class="portal-access-section py-5">
+      <div class="container">
+        <div class="text-center mb-4">
+          <h2 class="portal-section-title">Platform Portals & Account Access</h2>
+          <p class="text-muted small">Choose your access portal to manage purchases or inventory</p>
+        </div>
+        <div class="row g-4 justify-content-center">
+          <div class="col-md-5">
+            <div class="portal-box citizen-portal-box h-100">
+              <div class="portal-icon-circle citizen-icon mx-auto mb-3">
+                <i class="fas fa-user-circle"></i>
+              </div>
+              <h4 class="portal-box-title mb-2">Citizen & Buyer Portal</h4>
+              <p class="portal-box-desc mb-4">Browse verified seized inventory, track live orders, manage escrow deliveries, and submit inspection reviews.</p>
+              <div class="d-flex gap-2 justify-content-center flex-wrap">
+                <a href="/auth/customer/login" class="btn btn-portal-primary">Sign In</a>
+                <a href="/customer/register" class="btn btn-portal-outline">Create Account</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-5">
+            <div class="portal-box agency-portal-box h-100">
+              <div class="portal-icon-circle agency-icon mx-auto mb-3">
+                <i class="fas fa-landmark"></i>
+              </div>
+              <h4 class="portal-box-title mb-2">Government Agency Portal</h4>
+              <p class="portal-box-desc mb-4">Upload disposal manifests, manage seized inventory batches, track lot clearance, and review fulfillment metrics.</p>
+              <div class="d-flex gap-2 justify-content-center flex-wrap">
+                <a href="/auth/agency/login" class="btn btn-portal-dark">Agency Sign In</a>
+                <a href="/agency/register" class="btn btn-portal-outline">Register Agency</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   <% } %>
 
   <!-- Customer Login Page -->
   <% if(page === 'customer-login') { %>
-    <div class="auth-container">
-      <div class="auth-card">
-        <div class="auth-logo">
-          <a href="/" class="logo">
-            <div class="logo-icon">
-              <i class="fas fa-shopping-bag"></i>
-            </div>
-            <span class="logo-text">SETU</span>
+    <div class="auth-shell">
+      <div class="auth-visual">
+        <span class="auth-badge"><i class="fas fa-shopping-basket"></i> Customer Portal</span>
+        <h1>Welcome back to SETU.</h1>
+        <p>Discover curated products, track orders, and manage your account from one seamless shopping experience.</p>
+        <ul class="auth-features">
+          <li><i class="fas fa-check-circle"></i> Personalized recommendations</li>
+          <li><i class="fas fa-check-circle"></i> Fast order tracking</li>
+          <li><i class="fas fa-check-circle"></i> Secure shopping experience</li>
+        </ul>
+      </div>
+
+      <div class="auth-panel">
+        <div class="auth-panel-header">
+          <a href="/" class="auth-logo-mark">
+            <span class="logo-icon"><i class="fas fa-shopping-bag"></i></span>
+            <span>SETU</span>
           </a>
         </div>
 
-        <div class="auth-content">
-          <div class="auth-header">
-            <h1 class="auth-title">Customer Login</h1>
-            <p class="auth-description">Welcome back! Please enter your details</p>
+        <div class="auth-form-header">
+          <h2>Customer Login</h2>
+          <p>Welcome back! Please enter your details.</p>
+        </div>
+
+        <form action="/auth/customer/login" method="POST" class="auth-form">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" placeholder="Enter your email" required>
           </div>
 
-          <form action="/auth/customer/login" method="POST" class="auth-form">
-            <div class="form-group">
-              <label for="email" class="form-label">Email</label>
-              <input id="email" name="email" type="email" class="form-input" placeholder="Enter your email" required>
+          <div class="form-group">
+            <div class="auth-inline-row" style="align-items:end;">
+              <label for="password">Password</label>
+              <a href="/auth/customer/forgot-password" class="form-link" style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.05em;">Forgot password?</a>
             </div>
-
-            <div class="form-group">
-              <div class="form-label-group">
-                <label for="password" class="form-label">Password</label>
-                <a href="/auth/customer/forgot-password" class="form-link">Forgot password?</a>
-              </div>
-              <input id="password" name="password" type="password" class="form-input" placeholder="Enter your password" required>
-            </div>
-
-            <div class="form-checkbox">
-              <input type="checkbox" id="remember" name="remember" class="checkbox">
-              <label for="remember" class="checkbox-label">Remember me for 30 days</label>
-            </div>
-
-            <button type="submit" class="btn btn-primary btn-block">Sign in</button>
-          </form>
-
-          <div class="auth-footer">
-            <p class="auth-footer-text">
-              Don't have an account?
-              <a href="/auth/customer/register" class="auth-footer-link">Sign up</a>
-            </p>
+            <input id="password" name="password" type="password" placeholder="Enter your password" required>
           </div>
+
+          <label class="auth-remember" for="remember">
+            <input type="checkbox" id="remember" name="remember">
+            <span>Remember me for 30 days</span>
+          </label>
+
+          <button type="submit" class="btn btn-primary">Sign in</button>
+
+          <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill w-100 mt-2" onclick="document.getElementById('email').value='customer@example.com'; document.getElementById('password').value='password123';">
+            <i class="fas fa-magic me-1"></i> Fill Demo Customer Credentials
+          </button>
+        </form>
+
+        <div class="auth-footer">
+          <p>Don't have an account? <a href="/auth/customer/register">Sign up</a></p>
         </div>
       </div>
     </div>
@@ -262,190 +543,134 @@
 
   <!-- Customer Register Page -->
   <% if(page === 'customer-register') { %>
-    <div class="auth-container">
-      <div class="auth-card">
-        <div class="auth-logo">
-          <a href="/" class="logo">
-            <div class="logo-icon">
-              <i class="fas fa-shopping-bag"></i>
-            </div>
-            <span class="logo-text">SETU</span>
+    <div class="auth-shell">
+      <div class="auth-visual">
+        <span class="auth-badge"><i class="fas fa-user-plus"></i> Citizen Account</span>
+        <h1>Start with SETU.</h1>
+        <p>Direct citizen access to 100% verified seized assets, transparent clearance pricing, and escrow-protected checkout.</p>
+        <ul class="auth-features">
+          <li><i class="fas fa-shield-halved"></i> 100% Legally Verified Confiscations</li>
+          <li><i class="fas fa-lock"></i> Escrow-Protected Payments</li>
+          <li><i class="fas fa-truck-fast"></i> Inspected Express Delivery</li>
+        </ul>
+      </div>
+
+      <div class="auth-panel">
+        <div class="auth-panel-header">
+          <a href="/" class="auth-logo-mark">
+            <span class="logo-icon"><i class="fas fa-shield-halved"></i></span>
+            <span>SETU</span>
           </a>
         </div>
 
-        <div class="auth-content">
-          <div class="auth-header">
-            <h1 class="auth-title">Create Customer Account</h1>
-            <p class="auth-description">Fill in your details to get started</p>
+        <div class="auth-form-header">
+          <h2>Create Citizen Account</h2>
+          <p>Register to purchase seized goods at fixed clearance rates.</p>
+        </div>
+
+        <% if(typeof errors !== 'undefined' && errors && errors.length > 0) { %>
+          <% errors.forEach(function(error) { %>
+            <div class="alert alert-danger py-2 px-3 small rounded-3 mb-2">
+              <i class="fas fa-circle-exclamation me-1"></i> <%= error.msg %>
+            </div>
+          <% }); %>
+        <% } %>
+
+        <form action="/auth/customer/register" method="POST" class="auth-form">
+          <div class="form-group">
+            <label for="name">Full Name</label>
+            <input id="name" name="name" type="text" placeholder="Enter your full name" required value="<%= typeof name != 'undefined' ? name : '' %>">
           </div>
 
-          <form action="/auth/customer/register" method="POST" class="auth-form">
-            <div class="form-group">
-              <label for="name" class="form-label">Full Name</label>
-              <input id="name" name="name" type="text" class="form-input" placeholder="Enter your full name" required value="<%= typeof name != 'undefined' ? name : '' %>">
-              <div id="name-error" class="error-message"></div>
-            </div>
-
-            <div class="form-group">
-              <label for="email" class="form-label">Email</label>
-              <input id="email" name="email" type="email" class="form-input" placeholder="Enter your email" required value="<%= typeof email != 'undefined' ? email : '' %>">
-              <div id="email-error" class="error-message"></div>
-            </div>
-
-            <div class="form-group">
-              <label for="password" class="form-label">Password</label>
-              <input id="password" name="password" type="password" class="form-input" placeholder="Create a password" required>
-              <div id="password-error" class="error-message"></div>
-            </div>
-
-            <div class="form-group">
-              <label for="confirmPassword" class="form-label">Confirm Password</label>
-              <input id="confirmPassword" name="confirmPassword" type="password" class="form-input confirmPassword" placeholder="Confirm your password" required>
-              <div id="confirm-password-error" class="error-message"></div>
-            </div>
-
-            <div class="form-checkbox">
-              <input type="checkbox" id="terms" name="terms" class="checkbox" required>
-              <label for="terms" class="checkbox-label">
-                I agree to the <a href="/terms" class="form-link">Terms of Service</a> and <a href="/privacy" class="form-link">Privacy Policy</a>
-              </label>
-            </div>
-
-            <button type="submit" class="btn btn-primary btn-block">Create Account</button>
-          </form>
-
-          <div class="auth-footer">
-            <p class="auth-footer-text">
-              Already have an account?
-              <a href="/auth/customer/login" class="auth-footer-link">Sign in</a>
-            </p>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input id="email" name="email" type="email" placeholder="name@example.com" required value="<%= typeof email != 'undefined' ? email : '' %>">
           </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input id="password" name="password" type="password" placeholder="Create password" required>
+            </div>
+
+            <div class="form-group">
+              <label for="confirmPassword">Confirm Password</label>
+              <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm password" required>
+            </div>
+          </div>
+
+          <label class="auth-remember" for="terms">
+            <input type="checkbox" id="terms" name="terms" required checked>
+            <span>I agree to the <a href="/terms" class="text-primary fw-semibold">Terms of Service</a> & <a href="/privacy" class="text-primary fw-semibold">Privacy Policy</a></span>
+          </label>
+
+          <button type="submit" class="btn btn-primary w-100 py-2 fw-bold rounded-pill">
+            <i class="fas fa-user-plus me-1"></i> Create Account
+          </button>
+        </form>
+
+        <div class="auth-footer mt-4 text-center">
+          <p class="text-muted small mb-0">Already have an account? <a href="/auth/customer/login" class="text-primary fw-bold text-decoration-none">Sign In &rarr;</a></p>
         </div>
       </div>
     </div>
-
-    <!-- <div class="auth-container">
-      <div class="auth-card">
-        <div class="auth-logo">
-          <a href="/" class="logo">
-            <div class="logo-icon">
-              <i class="fas fa-user"></i>
-            </div>
-            <span class="logo-text">SETU</span>
-          </a>
-        </div>
-
-        <div class="auth-content">
-          <div class="auth-header">
-            <h1 class="auth-title">Customer Registration</h1>
-            <p class="auth-description">Create an account to start shopping</p>
-          </div>
-
-
-          <% if(typeof errors !== 'undefined' && errors.length > 0) { %>
-            <% errors.forEach(function(error) { %>
-              <div class="alert alert-danger"><%= error.msg %></div>
-            <% }); %>
-          <% } %>
-
-
-          <div id="success-message" class="alert alert-success hidden">
-            Registration successful! You can now log in.
-          </div>
-
-          <form id="registration-form" action="/auth/customer/register" method="POST" class="auth-form">
-            <div class="form-group">
-              <label for="name">Full Name</label>
-              <input type="text" id="name" name="name" class="form-control" value="<%= typeof name != 'undefined' ? name : '' %>">
-              <div id="name-error" class="error-message"></div>
-            </div>
-
-            <div class="form-group">
-              <label for="email">Email Address</label>
-              <input type="email" id="email" name="email" class="form-control" value="<%= typeof email != 'undefined' ? email : '' %>">
-              <div id="email-error" class="error-message"></div>
-            </div>
-
-            <div class="form-group">
-              <label for="password">Password</label>
-              <input type="password" id="password" name="password" class="form-control">
-              <div id="password-error" class="error-message"></div>
-            </div>
-
-            <div class="form-group">
-              <label for="confirm-password">Confirm Password</label>
-              <input type="password" id="confirm-password" name="confirmPassword" class="form-control">
-              <div id="confirm-password-error" class="error-message"></div>
-            </div>
-
-            <div class="form-checkbox">
-              <input type="checkbox" id="terms" name="terms" class="checkbox" required>
-              <label for="terms" class="checkbox-label">
-                I agree to the <a href="/terms" class="form-link">Terms of Service</a> and <a href="/privacy" class="form-link">Privacy Policy</a>
-              </label>
-            </div>
-
-            <button type="submit" class="btn btn-primary btn-block">Create Account</button>
-          </form>
-
-          <div class="auth-footer">
-            <p class="auth-footer-text">
-              Already have an account? <a href="/auth/customer/login" class="form-link">Log in</a>
-            </p>
-          </div>
-        </div>
-      </div>
-    </div> -->
-
   <% } %>
 
   <!-- Agency Login Page -->
   <% if(page === 'agency-login') { %>
-    <div class="auth-container">
-      <div class="auth-card">
-        <div class="auth-logo">
-          <a href="/" class="logo">
-            <div class="logo-icon">
-              <i class="fas fa-building"></i>
-            </div>
-            <span class="logo-text">SETU</span>
+    <div class="auth-shell">
+      <div class="auth-visual">
+        <span class="auth-badge"><i class="fas fa-building"></i> Agency Portal</span>
+        <h1>Grow your business on SETU.</h1>
+        <p>Manage your listings, track orders, and expand your digital storefront with a dedicated agency dashboard.</p>
+        <ul class="auth-features">
+          <li><i class="fas fa-check-circle"></i> Inventory management</li>
+          <li><i class="fas fa-check-circle"></i> Order visibility</li>
+          <li><i class="fas fa-check-circle"></i> Growth insights</li>
+        </ul>
+      </div>
+
+      <div class="auth-panel">
+        <div class="auth-panel-header">
+          <a href="/" class="auth-logo-mark">
+            <span class="logo-icon"><i class="fas fa-building"></i></span>
+            <span>SETU</span>
           </a>
         </div>
 
-        <div class="auth-content">
-          <div class="auth-header">
-            <h1 class="auth-title">Agency Login</h1>
-            <p class="auth-description">Sign in to your agency account</p>
+        <div class="auth-form-header">
+          <h2>Agency Login</h2>
+          <p>Sign in to your agency account.</p>
+        </div>
+
+        <form action="/auth/agency/login" method="POST" class="auth-form">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" placeholder="Enter your email" required>
           </div>
 
-          <form action="/auth/agency/login" method="POST" class="auth-form">
-            <div class="form-group">
-              <label for="email" class="form-label">Email</label>
-              <input id="email" name="email" type="email" class="form-input" placeholder="Enter your email" required>
+          <div class="form-group">
+            <div class="auth-inline-row" style="align-items:end;">
+              <label for="password">Password</label>
+              <a href="/auth/agency/forgot-password" class="form-link" style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.05em;">Forgot password?</a>
             </div>
-
-            <div class="form-group">
-              <div class="form-label-group">
-                <label for="password" class="form-label">Password</label>
-                <a href="/auth/agency/forgot-password" class="form-link">Forgot password?</a>
-              </div>
-              <input id="password" name="password" type="password" class="form-input" placeholder="Enter your password" required>
-            </div>
-
-            <div class="form-checkbox">
-              <input type="checkbox" id="remember" name="remember" class="checkbox">
-              <label for="remember" class="checkbox-label">Remember me for 30 days</label>
-            </div>
-
-            <button type="submit" class="btn btn-primary btn-block">Sign in</button>
-          </form>
-
-          <div class="auth-footer">
-            <p class="auth-footer-text">
-              Don't have an agency account?
-              <a href="/auth/agency/register" class="auth-footer-link">Apply now</a>
-            </p>
+            <input id="password" name="password" type="password" placeholder="Enter your password" required>
           </div>
+
+          <label class="auth-remember" for="remember">
+            <input type="checkbox" id="remember" name="remember">
+            <span>Remember me for 30 days</span>
+          </label>
+
+          <button type="submit" class="btn btn-primary">Sign in</button>
+
+          <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill w-100 mt-2" onclick="document.getElementById('email').value='agency@example.com'; document.getElementById('password').value='password123';">
+            <i class="fas fa-magic me-1"></i> Fill Demo Agency Credentials
+          </button>
+        </form>
+
+        <div class="auth-footer">
+          <p>Don't have an agency account? <a href="/auth/agency/register">Apply now</a></p>
         </div>
       </div>
     </div>
@@ -453,133 +678,112 @@
 
   <!-- Agency Register Page -->
   <% if(page === 'agency-register') { %>
-    <div class="auth-container">
-      <div class="auth-card wide-card">
-        <div class="auth-logo">
-          <a href="/" class="logo">
-            <div class="logo-icon">
-              <i class="fas fa-building"></i>
-            </div>
-            <span class="logo-text">SETU</span>
+    <div class="auth-shell" style="grid-template-columns: 1fr; max-width: 960px;">
+      <div class="auth-panel" style="padding:2rem;">
+        <div class="auth-panel-header">
+          <a href="/" class="auth-logo-mark">
+            <span class="logo-icon"><i class="fas fa-building"></i></span>
+            <span>SETU</span>
           </a>
         </div>
 
-        <div class="auth-content">
-          <div class="auth-header">
-            <h1 class="auth-title">Agency Registration</h1>
-            <p class="auth-description">Create an agency account to start selling on our platform</p>
-          </div>
+        <div class="auth-form-header">
+          <h2>Agency Registration</h2>
+          <p>Create an agency account to start selling on our platform.</p>
+        </div>
 
-          <form action="/auth/agency/register" method="POST" class="auth-form">
-            <div class="form-section">
-              <h2 class="form-section-title">Agency Information</h2>
-
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="agencyName" class="form-label">Agency Name</label>
-                  <input id="agencyName" name="agencyName" type="text" class="form-input" placeholder="Enter your agency name" required>
-                </div>
-
-                <div class="form-group">
-                  <label for="businessType" class="form-label">Business Type</label>
-                  <select id="businessType" name="businessType" class="form-input" required>
-                    <option value="">Select business type</option>
-                    <option value="sole_proprietorship">Sole Proprietorship</option>
-                    <option value="partnership">Partnership</option>
-                    <option value="llc">Limited Liability Company (LLC)</option>
-                    <option value="corporation">Corporation</option>
-                    <option value="other">Other</option>
-                  </select>
-                </div>
-              </div>
-
+        <form action="/auth/agency/register" method="POST" class="auth-form">
+          <div class="auth-section">
+            <h3>Agency Information</h3>
+            <div class="form-row">
               <div class="form-group">
-                <label for="businessDescription" class="form-label">Business Description</label>
-                <textarea id="businessDescription" name="businessDescription" class="form-textarea" placeholder="Briefly describe your business and the products you sell" required></textarea>
+                <label for="agencyName">Agency Name</label>
+                <input id="agencyName" name="agencyName" type="text" placeholder="Enter your agency name" required>
               </div>
-
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="website" class="form-label">Website (Optional)</label>
-                  <input id="website" name="website" type="url" class="form-input" placeholder="https://www.example.com">
-                </div>
-
-                <div class="form-group">
-                  <label for="phone" class="form-label">Business Phone</label>
-                  <input id="phone" name="phone" type="tel" class="form-input" placeholder="Enter business phone number" required>
-                </div>
-              </div>
-            </div>
-
-            <div class="form-section">
-              <h2 class="form-section-title">Contact Information</h2>
-
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="firstName" class="form-label">First Name</label>
-                  <input id="firstName" name="firstName" type="text" class="form-input" placeholder="Enter your first name" required>
-                </div>
-
-                <div class="form-group">
-                  <label for="lastName" class="form-label">Last Name</label>
-                  <input id="lastName" name="lastName" type="text" class="form-input" placeholder="Enter your last name" required>
-                </div>
-              </div>
-
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="email" class="form-label">Email Address</label>
-                  <input id="email" name="email" type="email" class="form-input" placeholder="Enter your email" required>
-                </div>
-
-                <div class="form-group">
-                  <label for="position" class="form-label">Position/Title</label>
-                  <input id="position" name="position" type="text" class="form-input" placeholder="Enter your position" required>
-                </div>
+              <div class="form-group">
+                <label for="businessType">Business Type</label>
+                <select id="businessType" name="businessType" required>
+                  <option value="">Select business type</option>
+                  <option value="sole_proprietorship">Sole Proprietorship</option>
+                  <option value="partnership">Partnership</option>
+                  <option value="llc">Limited Liability Company (LLC)</option>
+                  <option value="corporation">Corporation</option>
+                  <option value="other">Other</option>
+                </select>
               </div>
             </div>
 
-            <div class="form-section">
-              <h2 class="form-section-title">Account Information</h2>
-
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="password" class="form-label">Password</label>
-                  <input id="password" name="password" type="password" class="form-input" placeholder="Create a password" required>
-                </div>
-
-                <div class="form-group">
-                  <label for="confirmPassword" class="form-label">Confirm Password</label>
-                  <input id="confirmPassword" name="confirmPassword" type="password" class="form-input" placeholder="Confirm your password" required>
-                </div>
-              </div>
+            <div class="form-group">
+              <label for="businessDescription">Business Description</label>
+              <textarea id="businessDescription" name="businessDescription" rows="3" placeholder="Briefly describe your business and the products you sell" required></textarea>
             </div>
 
-            <div class="form-section">
-              <div class="form-checkbox">
-                <input type="checkbox" id="terms" name="terms" class="checkbox" required>
-                <label for="terms" class="checkbox-label">
-                  I agree to the <a href="/terms" class="form-link">Terms of Service</a> and <a href="/privacy" class="form-link">Privacy Policy</a>
-                </label>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="website">Website (Optional)</label>
+                <input id="website" name="website" type="url" placeholder="https://www.example.com">
               </div>
-
-              <div class="form-checkbox">
-                <input type="checkbox" id="marketing" name="marketing" class="checkbox">
-                <label for="marketing" class="checkbox-label">
-                  I agree to receive marketing communications from SETU
-                </label>
+              <div class="form-group">
+                <label for="phone">Business Phone</label>
+                <input id="phone" name="phone" type="tel" placeholder="Enter business phone number" required>
               </div>
             </div>
-
-            <button type="submit" class="btn btn-primary btn-block">Submit Application</button>
-          </form>
-
-          <div class="auth-footer">
-            <p class="auth-footer-text">
-              Already have an agency account?
-              <a href="/auth/agency/login" class="auth-footer-link">Sign in</a>
-            </p>
           </div>
+
+          <div class="auth-section">
+            <h3>Contact Information</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input id="firstName" name="firstName" type="text" placeholder="Enter your first name" required>
+              </div>
+              <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input id="lastName" name="lastName" type="text" placeholder="Enter your last name" required>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="email">Email Address</label>
+                <input id="email" name="email" type="email" placeholder="Enter your email" required>
+              </div>
+              <div class="form-group">
+                <label for="position">Position / Title</label>
+                <input id="position" name="position" type="text" placeholder="Enter your position" required>
+              </div>
+            </div>
+          </div>
+
+          <div class="auth-section">
+            <h3>Account Information</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input id="password" name="password" type="password" placeholder="Create a password" required>
+              </div>
+              <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm your password" required>
+              </div>
+            </div>
+          </div>
+
+          <label class="auth-remember" for="terms">
+            <input type="checkbox" id="terms" name="terms" required>
+            <span>I agree to the <a href="/terms">Terms of Service</a> and <a href="/privacy">Privacy Policy</a></span>
+          </label>
+
+          <label class="auth-remember" for="marketing">
+            <input type="checkbox" id="marketing" name="marketing">
+            <span>I agree to receive marketing communications from SETU</span>
+          </label>
+
+          <button type="submit" class="btn btn-primary">Submit Application</button>
+        </form>
+
+        <div class="auth-footer">
+          <p>Already have an agency account? <a href="/auth/agency/login">Sign in</a></p>
         </div>
       </div>
     </div>
@@ -587,210 +791,404 @@
 
   <!-- Customer Browsing Page -->
   <% if(page === 'customer-browsing') { %>
-    <div class="container">
-      <!-- Mobile Sidebar Toggle -->
-      <button class="mobile-sidebar-toggle" id="sidebarToggle">
-        <i class="fas fa-bars"></i>
-      </button>
-
-      <!-- Mobile Header -->
-      <div class="mobile-header">
-        <div class="mobile-header-content">
-          <a href="/customer/browsing" class="mobile-logo">SETU</a>
-          <div class="mobile-actions">
-            <a href="index" class="mobile-cart-icon">
-              <i class="fas fa-shopping-cart"></i>
-              <span class="cart-count" id="mobileCartCount">0</span>
-            </a>
+    <!-- Catalog Hero Banner -->
+    <section class="py-4 border-bottom position-relative" style="background: linear-gradient(135deg, #0b1120 0%, #0f172a 50%, #0369a1 100%); color: #ffffff;">
+      <div class="container py-2" style="max-width: 1320px;">
+        <div class="row align-items-center g-3">
+          <div class="col-lg-7">
+            <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-2" style="background: rgba(2, 132, 199, 0.25); border: 1px solid rgba(56, 189, 248, 0.35);">
+              <i class="fas fa-gavel text-warning"></i>
+              <span class="small fw-bold text-info text-uppercase" style="letter-spacing: 0.05em;">Direct Citizen Disposal Catalog</span>
+            </div>
+            <h1 class="h2 fw-extrabold text-white mb-2" style="font-weight: 800; letter-spacing: -0.02em;">
+              Government Seized & Confiscated Assets
+            </h1>
+            <p class="text-white-50 mb-0 small" style="max-width: 580px;">
+              Direct procurement of verified confiscations from Customs, Enforcement Directorate, and Police clearances. Inspected serial numbers, fixed clearance pricing, and 100% escrow protection.
+            </p>
+          </div>
+          <div class="col-lg-5">
+            <form action="/customer/search" method="POST" class="d-flex shadow-sm rounded-pill p-1 bg-white">
+              <input type="text" name="searchTerm" placeholder="Search laptops, phones, cameras..." 
+                     class="form-control border-0 rounded-pill ps-3 shadow-none" 
+                     value="<%= locals.searchTerm || '' %>" required>
+              <button type="submit" class="btn btn-primary rounded-pill px-4 fw-semibold">
+                <i class="fas fa-search me-1"></i> Search
+              </button>
+            </form>
+            <div class="d-flex gap-3 justify-content-end mt-2 text-white-50 small">
+              <span><i class="fas fa-shield-alt text-success me-1"></i> Escrow Secured</span>
+              <span><i class="fas fa-check-circle text-info me-1"></i> 100% Authentic</span>
+              <span><i class="fas fa-truck text-warning me-1"></i> Fast Shipping</span>
+            </div>
           </div>
         </div>
-        <!-- Mobile Search Bar -->
-        <div class="mobile-search-container">
-          <form class="search-form" action="/customer/search" method="POST">
-            <input type="text" name="searchTerm" placeholder="Search products..." class="search-input">
-            <button type="submit" class="search-button">
-              <i class="fas fa-search"></i>
-            </button>
-          </form>
+      </div>
+    </section>
+
+    <!-- Catalog Content -->
+    <div class="container py-4" style="max-width: 1320px;">
+      <!-- Breadcrumb & Stats Bar -->
+      <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0 bg-transparent p-0 small">
+            <li class="breadcrumb-item"><a href="/" class="text-decoration-none text-muted"><i class="fas fa-home me-1"></i> Home</a></li>
+            <li class="breadcrumb-item"><a href="/customer/browsing" class="text-decoration-none text-muted">Catalog</a></li>
+            <li class="breadcrumb-item active text-dark fw-bold text-capitalize" aria-current="page">
+              <%= (typeof activeTab !== 'undefined' && activeTab !== 'all') ? activeTab : 'All Products' %>
+            </li>
+          </ol>
+        </nav>
+        <div class="badge bg-light text-dark border px-3 py-2 rounded-pill fw-semibold shadow-xs">
+          <i class="fas fa-box text-primary me-1"></i> Showing <%= (typeof products !== 'undefined' && products) ? products.length : 0 %> Seized Assets
         </div>
       </div>
 
-      <!-- Sidebar -->
-      <%- include('partials/sidebar') %>
+      <!-- Category Filter Pills -->
+      <div class="d-flex flex-wrap gap-2 mb-4 pb-2 border-bottom">
+        <a href="/customer/browsing" 
+           class="btn rounded-pill px-4 py-2 fw-semibold <%= (activeTab === 'all' || !activeTab) ? 'btn-primary shadow-sm' : 'btn-outline-secondary' %>">
+          <i class="fas fa-th-large me-1"></i> All Items
+        </a>
+        <a href="/customer/browsing/laptops" 
+           class="btn rounded-pill px-4 py-2 fw-semibold <%= activeTab === 'laptops' ? 'btn-primary shadow-sm' : 'btn-outline-secondary' %>">
+          <i class="fas fa-laptop me-1"></i> Laptops & Computers
+        </a>
+        <a href="/customer/browsing/mobile" 
+           class="btn rounded-pill px-4 py-2 fw-semibold <%= activeTab === 'mobile' ? 'btn-primary shadow-sm' : 'btn-outline-secondary' %>">
+          <i class="fas fa-mobile-alt me-1"></i> Smartphones
+        </a>
+        <a href="/customer/browsing/cameras" 
+           class="btn rounded-pill px-4 py-2 fw-semibold <%= activeTab === 'cameras' ? 'btn-primary shadow-sm' : 'btn-outline-secondary' %>">
+          <i class="fas fa-camera me-1"></i> Cameras & Drones
+        </a>
+        <a href="/customer/browsing/electronics" 
+           class="btn rounded-pill px-4 py-2 fw-semibold <%= activeTab === 'electronics' ? 'btn-primary shadow-sm' : 'btn-outline-secondary' %>">
+          <i class="fas fa-headphones me-1"></i> Audio & Electronics
+        </a>
+      </div>
 
-      <!-- Main Content -->
-      <main class="main-content">
-        <!-- Desktop Search Bar -->
-        <div class="search-container">
-          <form class="search-form" action="/customer/search" method="POST">
-            <input type="text" name="searchTerm" placeholder="Search products..." class="search-input" value="<%= locals.searchTerm || '' %>">
-            <button type="submit" class="search-button">
-              <i class="fas fa-search"></i>
-            </button>
-          </form>
-        </div>
+      <!-- Product Cards Grid -->
+      <% if(typeof products !== 'undefined' && products && products.length > 0) { %>
+        <div class="row g-4">
+          <% products.forEach(function(product) { %>
+            <div class="col-xl-3 col-lg-4 col-md-6">
+              <div class="product-card h-100 shadow-sm border-0 d-flex flex-column" style="border-radius: 18px; overflow: hidden; background: #ffffff; transition: transform 0.2s, box-shadow 0.2s;">
+                <div class="product-image-container position-relative overflow-hidden" style="height: 200px; background: #f8fafc;">
+                  <a href="/customer/product/<%= product._id %>" style="display:block; height:100%;">
+                    <img src="<%= product.image || '/images/placeholder.png' %>" 
+                         alt="<%= product.name %>" 
+                         class="product-image w-100 h-100" 
+                         style="object-fit: cover; transition: transform 0.35s ease;"
+                         onerror="this.onerror=null; this.src='https://via.placeholder.com/300x200?text=Seized+Product';">
+                  </a>
+                  <span class="position-absolute top-0 start-0 m-2 badge bg-dark text-warning rounded-pill px-2 py-1 shadow-sm small">
+                    <i class="fas fa-gavel me-1"></i> Seized Asset
+                  </span>
+                  <span class="position-absolute top-0 end-0 m-2 badge bg-primary text-white rounded-pill px-2 py-1 shadow-sm small">
+                    <%= product.condition || 'Verified' %>
+                  </span>
+                </div>
 
-        <div class="page-header">
-          <h1 class="page-title">Browse Products</h1>
-          <p class="page-description">Explore our wide range of products</p>
-        </div>
+                <div class="p-3 d-flex flex-column flex-grow-1">
+                  <div class="d-flex justify-content-between align-items-center mb-1">
+                    <span class="product-category fw-bold small text-primary text-uppercase" style="font-size: 0.72rem; letter-spacing: 0.05em;">
+                      <%= product.category ? (product.category.charAt(0).toUpperCase() + product.category.slice(1)) : 'Electronics' %>
+                    </span>
+                    <button class="btn btn-sm btn-icon add-to-wishlist border-0 bg-transparent text-muted" title="Save to Wishlist">
+                      <i class="far fa-heart"></i>
+                    </button>
+                  </div>
 
-        <div class="tabs">
-          <div class="tab-list">
-            <div class="tab-item <%= activeTab === 'all' ? 'active' : '' %>" data-tab="all">
-              <a href="/customer/browsing">All Categories</a>
-            </div>
-            <div class="tab-item <%= activeTab === 'electronics' ? 'active' : '' %>" data-tab="electronics">
-              <a href="/customer/browsing/electronics">Electronics</a>
-            </div>
-            <div class="tab-item <%= activeTab === 'clothing' ? 'active' : '' %>" data-tab="clothing">
-              <a href="/customer/browsing/clothing">Clothing</a>
-            </div>
-            <div class="tab-item <%= activeTab === 'home' ? 'active' : '' %>" data-tab="home">
-              <a href="/customer/browsing/home">Home & Kitchen</a>
-            </div>
-          </div>
+                  <h3 class="h6 fw-bold mb-1" style="font-size: 0.95rem; line-height: 1.35;">
+                    <a href="/customer/product/<%= product._id %>" class="text-dark text-decoration-none">
+                      <%= product.name %>
+                    </a>
+                  </h3>
 
-          <div class="tab-content active">
-            <div class="product-grid">
-              <% if(products && products.length > 0) { %>
-                <% products.forEach(function(product) { %>
-                  <div class="product-card" data-category="<%= product.category %>">
-                    <div style="position: relative;">
-                      <img src="<%= product.image %>" alt="<%= product.name %>" class="product-image">
-                      <% if(product.isNew) { %>
-                        <span class="product-badge">New</span>
-                      <% } %>
-                    </div>
-                    <div class="product-content">
-                      <div class="product-category"><%= product.category.charAt(0).toUpperCase() + product.category.slice(1) %></div>
-                      <h3 class="product-title"><%= product.name %></h3>
-                      <div class="product-price">$<%= product.price.toFixed(2) %></div>
-                      <div class="product-actions">
-                        <button class="btn btn-primary add-to-cart add-to-cart-btn"
-                          data-id="<%= product._id %>"
-                          data-name="<%= product.name %>"
-                          data-price="<%= product.price %>"
-                          data-image="<%= product.image %>">
-                          <i class="fas fa-shopping-cart"></i> Add to Cart
-                        </button>
+                  <small class="text-muted d-block mb-3" style="font-size: 0.78rem;">
+                    <i class="fas fa-landmark me-1 text-secondary"></i>
+                    <%= product.agency && product.agency.name ? product.agency.name : 'Customs Disposal Authority' %>
+                  </small>
+
+                  <div class="mt-auto pt-2 border-top">
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                      <div class="h5 fw-bold text-primary mb-0">
+                        ₹<%= typeof product.price === 'number' ? product.price.toLocaleString('en-IN') : product.price %>
                       </div>
+                      <span class="badge bg-light text-success border small">
+                        <i class="fas fa-check-circle me-1"></i> In Stock (<%= product.stock || 1 %>)
+                      </span>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                      <button class="btn btn-primary add-to-cart add-to-cart-btn flex-grow-1 rounded-pill fw-semibold py-2"
+                        data-id="<%= product._id %>"
+                        data-name="<%= product.name %>"
+                        data-price="<%= product.price %>"
+                        data-image="<%= product.image %>">
+                        <i class="fas fa-shopping-cart me-1"></i> Add to Cart
+                      </button>
+                      <a href="/customer/product/<%= product._id %>" class="btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;" title="View Details">
+                        <i class="fas fa-eye"></i>
+                      </a>
                     </div>
                   </div>
-                <% }); %>
-              <% } else { %>
-                <p>No products available in this category yet.</p>
-              <% } %>
+                </div>
+              </div>
+            </div>
+          <% }); %>
+        </div>
+      <% } else { %>
+        <div class="py-5 text-center bg-white rounded-4 border p-5 shadow-sm my-4">
+          <div class="rounded-circle bg-light text-muted d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 70px; height: 70px; font-size: 2rem;">
+            <i class="fas fa-box-open"></i>
+          </div>
+          <h4 class="fw-bold mb-1">No Seized Products Found</h4>
+          <p class="text-muted mb-4" style="max-width: 440px; margin: 0 auto;">
+            No confiscated inventory matches your selection right now. More seized lots are cleared every week.
+          </p>
+          <a href="/customer/browsing" class="btn btn-primary rounded-pill px-4 fw-semibold">
+            <i class="fas fa-store me-1"></i> Browse All Confiscations
+          </a>
+        </div>
+      <% } %>
+    </div>
+  <% } %>
+
+  <!-- Customer Product Details Page -->
+  <% if(page === 'customer-product-details' && typeof product !== 'undefined' && product) { %>
+    <div class="container my-4" style="max-width: 1200px;">
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb bg-white p-3 rounded-pill shadow-sm border">
+          <li class="breadcrumb-item"><a href="/" class="text-decoration-none text-muted"><i class="fas fa-home me-1"></i> Home</a></li>
+          <li class="breadcrumb-item"><a href="/customer/browsing" class="text-decoration-none text-muted">Browse Catalog</a></li>
+          <li class="breadcrumb-item"><a href="/customer/browsing/<%= product.category %>" class="text-decoration-none text-muted text-capitalize"><%= product.category %></a></li>
+          <li class="breadcrumb-item active text-dark fw-bold text-truncate" style="max-width: 280px;" aria-current="page"><%= product.name %></li>
+        </ol>
+      </nav>
+
+      <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-5">
+        <div class="row g-0">
+          <!-- Product Image Column -->
+          <div class="col-lg-6 p-4 p-md-5 bg-light d-flex flex-column align-items-center justify-content-center border-end">
+            <div class="position-relative w-100 text-center" style="max-height: 440px;">
+              <img src="<%= product.image || '/images/placeholder.png' %>" 
+                   alt="<%= product.name %>" 
+                   class="img-fluid rounded-4 shadow-sm" 
+                   style="max-height: 420px; object-fit: contain; width: 100%;"
+                   onerror="this.onerror=null; this.src='https://via.placeholder.com/500x400?text=Product+Image';">
+              <span class="position-absolute top-0 start-0 badge bg-dark text-white px-3 py-2 rounded-pill shadow-sm">
+                <i class="fas fa-shield-alt text-warning me-1"></i> Seized & Verified
+              </span>
+            </div>
+          </div>
+
+          <!-- Product Details Column -->
+          <div class="col-lg-6 p-4 p-md-5 d-flex flex-column justify-content-between">
+            <div>
+              <div class="d-flex align-items-center gap-2 mb-2">
+                <span class="badge bg-primary-subtle text-primary px-3 py-1 rounded-pill fw-bold text-uppercase" style="background:#e0f2fe; color:#0369a1;">
+                  <%= product.category %>
+                </span>
+                <span class="badge bg-success-subtle text-success px-3 py-1 rounded-pill fw-bold" style="background:#dcfce7; color:#15803d;">
+                  Condition: <%= product.condition || 'Refurbished A+' %>
+                </span>
+              </div>
+
+              <h1 class="h2 fw-bold text-dark mb-3"><%= product.name %></h1>
+
+              <div class="p-3 bg-light rounded-3 border mb-4">
+                <div class="d-flex align-items-center gap-2 mb-1">
+                  <i class="fas fa-landmark text-primary"></i>
+                  <span class="fw-bold text-dark">Disposal Agency:</span>
+                  <span><%= product.agency && product.agency.name ? product.agency.name : 'Government Custody Division' %></span>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                  <i class="fas fa-check-circle text-success"></i>
+                  <small class="text-muted">Legal seizure clearance manifest verified. Escrow purchase protection guaranteed.</small>
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <div class="text-muted small text-uppercase fw-bold mb-1">Fixed Clearance Price</div>
+                <div class="d-flex align-items-baseline gap-3">
+                  <span class="h1 fw-bold text-primary mb-0">₹<%= typeof product.price === 'number' ? product.price.toLocaleString('en-IN') : product.price %></span>
+                  <span class="text-muted text-decoration-line-through">₹<%= typeof product.price === 'number' ? Math.round(product.price * 1.45).toLocaleString('en-IN') : '' %></span>
+                  <span class="badge bg-danger rounded-pill px-2 py-1">Save 31%</span>
+                </div>
+              </div>
+
+              <p class="text-secondary leading-relaxed mb-4">
+                <%= product.description || 'Verified seized electronic unit inspected and cleared for direct public resale under official disposal regulations.' %>
+              </p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div>
+              <div class="d-flex align-items-center gap-3 mb-4">
+                <div class="d-flex align-items-center border rounded-pill px-3 py-1 bg-white">
+                  <span class="text-muted small me-2">Quantity:</span>
+                  <input type="number" data-product-id="<%= product._id %>" value="1" min="1" max="<%= product.stock || 10 %>" 
+                         class="form-control form-control-sm border-0 text-center fw-bold" style="width: 50px;">
+                </div>
+                <span class="text-muted small">
+                  <i class="fas fa-box text-primary me-1"></i> Stock Available: <strong><%= product.stock || 1 %></strong>
+                </span>
+              </div>
+
+              <div class="d-flex gap-3">
+                <button class="btn btn-primary add-to-cart add-to-cart-btn rounded-pill px-4 py-3 fw-bold flex-grow-1 shadow-sm"
+                  data-id="<%= product._id %>"
+                  data-name="<%= product.name %>"
+                  data-price="<%= product.price %>"
+                  data-image="<%= product.image %>">
+                  <i class="fas fa-shopping-cart me-2"></i> Add to Cart
+                </button>
+                <a href="/customer/checkout" class="btn btn-dark rounded-pill px-4 py-3 fw-bold add-to-cart add-to-cart-btn"
+                  data-id="<%= product._id %>"
+                  data-name="<%= product.name %>"
+                  data-price="<%= product.price %>"
+                  data-image="<%= product.image %>">
+                  <i class="fas fa-bolt me-2 text-warning"></i> Buy Now
+                </a>
+              </div>
             </div>
           </div>
         </div>
-      </main>
+      </div>
     </div>
   <% } %>
 
   <!-- Customer Cart Page -->
   <% if(page === 'customer-cart') { %>
-    <div class="container">
-      <!-- Mobile Sidebar Toggle -->
-      <button class="mobile-sidebar-toggle" id="sidebarToggle">
-        <i class="fas fa-bars"></i>
-      </button>
+    <div class="container cart-page-wrapper">
+      <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <div>
+          <h1 class="h2 fw-bold mb-1"><i class="fas fa-shopping-bag text-primary me-2"></i> Shopping Cart</h1>
+          <p class="text-muted mb-0">Review your selected seized items and proceed to secure checkout</p>
+        </div>
+        <a href="/customer/browsing" class="btn btn-outline-primary rounded-pill px-4 btn-sm fw-semibold">
+          <i class="fas fa-arrow-left me-1"></i> Continue Shopping
+        </a>
+      </div>
 
-      <!-- Mobile Header -->
-      <div class="mobile-header">
-        <div class="mobile-header-content">
-          <a href="/customer/browsing" class="mobile-logo">SETU</a>
-          <div class="mobile-actions">
-            <a href="/customer/cart" class="mobile-cart-icon">
-              <i class="fas fa-shopping-cart"></i>
-              <span class="cart-count" id="mobileCartCount">0</span>
+      <% if (typeof cart !== 'undefined' && cart && cart.length > 0) { %>
+        <div class="row g-4">
+          <!-- Items List Column -->
+          <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+              <div class="card-header bg-white py-3 px-4 border-bottom">
+                <h5 class="fw-bold mb-0">Cart Items (<%= cart.length %>)</h5>
+              </div>
+              <div class="card-body p-4">
+                <div class="cart-items" id="cartItems">
+                  <% cart.forEach(item => { %>
+                    <div class="cart-item-row" data-product-id="<%= item.productId %>" data-price="<%= item.price %>">
+                      <img src="<%= item.image || '/images/placeholder.png' %>" 
+                           alt="<%= item.name %>" 
+                           class="cart-item-thumb" 
+                           onerror="this.onerror=null; this.src='https://via.placeholder.com/80x80?text=Item';">
+                      
+                      <div class="flex-grow-1">
+                        <h6 class="fw-bold text-dark mb-1"><%= item.name %></h6>
+                        <small class="text-muted d-block mb-1">Verified Seized Asset</small>
+                        <div class="text-primary fw-semibold">
+                          ₹<%= (item.price || 0).toLocaleString('en-IN') %> per unit
+                        </div>
+                      </div>
+
+                      <!-- Quantity Stepper -->
+                      <div class="cart-qty-ctrl">
+                        <button type="button" class="cart-qty-btn cart-qty-minus">-</button>
+                        <input type="text" class="cart-qty-input" value="<%= item.quantity %>" readonly>
+                        <button type="button" class="cart-qty-btn cart-qty-plus">+</button>
+                      </div>
+
+                      <!-- Subtotal for item -->
+                      <div class="fw-bold text-dark fs-6 cart-item-subtotal text-end" style="min-width: 90px;">
+                        ₹<%= ((item.price || 0) * (item.quantity || 1)).toLocaleString('en-IN') %>
+                      </div>
+
+                      <!-- Remove Button -->
+                      <button type="button" class="cart-item-remove-btn" title="Remove item">
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
+                    </div>
+                  <% }) %>
+                </div>
+              </div>
+            </div>
+
+            <!-- Escrow Notice -->
+            <div class="p-3 bg-light rounded-4 border mt-3 d-flex align-items-center gap-3">
+              <i class="fas fa-shield-halved text-success fa-2x"></i>
+              <div>
+                <strong class="d-block text-dark">Protected by SETU Escrow</strong>
+                <small class="text-muted">Your funds are safe. Payment is only released to the agency after your 7-day inspection window.</small>
+              </div>
+            </div>
+          </div>
+
+          <!-- Order Summary Column -->
+          <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden sticky-top" style="top: 5.5rem;">
+              <div class="card-header bg-white py-3 px-4 border-bottom">
+                <h5 class="fw-bold mb-0">Order Summary</h5>
+              </div>
+              <div class="card-body p-4">
+                <div class="d-flex justify-content-between mb-2">
+                  <span class="text-muted">Subtotal</span>
+                  <span class="fw-bold text-dark" id="cartSubtotal">₹<%= (subtotal || 0).toLocaleString('en-IN') %></span>
+                </div>
+
+                <div class="d-flex justify-content-between mb-2">
+                  <span class="text-muted">Estimated GST (10%)</span>
+                  <span class="fw-bold text-dark" id="cartTax">₹<%= (tax || 0).toFixed(2) %></span>
+                </div>
+
+                <div class="d-flex justify-content-between mb-3">
+                  <span class="text-muted">Delivery Charges</span>
+                  <span class="text-success fw-bold" id="cartShipping">₹5.00</span>
+                </div>
+
+                <hr class="my-3">
+
+                <div class="d-flex justify-content-between align-items-baseline mb-4">
+                  <span class="h6 fw-bold mb-0">Total Amount</span>
+                  <span class="h4 fw-bold text-primary mb-0" id="cartTotal">₹<%= Math.round(total || 0).toLocaleString('en-IN') %></span>
+                </div>
+
+                <a href="/customer/checkout" class="btn btn-primary rounded-pill w-100 py-3 fw-bold fs-6 shadow-sm d-flex align-items-center justify-content-center gap-2" id="checkoutBtn">
+                  <span>Proceed to Checkout</span>
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+
+                <div class="mt-4 pt-3 border-top">
+                  <div class="input-group">
+                    <input type="text" class="form-control rounded-start-pill ps-3" placeholder="Promo code (e.g. SETU10)" id="promoInput">
+                    <button class="btn btn-outline-secondary rounded-end-pill px-3" type="button" onclick="showToast('Promo code SETU10 applied! 10% discount', 'success')">Apply</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% } else { %>
+        <div class="card border-0 shadow-sm rounded-4 p-5 text-center my-4">
+          <div class="text-primary mb-3 opacity-50">
+            <i class="fas fa-shopping-cart fa-4x"></i>
+          </div>
+          <h3 class="fw-bold mb-2">Your Shopping Cart is Empty</h3>
+          <p class="text-muted mb-4">You haven't added any seized electronic items to your cart yet.</p>
+          <div>
+            <a href="/customer/browsing" class="btn btn-primary rounded-pill px-5 py-2 fw-semibold shadow-sm">
+              <i class="fas fa-store me-2"></i> Explore Seized Catalog
             </a>
           </div>
         </div>
-      </div>
-
-      <!-- Sidebar -->
-      <%- include('partials/sidebar') %>
-
-      <!-- Main Content -->
-      <main class="main-content">
-        <div class="page-header">
-          <h1 class="page-title">Shopping Cart</h1>
-          <p class="page-description">Review and checkout your items</p>
-        </div>
-
-        <div class="flex-wrap">
-          <div class="flex-1 min-w-300">
-            <div class="card">
-              <div class="card-header">
-                <h2 class="card-title">Cart Items</h2>
-              </div>
-              <div class="card-content">
-
-                <div class="cart-items" id="cartItems">
-                  <% if (cart.length > 0) { %>
-                    <% cart.forEach(item => { %>
-                      <div class="cart-item">
-                        <span><%= item.name %></span>
-                        <span>₹<%= item.price %> x <%= item.quantity %></span>
-                      </div>
-                    <% }) %>
-                  <% } else { %>
-                    <div class="cart-empty">Your cart is empty.</div>
-                  <% } %>
-                </div>
-
-
-              </div>
-            </div>
-          </div>
-
-          <div class="cart-sidebar">
-            <div class="card cart-summary">
-              <div class="card-header">
-                <h2 class="card-title">Order Summary</h2>
-              </div>
-              <div class="card-content">
-                <div class="cart-subtotal">
-                  <span>Subtotal</span>
-                  <span class="cart-subtotal-value" id="cartSubtotal">$0.00</span>
-                </div>
-
-                <div class="cart-tax">
-                  <span>Tax (10%)</span>
-                  <span class="cart-tax-value" id="cartTax">$0.00</span>
-                </div>
-
-                <div class="cart-shipping">
-                  <span>Shipping</span>
-                  <span class="cart-shipping-value" id="cartShipping">$5.00</span>
-                </div>
-
-                <div class="cart-total">
-                  <span>Total</span>
-                  <span class="cart-total-value" id="cartTotal">$0.00</span>
-                </div>
-
-                <a href="/customer/checkout" class="btn btn-primary btn-block" id="checkoutBtn">
-                  Proceed to Checkout
-                </a>
-              </div>
-            </div>
-
-            <div class="card mt-4">
-              <div class="card-header">
-                <h3 class="card-title">Have a Promo Code?</h3>
-              </div>
-              <div class="card-content">
-                <div class="form-group">
-                  <input type="text" class="form-input" placeholder="Enter promo code">
-                </div>
-                <button class="btn btn-secondary btn-block">Apply</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </main>
+      <% } %>
     </div>
   <% } %>
 
@@ -1672,6 +2070,11 @@
 
 
     </script>
+  <% if(page !== 'customer-login' && page !== 'customer-register' && page !== 'agency-login' && page !== 'agency-register') { %>
+    <%- include('partials/footer') %>
+  <% } %>
+  <!-- Bootstrap 5 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="/js/script.js"></script>
   <script src="/js/customer.js"></script>
   <!-- Chatbot Widget -->

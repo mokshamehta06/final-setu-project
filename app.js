@@ -71,17 +71,6 @@ async function initializeDefaultAdmin() {
 }
 
 
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(async () => {
-  console.log("MongoDB connected ✅");
-  await initializeDefaultAdmin(); // 👈 Add this line
-})
-.catch(err => console.error("MongoDB connection error:", err));
-
-//B
 
 
 // Middleware
@@ -96,7 +85,8 @@ app.set("views", path.join(__dirname, "views"))
 // Set up EJS layouts
 const expressLayouts = require('express-ejs-layouts')
 app.use(expressLayouts)
-app.set('layout', 'layout')
+app.set('layout', false)
+
 
 // Session configuration
 app.use(
@@ -314,10 +304,7 @@ app.get("/agency/login", (req, res) => {
 
 // Direct register routes for customer and agency
 app.get("/customer/register", (req, res) => {
-  res.render("auth/register", {
-    title: "Customer Registration",
-    role: "customer",
-  })
+  res.redirect("/auth/customer/register");
 })
 
 app.get("/agency/register", (req, res) => {
@@ -514,32 +501,6 @@ const initializeProducts = async () => {
 
       
 
-async function initializeDefaultAdmin() {
-  try {
-    const adminEmail = "admin@example.com";
-
-    // Check if admin already exists
-    const existingAdmin = await User.findOne({ email: adminEmail, role: "admin" });
-    if (existingAdmin) {
-      console.log("✅ Default admin already exists.");
-      return;
-    }
-
-    // Create default admin
-    const adminUser = new User({
-      name: "Default Admin",
-      email: adminEmail,
-      password: "admin123", // will be hashed by the pre-save hook
-      role: "admin",
-      isVerified: true,
-    });
-
-    await adminUser.save();
-    console.log("✅ Default admin created successfully.");
-  } catch (error) {
-    console.error("❌ Error creating default admin:", error.message);
-  }
-}
 
       // Create some default orders
       const customerUser =
@@ -735,13 +696,21 @@ const createUploadsDirectory = () => {
 }
 
 // Start the server
-app.listen(PORT, async () => {
-  console.log(`Server running on port ${PORT}`)
+const startServer = async () => {
   try {
     createUploadsDirectory()
+    await connectDB()
+    console.log("MongoDB connected ✅")
+    await initializeDefaultAdmin()
     await initializeProducts()
+
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`)
+    })
   } catch (error) {
-    console.error("Error during startup:", error)
+    console.error("❌ Failed to start server:", error.message)
   }
-})
+}
+
+startServer()
 

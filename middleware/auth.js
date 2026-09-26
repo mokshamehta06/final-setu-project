@@ -4,7 +4,7 @@ const isAuthenticated = (req, res, next) => {
     return next()
   }
   req.flash("error_msg", "Please log in to access this page")
-  res.redirect("/auth/login")
+  res.redirect("/auth/customer/login")
 }
 
 // Role-based middleware

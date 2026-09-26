@@ -3,35 +3,35 @@
     <div class="user-profile mb-4">
       <div class="d-flex align-items-center">
         <div class="profile-pic">
-          <%= user.name.charAt(0).toUpperCase() %>
+          <%= (typeof user !== 'undefined' && user && user.name) ? user.name.charAt(0).toUpperCase() : 'U' %>
         </div>
         <div class="user-info">
-          <h6 class="mb-1"><%= user.name %></h6>
-          <small class="text-muted"><%= user.email %></small>
+          <h6 class="mb-1"><%= (typeof user !== 'undefined' && user && user.name) ? user.name : 'Customer' %></h6>
+          <small class="text-muted"><%= (typeof user !== 'undefined' && user && user.email) ? user.email : '' %></small>
         </div>
       </div>
     </div>
     <div class="list-group list-group-flush">
-      <a href="/customer/dashboard" class="list-group-item list-group-item-action <%= page === 'dashboard' ? 'active' : '' %>">
-        <i class="bi bi-speedometer2 me-2"></i> Dashboard
+      <a href="/customer/dashboard" class="list-group-item list-group-item-action <%= (typeof page !== 'undefined' && page === 'dashboard') ? 'active' : '' %>">
+        <i class="fas fa-tachometer-alt me-2"></i> Dashboard
       </a>
-      <a href="/customer/orders" class="list-group-item list-group-item-action <%= page === 'orders' ? 'active' : '' %>">
-        <i class="bi bi-bag me-2"></i> My Orders
+      <a href="/customer/browsing" class="list-group-item list-group-item-action <%= (typeof page !== 'undefined' && page === 'customer-browsing') ? 'active' : '' %>">
+        <i class="fas fa-store me-2"></i> Browse Items
       </a>
-      <a href="/customer/wishlist" class="list-group-item list-group-item-action <%= page === 'wishlist' ? 'active' : '' %>">
-        <i class="bi bi-heart me-2"></i> Wishlist
+      <a href="/customer/orders" class="list-group-item list-group-item-action <%= (typeof page !== 'undefined' && page === 'orders') ? 'active' : '' %>">
+        <i class="fas fa-shopping-bag me-2"></i> My Orders
       </a>
-      <a href="/customer/profile" class="list-group-item list-group-item-action <%= page === 'profile' ? 'active' : '' %>">
-        <i class="bi bi-person me-2"></i> My Profile
+      <a href="/customer/cart" class="list-group-item list-group-item-action <%= (typeof page !== 'undefined' && page === 'cart') ? 'active' : '' %>">
+        <i class="fas fa-shopping-cart me-2"></i> Shopping Cart
       </a>
-      <a href="/customer/addresses" class="list-group-item list-group-item-action <%= page === 'addresses' ? 'active' : '' %>">
-        <i class="bi bi-geo-alt me-2"></i> Addresses
+      <a href="/customer/settings" class="list-group-item list-group-item-action <%= (typeof page !== 'undefined' && page === 'settings') ? 'active' : '' %>">
+        <i class="fas fa-cog me-2"></i> Settings
       </a>
-      <a href="/customer/support" class="list-group-item list-group-item-action <%= page === 'support' ? 'active' : '' %>">
-        <i class="bi bi-question-circle me-2"></i> Support
+      <a href="/customer/support" class="list-group-item list-group-item-action <%= (typeof page !== 'undefined' && page === 'support') ? 'active' : '' %>">
+        <i class="fas fa-headset me-2"></i> Support
       </a>
       <a href="/auth/logout" class="list-group-item list-group-item-action text-danger">
-        <i class="bi bi-box-arrow-right me-2"></i> Logout
+        <i class="fas fa-sign-out-alt me-2"></i> Logout
       </a>
     </div>
   </div>

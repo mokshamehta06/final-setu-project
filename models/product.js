@@ -61,6 +61,8 @@ const productSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+}, {
+  suppressReservedKeysWarning: true
 })
 
 // Update the updatedAt field before saving

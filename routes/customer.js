@@ -106,6 +106,43 @@ router.post("/search", async (req, res) => {
   }
 })
 
+// Support GET search with query parameter
+router.get("/search", async (req, res) => {
+  try {
+    const searchTerm = req.query.searchTerm || req.query.q || ""
+
+    const query = searchTerm ? {
+      $and: [
+        { stock: { $gt: 0 } },
+        {
+          $or: [
+            { name: { $regex: searchTerm, $options: "i" } },
+            { description: { $regex: searchTerm, $options: "i" } },
+            { category: { $regex: searchTerm, $options: "i" } },
+          ],
+        },
+      ],
+    } : { stock: { $gt: 0 } }
+
+    const products = await Product.find(query)
+      .populate("agency", "name")
+      .sort({ createdAt: -1 })
+
+    res.render("index", {
+      page: "customer-browsing",
+      title: searchTerm ? `Search: ${searchTerm}` : "Browse Products",
+      products,
+      activeTab: "all",
+      searchTerm,
+      user: req.session.user || null,
+    })
+  } catch (error) {
+    console.error("Error searching products:", error)
+    req.flash("error_msg", "Failed to search products")
+    res.redirect("/customer/browsing")
+  }
+})
+
 // Product details
 router.get("/product/:id", async (req, res) => {
   try {
