@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="/css/animations.css">
   <link rel="stylesheet" href="/css/buttons.css">
   <link rel="stylesheet" href="/css/ui-enhancements.css">
+  <link rel="stylesheet" href="/css/chatbot.css">
   <style>
     .form-group {
   margin-bottom: 1.5rem;
@@ -113,80 +114,90 @@
   <% if(page === 'home') { %>
 
     <!-- Announcement Bar -->
-    <div class="py-2 px-3 text-center text-white small fw-bold" style="background: linear-gradient(90deg, #0c4a6e 0%, #0284c7 50%, #0369a1 100%); letter-spacing: 0.04em;">
-      <i class="fas fa-shield-halved text-warning me-2"></i>
-      GOVERNMENT DISPOSAL CLEARANCE LOT • ALL SEIZED ASSETS 100% VERIFIED & INSPECTED • FREE EXPRESS COURIER
+    <div class="announcement-bar">
+      <div class="container-fluid d-flex align-items-center justify-content-center gap-2 py-2 px-3 text-center text-white small fw-bold">
+        <span class="announcement-badge"><i class="fas fa-shield-halved text-warning me-1"></i> OFFICIAL DISPOSAL</span>
+        <span class="announcement-text">Direct Public Clearance Lot &bull; All Confiscated Assets 100% Inspected &bull; Free Express Delivery</span>
+      </div>
     </div>
 
     <!-- E-Commerce Hero Section -->
-    <section class="ecom-hero-section py-5 position-relative overflow-hidden" style="background: radial-gradient(circle at 80% 20%, rgba(2, 132, 199, 0.15) 0%, transparent 50%), linear-gradient(180deg, #0b1120 0%, #0f172a 100%); color: #ffffff;">
-      <div class="container py-4">
+    <section class="ecom-hero-section position-relative overflow-hidden">
+      <div class="hero-bg-glow"></div>
+      <div class="container py-5 position-relative" style="z-index: 2;">
         <div class="row align-items-center g-5">
           <div class="col-lg-7">
-            <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-3" style="background: rgba(2, 132, 199, 0.2); border: 1px solid rgba(56, 189, 248, 0.3);">
+            <div class="hero-verified-badge mb-3">
+              <span class="pulse-dot"></span>
               <i class="fas fa-certificate text-warning"></i>
-              <span class="small fw-bold text-info text-uppercase" style="letter-spacing: 0.05em;">Direct Citizen Access • No Auction Bidding</span>
+              <span class="text-uppercase">Direct Citizen Access &bull; Fixed Clearance Rates</span>
             </div>
 
-            <h1 class="display-4 fw-extrabold mb-3 text-white" style="letter-spacing: -0.03em; font-weight: 800; line-height: 1.15;">
-              Legally Seized Electronics.<br>
-              <span style="background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Fixed Clearance Prices.</span>
+            <h1 class="hero-title">
+              Legally Seized Goods.<br>
+              <span class="hero-title-gradient">Direct Clearance Prices.</span>
             </h1>
 
-            <p class="lead text-white-50 mb-4" style="max-width: 580px; font-size: 1.15rem;">
-              Direct public resale of authentic goods confiscated during customs checks, tax operations, and court asset liquidations. Inspected, certified, and backed by escrow.
+            <p class="hero-subtitle mb-4">
+              Direct public resale of authentic goods confiscated during customs checks, tax enforcement, and court asset liquidations. Certified authentic, tested, and backed by escrow protection.
             </p>
 
             <!-- Search Bar in Hero -->
-            <form action="/customer/search" method="POST" class="mb-4" style="max-width: 580px;">
-              <div class="p-2 rounded-pill bg-white shadow-lg d-flex align-items-center gap-2">
-                <i class="fas fa-search text-muted ms-3 fs-5"></i>
-                <input type="text" name="searchTerm" class="form-control border-0 shadow-none ps-2" 
-                       placeholder="Search seized MacBooks, iPhones, cameras, consoles..." style="font-size: 0.95rem;">
-                <button type="submit" class="btn btn-primary rounded-pill px-4 py-2 fw-bold text-nowrap">
-                  Find Deals
+            <form action="/customer/search" method="POST" class="hero-search-form mb-4">
+              <div class="hero-search-box">
+                <i class="fas fa-search hero-search-icon"></i>
+                <input type="text" name="searchTerm" class="hero-search-input" 
+                       placeholder="Search seized MacBooks, iPhones, cameras, consoles..." 
+                       aria-label="Search seized inventory">
+                <button type="submit" class="btn btn-hero-search">
+                  <span>Find Deals</span>
+                  <i class="fas fa-arrow-right ms-1"></i>
                 </button>
               </div>
             </form>
 
             <!-- Popular Quick Filter Tags -->
-            <div class="d-flex align-items-center gap-2 flex-wrap text-white-50 small">
-              <span class="fw-semibold text-white">Popular:</span>
-              <a href="/customer/browsing/laptops" class="badge rounded-pill text-decoration-none px-3 py-2" style="background: rgba(255,255,255,0.1); color:#e2e8f0;">💻 MacBooks</a>
-              <a href="/customer/browsing/mobile" class="badge rounded-pill text-decoration-none px-3 py-2" style="background: rgba(255,255,255,0.1); color:#e2e8f0;">📱 iPhones</a>
-              <a href="/customer/browsing/electronics" class="badge rounded-pill text-decoration-none px-3 py-2" style="background: rgba(255,255,255,0.1); color:#e2e8f0;">🎧 Sony XM5</a>
-              <a href="/customer/browsing/cameras" class="badge rounded-pill text-decoration-none px-3 py-2" style="background: rgba(255,255,255,0.1); color:#e2e8f0;">📷 Canon R5</a>
+            <div class="hero-quick-tags d-flex align-items-center gap-2 flex-wrap">
+              <span class="tags-label"><i class="fas fa-fire text-warning me-1"></i> Popular:</span>
+              <a href="/customer/browsing/laptops" class="hero-chip">💻 MacBooks</a>
+              <a href="/customer/browsing/mobile" class="hero-chip">📱 iPhones</a>
+              <a href="/customer/browsing/electronics" class="hero-chip">🎧 Sony XM5</a>
+              <a href="/customer/browsing/cameras" class="hero-chip">📷 Canon R5</a>
+              <a href="/customer/browsing" class="hero-chip hero-chip-all">Explore All &rarr;</a>
             </div>
           </div>
 
           <!-- Hero Spotlight Deal Card -->
           <div class="col-lg-5">
-            <div class="card border-0 rounded-4 overflow-hidden shadow-lg" style="background: rgba(255, 255, 255, 0.07); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.15) !important;">
-              <div class="p-3 text-center position-relative" style="background: rgba(0,0,0,0.25);">
-                <span class="badge bg-danger rounded-pill px-3 py-1 position-absolute top-0 start-0 m-3 shadow">
+            <div class="spotlight-deal-card">
+              <div class="spotlight-image-wrapper">
+                <span class="spotlight-badge">
                   <i class="fas fa-fire me-1"></i> TOP SEIZED DEAL
                 </span>
                 <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800&auto=format&fit=crop&q=80" 
                      alt="Apple MacBook Pro 16 M2 Pro" 
-                     class="img-fluid rounded-3 my-2" 
-                     style="max-height: 220px; object-fit: cover;">
+                     class="spotlight-img">
               </div>
-              <div class="p-4">
-                <div class="d-flex justify-content-between align-items-center mb-1">
-                  <span class="text-info fw-bold small text-uppercase">Customs Seizure Lot</span>
-                  <div class="text-warning small">
-                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                    <span class="text-white-50 ms-1">(4.9)</span>
+              <div class="spotlight-content">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="spotlight-tag">Customs Seizure Lot</span>
+                  <div class="spotlight-rating">
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <span class="rating-val ms-1">4.9 (128 reviews)</span>
                   </div>
                 </div>
-                <h4 class="fw-bold text-white mb-2">Apple MacBook Pro 16" M2 Pro (16GB / 512GB)</h4>
-                <div class="d-flex align-items-baseline gap-3 mb-3">
-                  <span class="h3 fw-bold text-white mb-0">₹84,999</span>
-                  <span class="text-white-50 text-decoration-line-through">₹1,69,900</span>
-                  <span class="badge bg-success rounded-pill px-2 py-1">Save 50%</span>
+                <h4 class="spotlight-title">Apple MacBook Pro 16" M2 Pro (16GB / 512GB)</h4>
+                <div class="spotlight-pricing d-flex align-items-baseline gap-3 mb-3">
+                  <span class="current-price">₹84,999</span>
+                  <span class="original-price">₹1,69,900</span>
+                  <span class="discount-badge">Save 50%</span>
                 </div>
-                <div class="d-grid gap-2">
-                  <a href="/customer/browsing" class="btn btn-primary rounded-pill py-2 fw-bold">
+                <div class="d-grid">
+                  <a href="/customer/browsing" class="btn btn-spotlight-cta">
                     <i class="fas fa-shopping-cart me-2"></i> Browse All Seized Stock
                   </a>
                 </div>
@@ -197,50 +208,50 @@
       </div>
     </section>
 
-    <!-- Category Carousel Bar -->
-    <section class="py-4 bg-white border-bottom shadow-sm">
+    <!-- Category Quick Navigation Bar -->
+    <section class="category-nav-section py-4 bg-white border-bottom">
       <div class="container">
         <div class="row g-3 text-center justify-content-center">
-          <div class="col-6 col-md-3 col-lg-2">
-            <a href="/customer/browsing/laptops" class="text-decoration-none text-dark p-3 rounded-4 d-block border hover-shadow" style="transition: all 0.2s; background: #f8fafc;">
-              <div class="fs-2 mb-1 text-primary"><i class="fas fa-laptop"></i></div>
-              <div class="fw-bold small">Laptops & PCs</div>
-              <small class="text-muted">From ₹64,999</small>
+          <div class="col-6 col-md-4 col-lg-2">
+            <a href="/customer/browsing/laptops" class="category-card">
+              <div class="cat-icon-circle"><i class="fas fa-laptop"></i></div>
+              <div class="cat-name">Laptops & PCs</div>
+              <span class="cat-price-hint">From ₹64,999</span>
             </a>
           </div>
-          <div class="col-6 col-md-3 col-lg-2">
-            <a href="/customer/browsing/mobile" class="text-decoration-none text-dark p-3 rounded-4 d-block border hover-shadow" style="transition: all 0.2s; background: #f8fafc;">
-              <div class="fs-2 mb-1 text-primary"><i class="fas fa-mobile-alt"></i></div>
-              <div class="fw-bold small">Smartphones</div>
-              <small class="text-muted">From ₹59,999</small>
+          <div class="col-6 col-md-4 col-lg-2">
+            <a href="/customer/browsing/mobile" class="category-card">
+              <div class="cat-icon-circle"><i class="fas fa-mobile-alt"></i></div>
+              <div class="cat-name">Smartphones</div>
+              <span class="cat-price-hint">From ₹59,999</span>
             </a>
           </div>
-          <div class="col-6 col-md-3 col-lg-2">
-            <a href="/customer/browsing/electronics" class="text-decoration-none text-dark p-3 rounded-4 d-block border hover-shadow" style="transition: all 0.2s; background: #f8fafc;">
-              <div class="fs-2 mb-1 text-primary"><i class="fas fa-headphones"></i></div>
-              <div class="fw-bold small">Audio & Tech</div>
-              <small class="text-muted">From ₹11,499</small>
+          <div class="col-6 col-md-4 col-lg-2">
+            <a href="/customer/browsing/electronics" class="category-card">
+              <div class="cat-icon-circle"><i class="fas fa-headphones"></i></div>
+              <div class="cat-name">Audio & Tech</div>
+              <span class="cat-price-hint">From ₹11,499</span>
             </a>
           </div>
-          <div class="col-6 col-md-3 col-lg-2">
-            <a href="/customer/browsing/cameras" class="text-decoration-none text-dark p-3 rounded-4 d-block border hover-shadow" style="transition: all 0.2s; background: #f8fafc;">
-              <div class="fs-2 mb-1 text-primary"><i class="fas fa-camera"></i></div>
-              <div class="fw-bold small">Cameras & Lenses</div>
-              <small class="text-muted">From ₹54,999</small>
+          <div class="col-6 col-md-4 col-lg-2">
+            <a href="/customer/browsing/cameras" class="category-card">
+              <div class="cat-icon-circle"><i class="fas fa-camera"></i></div>
+              <div class="cat-name">Cameras & Gear</div>
+              <span class="cat-price-hint">From ₹54,999</span>
             </a>
           </div>
-          <div class="col-6 col-md-3 col-lg-2">
-            <a href="/customer/browsing" class="text-decoration-none text-dark p-3 rounded-4 d-block border hover-shadow" style="transition: all 0.2s; background: #f8fafc;">
-              <div class="fs-2 mb-1 text-primary"><i class="fas fa-gamepad"></i></div>
-              <div class="fw-bold small">Gaming Gear</div>
-              <small class="text-muted">From ₹29,999</small>
+          <div class="col-6 col-md-4 col-lg-2">
+            <a href="/customer/browsing" class="category-card">
+              <div class="cat-icon-circle"><i class="fas fa-gamepad"></i></div>
+              <div class="cat-name">Gaming Gear</div>
+              <span class="cat-price-hint">From ₹29,999</span>
             </a>
           </div>
-          <div class="col-6 col-md-3 col-lg-2">
-            <a href="/customer/browsing" class="text-decoration-none text-dark p-3 rounded-4 d-block border hover-shadow" style="transition: all 0.2s; background: #f8fafc;">
-              <div class="fs-2 mb-1 text-primary"><i class="fas fa-store"></i></div>
-              <div class="fw-bold small">All Categories</div>
-              <small class="text-primary fw-bold">Explore All &rarr;</small>
+          <div class="col-6 col-md-4 col-lg-2">
+            <a href="/customer/browsing" class="category-card category-card-highlight">
+              <div class="cat-icon-circle highlight"><i class="fas fa-store"></i></div>
+              <div class="cat-name">All Categories</div>
+              <span class="cat-price-hint highlight">Explore 200+ &rarr;</span>
             </a>
           </div>
         </div>
@@ -248,18 +259,19 @@
     </section>
 
     <!-- Live Seized Products Showcase -->
-    <section class="py-5" style="background: #f8fafc;">
+    <section class="products-showcase-section py-5">
       <div class="container">
-        <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-2">
+        <div class="showcase-header d-flex justify-content-between align-items-end mb-4 flex-wrap gap-3">
           <div>
-            <span class="badge bg-primary px-3 py-1 rounded-pill mb-2 fw-bold text-uppercase">
+            <div class="showcase-badge mb-2">
               <i class="fas fa-bolt text-warning me-1"></i> Authentic Confiscations
-            </span>
-            <h2 class="h2 fw-bold text-dark mb-1">Today's Verified Seized Deals</h2>
-            <p class="text-muted mb-0">Inspected by accredited disposal agencies. Verified chain of custody.</p>
+            </div>
+            <h2 class="showcase-title mb-1">Today's Verified Seized Deals</h2>
+            <p class="showcase-subtitle mb-0">Inspected by accredited disposal agencies. Verified chain of custody.</p>
           </div>
-          <a href="/customer/browsing" class="btn btn-outline-primary rounded-pill px-4 fw-semibold">
-            View All <%= (typeof products !== 'undefined' && products) ? products.length : 12 %> Products <i class="fas fa-arrow-right ms-1"></i>
+          <a href="/customer/browsing" class="btn btn-view-all">
+            <span>View All <%= (typeof products !== 'undefined' && products) ? products.length : 12 %> Products</span>
+            <i class="fas fa-arrow-right ms-2"></i>
           </a>
         </div>
 
@@ -267,13 +279,13 @@
           <div class="row g-4">
             <% products.forEach(function(product) { %>
               <div class="col-xl-3 col-lg-4 col-md-6">
-                <div class="product-card h-100 shadow-sm border-0">
+                <div class="product-card h-100">
                   <div class="product-image-container">
-                    <a href="/customer/product/<%= product._id %>" style="display:block; height:100%;">
+                    <a href="/customer/product/<%= product._id %>" class="product-image-link">
                       <img src="<%= product.image || '/images/placeholder.png' %>" 
                            alt="<%= product.name %>" 
                            class="product-image" 
-                           onerror="this.onerror=null; this.src='https://via.placeholder.com/300x200?text=Seized+Product';">
+                           onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=500&auto=format&fit=crop&q=60';">
                     </a>
                     <span class="seizure-badge">
                       <i class="fas fa-gavel me-1"></i> Seized Asset
@@ -282,44 +294,44 @@
                   </div>
                   <div class="product-content p-3 d-flex flex-column flex-grow-1">
                     <div class="d-flex justify-content-between align-items-center mb-1">
-                      <span class="product-category fw-bold small text-primary text-uppercase">
+                      <span class="product-category">
                         <%= product.category ? (product.category.charAt(0).toUpperCase() + product.category.slice(1)) : 'Electronics' %>
                       </span>
-                      <button class="btn btn-sm btn-icon add-to-wishlist border-0 bg-transparent text-muted" title="Save to Wishlist">
+                      <button class="btn-wishlist add-to-wishlist" title="Save to Wishlist" aria-label="Save to Wishlist">
                         <i class="far fa-heart"></i>
                       </button>
                     </div>
 
-                    <h3 class="product-title h6 fw-bold mb-1">
-                      <a href="/customer/product/<%= product._id %>" class="text-dark text-decoration-none">
+                    <h3 class="product-title">
+                      <a href="/customer/product/<%= product._id %>">
                         <%= product.name %>
                       </a>
                     </h3>
 
-                    <small class="text-muted d-block mb-3">
-                      <i class="fas fa-landmark me-1 text-secondary"></i>
-                      <%= product.agency && product.agency.name ? product.agency.name : 'Customs Disposal Authority' %>
-                    </small>
+                    <div class="agency-tag mb-3">
+                      <i class="fas fa-landmark me-1"></i>
+                      <span><%= product.agency && product.agency.name ? product.agency.name : 'Customs Disposal Authority' %></span>
+                    </div>
 
-                    <div class="mt-auto pt-2 border-top">
+                    <div class="product-footer mt-auto pt-2 border-top">
                       <div class="d-flex justify-content-between align-items-baseline mb-2">
-                        <div class="product-price h5 fw-bold text-primary mb-0">
+                        <div class="product-price">
                           ₹<%= typeof product.price === 'number' ? product.price.toLocaleString('en-IN') : product.price %>
                         </div>
-                        <span class="badge bg-light text-success border small">
+                        <span class="stock-status-badge">
                           <i class="fas fa-check-circle me-1"></i> Available
                         </span>
                       </div>
 
                       <div class="d-flex gap-2">
-                        <button class="btn btn-primary add-to-cart add-to-cart-btn flex-grow-1 rounded-pill fw-semibold py-2"
+                        <button class="btn btn-add-cart add-to-cart add-to-cart-btn flex-grow-1"
                           data-id="<%= product._id %>"
                           data-name="<%= product.name %>"
                           data-price="<%= product.price %>"
                           data-image="<%= product.image %>">
                           <i class="fas fa-shopping-cart me-1"></i> Add to Cart
                         </button>
-                        <a href="/customer/product/<%= product._id %>" class="btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;" title="View Details">
+                        <a href="/customer/product/<%= product._id %>" class="btn btn-quick-view" title="View Details" aria-label="View Details">
                           <i class="fas fa-eye"></i>
                         </a>
                       </div>
@@ -333,41 +345,96 @@
       </div>
     </section>
 
-    <!-- How SETU Works Timeline -->
-    <section class="py-5 bg-white border-top border-bottom">
+    <!-- Trust & Value Highlights Strip -->
+    <section class="trust-highlights-bar py-4">
+      <div class="container">
+        <div class="row g-4">
+          <div class="col-lg-3 col-md-6">
+            <div class="trust-item d-flex align-items-center gap-3">
+              <div class="trust-icon-box">
+                <i class="fas fa-scale-balanced"></i>
+              </div>
+              <div>
+                <h6 class="trust-title mb-0">100% Legally Seized</h6>
+                <p class="trust-desc mb-0">Confiscated by customs & courts</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="trust-item d-flex align-items-center gap-3">
+              <div class="trust-icon-box">
+                <i class="fas fa-lock"></i>
+              </div>
+              <div>
+                <h6 class="trust-title mb-0">Escrow Protected</h6>
+                <p class="trust-desc mb-0">Funds secured until verification</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="trust-item d-flex align-items-center gap-3">
+              <div class="trust-icon-box">
+                <i class="fas fa-tag"></i>
+              </div>
+              <div>
+                <h6 class="trust-title mb-0">Zero Auction Markup</h6>
+                <p class="trust-desc mb-0">Direct fixed clearance rates</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="trust-item d-flex align-items-center gap-3">
+              <div class="trust-icon-box">
+                <i class="fas fa-truck-fast"></i>
+              </div>
+              <div>
+                <h6 class="trust-title mb-0">Inspected Delivery</h6>
+                <p class="trust-desc mb-0">Free express insured courier</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How SETU Works Timeline Section -->
+    <section class="process-section py-5 bg-white border-top border-bottom">
       <div class="container py-3">
-        <div class="text-center mb-5" style="max-width: 640px; margin: 0 auto;">
-          <span class="badge bg-primary px-3 py-1 rounded-pill fw-bold text-uppercase mb-2">Transparency Process</span>
-          <h2 class="h2 fw-bold text-dark">How Seized Goods Reach Citizens</h2>
-          <p class="text-muted">A government-compliant bridge ensuring transparency, fair fixed prices, and absolute trust.</p>
+        <div class="text-center mb-5" style="max-width: 660px; margin: 0 auto;">
+          <div class="process-badge mb-2">Transparency Process</div>
+          <h2 class="process-heading">How Seized Goods Reach Citizens</h2>
+          <p class="process-subheading">A transparent, government-compliant bridge ensuring verified authentic goods, fixed clearance pricing, and buyer safety.</p>
         </div>
 
-        <div class="row g-4 text-center">
+        <div class="row g-4 text-center position-relative">
           <div class="col-md-4">
-            <div class="p-4 rounded-4 bg-light border h-100">
-              <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 60px; height: 60px; font-size: 1.5rem;">
+            <div class="process-card h-100">
+              <span class="process-step-num">01</span>
+              <div class="process-icon-wrapper mx-auto mb-3">
                 <i class="fas fa-gavel"></i>
               </div>
-              <h5 class="fw-bold mb-2">1. Official Confiscation</h5>
-              <p class="text-muted small mb-0">High-value electronics confiscated during airport customs checks, tax raids, and bankruptcy asset recovery.</p>
+              <h5 class="process-card-title mb-2">1. Official Confiscation</h5>
+              <p class="process-card-desc mb-0">High-value electronics confiscated during airport customs checks, tax raids, and court bankruptcy liquidations.</p>
             </div>
           </div>
           <div class="col-md-4">
-            <div class="p-4 rounded-4 bg-light border h-100">
-              <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 60px; height: 60px; font-size: 1.5rem;">
+            <div class="process-card h-100">
+              <span class="process-step-num">02</span>
+              <div class="process-icon-wrapper mx-auto mb-3">
                 <i class="fas fa-clipboard-check"></i>
               </div>
-              <h5 class="fw-bold mb-2">2. Verification & Testing</h5>
-              <p class="text-muted small mb-0">Disposal authorities inspect hardware, check serial numbers against police records, and issue disposal clearance certificates.</p>
+              <h5 class="process-card-title mb-2">2. Verification & Testing</h5>
+              <p class="process-card-desc mb-0">Disposal authorities inspect hardware, check serial numbers against police records, and issue clearance certificates.</p>
             </div>
           </div>
           <div class="col-md-4">
-            <div class="p-4 rounded-4 bg-light border h-100">
-              <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 60px; height: 60px; font-size: 1.5rem;">
+            <div class="process-card h-100">
+              <span class="process-step-num">03</span>
+              <div class="process-icon-wrapper mx-auto mb-3">
                 <i class="fas fa-shield-alt"></i>
               </div>
-              <h5 class="fw-bold mb-2">3. Escrow Protected Resale</h5>
-              <p class="text-muted small mb-0">Citizens buy items directly without auction markups. Funds remain in escrow until you inspect your item upon delivery.</p>
+              <h5 class="process-card-title mb-2">3. Escrow Protected Resale</h5>
+              <p class="process-card-desc mb-0">Citizens buy items directly without auction markups. Funds remain in escrow until you inspect your item upon delivery.</p>
             </div>
           </div>
         </div>
@@ -375,36 +442,37 @@
     </section>
 
     <!-- Portals Access Section -->
-    <section class="py-5" style="background: #f1f5f9;">
+    <section class="portal-access-section py-5">
       <div class="container">
         <div class="text-center mb-4">
-          <h2 class="h3 fw-bold text-dark">Platform Portals & Account Access</h2>
+          <h2 class="portal-section-title">Platform Portals & Account Access</h2>
+          <p class="text-muted small">Choose your access portal to manage purchases or inventory</p>
         </div>
         <div class="row g-4 justify-content-center">
           <div class="col-md-5">
-            <div class="card border-0 shadow-sm rounded-4 p-4 text-center h-100 bg-white">
-              <div class="rounded-circle bg-primary-subtle text-primary d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 54px; height: 54px; font-size: 1.4rem; background: #e0f2fe;">
+            <div class="portal-box citizen-portal-box h-100">
+              <div class="portal-icon-circle citizen-icon mx-auto mb-3">
                 <i class="fas fa-user-circle"></i>
               </div>
-              <h4 class="fw-bold mb-2">Citizen & Buyer Portal</h4>
-              <p class="text-muted small mb-4">Browse seized inventory, track orders, manage deliveries, and submit inspection reviews.</p>
-              <div class="d-flex gap-2 justify-content-center">
-                <a href="/auth/customer/login" class="btn btn-primary rounded-pill px-4 fw-semibold">Sign In</a>
-                <a href="/customer/register" class="btn btn-outline-secondary rounded-pill px-4 fw-semibold">Create Account</a>
+              <h4 class="portal-box-title mb-2">Citizen & Buyer Portal</h4>
+              <p class="portal-box-desc mb-4">Browse verified seized inventory, track live orders, manage escrow deliveries, and submit inspection reviews.</p>
+              <div class="d-flex gap-2 justify-content-center flex-wrap">
+                <a href="/auth/customer/login" class="btn btn-portal-primary">Sign In</a>
+                <a href="/customer/register" class="btn btn-portal-outline">Create Account</a>
               </div>
             </div>
           </div>
 
           <div class="col-md-5">
-            <div class="card border-0 shadow-sm rounded-4 p-4 text-center h-100 bg-white">
-              <div class="rounded-circle bg-primary-subtle text-primary d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 54px; height: 54px; font-size: 1.4rem; background: #e0f2fe;">
+            <div class="portal-box agency-portal-box h-100">
+              <div class="portal-icon-circle agency-icon mx-auto mb-3">
                 <i class="fas fa-landmark"></i>
               </div>
-              <h4 class="fw-bold mb-2">Government Agency Portal</h4>
-              <p class="text-muted small mb-4">Upload disposal manifests, manage seized inventory batches, and review fulfillment metrics.</p>
-              <div class="d-flex gap-2 justify-content-center">
-                <a href="/auth/agency/login" class="btn btn-dark rounded-pill px-4 fw-semibold">Agency Sign In</a>
-                <a href="/agency/register" class="btn btn-outline-secondary rounded-pill px-4 fw-semibold">Register Agency</a>
+              <h4 class="portal-box-title mb-2">Government Agency Portal</h4>
+              <p class="portal-box-desc mb-4">Upload disposal manifests, manage seized inventory batches, track lot clearance, and review fulfillment metrics.</p>
+              <div class="d-flex gap-2 justify-content-center flex-wrap">
+                <a href="/auth/agency/login" class="btn btn-portal-dark">Agency Sign In</a>
+                <a href="/agency/register" class="btn btn-portal-outline">Register Agency</a>
               </div>
             </div>
           </div>
@@ -477,28 +545,36 @@
   <% if(page === 'customer-register') { %>
     <div class="auth-shell">
       <div class="auth-visual">
-        <span class="auth-badge"><i class="fas fa-user-plus"></i> New Customer</span>
-        <h1>Start shopping with SETU.</h1>
-        <p>Join today to save favorites, track orders, and explore premium products from trusted sellers.</p>
+        <span class="auth-badge"><i class="fas fa-user-plus"></i> Citizen Account</span>
+        <h1>Start with SETU.</h1>
+        <p>Direct citizen access to 100% verified seized assets, transparent clearance pricing, and escrow-protected checkout.</p>
         <ul class="auth-features">
-          <li><i class="fas fa-check-circle"></i> One-click checkout</li>
-          <li><i class="fas fa-check-circle"></i> Exclusive deals</li>
-          <li><i class="fas fa-check-circle"></i> Secure account management</li>
+          <li><i class="fas fa-shield-halved"></i> 100% Legally Verified Confiscations</li>
+          <li><i class="fas fa-lock"></i> Escrow-Protected Payments</li>
+          <li><i class="fas fa-truck-fast"></i> Inspected Express Delivery</li>
         </ul>
       </div>
 
       <div class="auth-panel">
         <div class="auth-panel-header">
           <a href="/" class="auth-logo-mark">
-            <span class="logo-icon"><i class="fas fa-shopping-bag"></i></span>
+            <span class="logo-icon"><i class="fas fa-shield-halved"></i></span>
             <span>SETU</span>
           </a>
         </div>
 
         <div class="auth-form-header">
-          <h2>Create Account</h2>
-          <p>Fill in your details to get started.</p>
+          <h2>Create Citizen Account</h2>
+          <p>Register to purchase seized goods at fixed clearance rates.</p>
         </div>
+
+        <% if(typeof errors !== 'undefined' && errors && errors.length > 0) { %>
+          <% errors.forEach(function(error) { %>
+            <div class="alert alert-danger py-2 px-3 small rounded-3 mb-2">
+              <i class="fas fa-circle-exclamation me-1"></i> <%= error.msg %>
+            </div>
+          <% }); %>
+        <% } %>
 
         <form action="/auth/customer/register" method="POST" class="auth-form">
           <div class="form-group">
@@ -507,109 +583,37 @@
           </div>
 
           <div class="form-group">
-            <label for="email">Email</label>
-            <input id="email" name="email" type="email" placeholder="Enter your email" required value="<%= typeof email != 'undefined' ? email : '' %>">
+            <label for="email">Email Address</label>
+            <input id="email" name="email" type="email" placeholder="name@example.com" required value="<%= typeof email != 'undefined' ? email : '' %>">
           </div>
 
           <div class="form-row">
             <div class="form-group">
               <label for="password">Password</label>
-              <input id="password" name="password" type="password" placeholder="Create a password" required>
+              <input id="password" name="password" type="password" placeholder="Create password" required>
             </div>
 
             <div class="form-group">
-              <label for="confirmPassword">Confirm</label>
+              <label for="confirmPassword">Confirm Password</label>
               <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm password" required>
             </div>
           </div>
 
           <label class="auth-remember" for="terms">
-            <input type="checkbox" id="terms" name="terms" required>
-            <span>I agree to the <a href="/terms">Terms</a> and <a href="/privacy">Privacy Policy</a></span>
+            <input type="checkbox" id="terms" name="terms" required checked>
+            <span>I agree to the <a href="/terms" class="text-primary fw-semibold">Terms of Service</a> & <a href="/privacy" class="text-primary fw-semibold">Privacy Policy</a></span>
           </label>
 
-          <button type="submit" class="btn btn-primary">Create Account</button>
+          <button type="submit" class="btn btn-primary w-100 py-2 fw-bold rounded-pill">
+            <i class="fas fa-user-plus me-1"></i> Create Account
+          </button>
         </form>
 
-        <div class="auth-footer">
-          <p>Already have an account? <a href="/auth/customer/login">Sign in</a></p>
+        <div class="auth-footer mt-4 text-center">
+          <p class="text-muted small mb-0">Already have an account? <a href="/auth/customer/login" class="text-primary fw-bold text-decoration-none">Sign In &rarr;</a></p>
         </div>
       </div>
     </div>
-
-    <!-- <div class="auth-container">
-      <div class="auth-card">
-        <div class="auth-logo">
-          <a href="/" class="logo">
-            <div class="logo-icon">
-              <i class="fas fa-user"></i>
-            </div>
-            <span class="logo-text">SETU</span>
-          </a>
-        </div>
-
-        <div class="auth-content">
-          <div class="auth-header">
-            <h1 class="auth-title">Customer Registration</h1>
-            <p class="auth-description">Create an account to start shopping</p>
-          </div>
-
-
-          <% if(typeof errors !== 'undefined' && errors.length > 0) { %>
-            <% errors.forEach(function(error) { %>
-              <div class="alert alert-danger"><%= error.msg %></div>
-            <% }); %>
-          <% } %>
-
-
-          <div id="success-message" class="alert alert-success hidden">
-            Registration successful! You can now log in.
-          </div>
-
-          <form id="registration-form" action="/auth/customer/register" method="POST" class="auth-form">
-            <div class="form-group">
-              <label for="name">Full Name</label>
-              <input type="text" id="name" name="name" class="form-control" value="<%= typeof name != 'undefined' ? name : '' %>">
-              <div id="name-error" class="error-message"></div>
-            </div>
-
-            <div class="form-group">
-              <label for="email">Email Address</label>
-              <input type="email" id="email" name="email" class="form-control" value="<%= typeof email != 'undefined' ? email : '' %>">
-              <div id="email-error" class="error-message"></div>
-            </div>
-
-            <div class="form-group">
-              <label for="password">Password</label>
-              <input type="password" id="password" name="password" class="form-control">
-              <div id="password-error" class="error-message"></div>
-            </div>
-
-            <div class="form-group">
-              <label for="confirm-password">Confirm Password</label>
-              <input type="password" id="confirm-password" name="confirmPassword" class="form-control">
-              <div id="confirm-password-error" class="error-message"></div>
-            </div>
-
-            <div class="form-checkbox">
-              <input type="checkbox" id="terms" name="terms" class="checkbox" required>
-              <label for="terms" class="checkbox-label">
-                I agree to the <a href="/terms" class="form-link">Terms of Service</a> and <a href="/privacy" class="form-link">Privacy Policy</a>
-              </label>
-            </div>
-
-            <button type="submit" class="btn btn-primary btn-block">Create Account</button>
-          </form>
-
-          <div class="auth-footer">
-            <p class="auth-footer-text">
-              Already have an account? <a href="/auth/customer/login" class="form-link">Log in</a>
-            </p>
-          </div>
-        </div>
-      </div>
-    </div> -->
-
   <% } %>
 
   <!-- Agency Login Page -->

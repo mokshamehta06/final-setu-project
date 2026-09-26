@@ -304,10 +304,7 @@ app.get("/agency/login", (req, res) => {
 
 // Direct register routes for customer and agency
 app.get("/customer/register", (req, res) => {
-  res.render("auth/register", {
-    title: "Customer Registration",
-    role: "customer",
-  })
+  res.redirect("/auth/customer/register");
 })
 
 app.get("/agency/register", (req, res) => {

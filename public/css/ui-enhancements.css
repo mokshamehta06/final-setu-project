@@ -1065,8 +1065,8 @@ header.bg-white {
   }
 }
 
-/* ===== PRODUCT BROWSING ===== */
-body .container {
+/* ===== PRODUCT BROWSING WITH SIDEBAR ===== */
+.sidebar-layout-container {
   max-width: 1380px !important;
   margin: 2rem auto 3rem !important;
   padding: 0 1rem 2rem !important;
@@ -1458,7 +1458,7 @@ body .empty-state-card {
 }
 
 @media (max-width: 980px) {
-  body .container {
+  .sidebar-layout-container {
     grid-template-columns: 1fr !important;
   }
 
@@ -1470,7 +1470,7 @@ body .empty-state-card {
 }
 
 @media (max-width: 640px) {
-  body .container {
+  .sidebar-layout-container {
     margin-top: 1rem !important;
     padding-left: 0.75rem !important;
     padding-right: 0.75rem !important;
