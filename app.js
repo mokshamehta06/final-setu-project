@@ -76,7 +76,7 @@ async function initializeDefaultAdmin() {
 // Middleware
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use(express.static(path.join(__dirname, "public")))
+app.use(express.static(path.join(__dirname, "dist"), { index: false }))
 
 // Set up EJS as the view engine
 app.set("view engine", "ejs")
@@ -110,9 +110,55 @@ app.use(flash())
 // Global variables middleware
 app.use((req, res, next) => {
   res.locals.user = req.session.user || null
+  res.locals.cartCount = (req.session.cart || []).reduce((total, item) => total + (Number(item.quantity) || 0), 0)
   res.locals.success_msg = req.flash("success_msg")
   res.locals.error_msg = req.flash("error_msg")
   next()
+})
+
+const reactManifestPath = path.join(__dirname, "dist", ".vite", "manifest.json")
+let reactAssets = { js: "/src/main.jsx", css: null }
+if (fs.existsSync(reactManifestPath)) {
+  const manifest = JSON.parse(fs.readFileSync(reactManifestPath, "utf8"))
+  const entry = manifest["index.html"]
+  if (entry) {
+    reactAssets = {
+      js: `/${entry.file}`,
+      css: entry.css && entry.css.length ? `/${entry.css[0]}` : null,
+    }
+  }
+}
+app.locals.reactAssets = reactAssets
+
+app.use((req, res, next) => {
+  const renderView = res.render.bind(res)
+  res.render = (view, options, callback) => {
+    if (typeof options === "function") {
+      callback = options
+      options = {}
+    }
+    const initialData = { ...res.locals, ...(options || {}), view, path: req.path }
+    delete initialData.layout
+    delete initialData.cache
+    return renderView("react-shell", { initialData, layout: false }, callback)
+  }
+  next()
+})
+
+app.get("/reset-password.html", (req, res) => {
+  res.render("index", {
+    page: "reset-password",
+    title: "Reset Password",
+    token: req.query.token || "",
+  })
+})
+
+app.get("/forgot-password-customer.html", (req, res) => {
+  res.render("index", { page: "forgot-password", title: "Forgot Password", userType: "customer" })
+})
+
+app.get("/forgot-password-agency.html", (req, res) => {
+  res.render("index", { page: "forgot-password", title: "Forgot Password", userType: "agency" })
 })
 
 // Routes - IMPORTANT: Order matters here
@@ -379,6 +425,8 @@ app.get("/privacy", (req, res) => {
     title: "Privacy Policy",
   })
 })
+
+app.use(express.static(path.join(__dirname, "public"), { index: false }))
 
 // Initialize default products if none exist
 const initializeProducts = async () => {

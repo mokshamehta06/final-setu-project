@@ -191,7 +191,29 @@ router.get("/product/:id", async (req, res) => {
 //   });
 // });
 
-router.get("/cart", (req, res) => {
+router.get("/cart", async (req, res) => {
+  if (req.session.user && req.session.user.role === "customer") {
+    try {
+      const cart = await cartController.getCart(req.session.user._id)
+      const subtotal = cart.totalAmount
+      const tax = subtotal * 0.1
+      const shipping = subtotal > 0 ? 50 : 0
+      return res.render("index", {
+        page: "customer-cart",
+        title: "Shopping Cart",
+        user: req.session.user,
+        cart,
+        subtotal,
+        tax,
+        shipping,
+        total: subtotal + tax + shipping,
+      })
+    } catch (error) {
+      console.error("Error loading customer cart:", error)
+      req.flash("error_msg", "Failed to load your cart")
+    }
+  }
+
   const cart = req.session.cart || []; // Get cart from session
   if (!cart.length) {
     return res.render("index", {
@@ -1031,7 +1053,7 @@ router.get("/wishlist", isAuthenticated, isCustomer, async (req, res) => {
       page: "customer-wishlist",
       title: "My Wishlist",
       user: req.session.user,
-      wishlistItems: user.wishlist || []
+      wishlistItems: user.wishlist || [],
     })
   } catch (error) {
     console.error("Error fetching wishlist:", error)
