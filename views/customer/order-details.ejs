@@ -3,234 +3,277 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Order Details</title>
+  <title><%= typeof title !== 'undefined' ? title : 'Order Details' %> | SETU</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="/css/styles.css">
-<link rel="stylesheet" href="/css/dashboard-variables.css">
-    <style>
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-        }
-
-        body {
-            background-color: var(--primary-50);
-            min-height: 100vh;
-            padding: 2rem;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .header {
-            background-color: var(--primary-600);
-            color: white;
-            padding: 2rem;
-            border-radius: var(--card-radius);
-            margin-bottom: 2rem;
-            text-align: center;
-            box-shadow: var(--card-shadow);
-        }
-
-        .orders-list {
-            display: grid;
-            gap: 2rem;
-        }
-
-        .order-card {
-            background-color: white;
-            border-radius: var(--card-radius);
-            padding: 1.5rem;
-            box-shadow: var(--card-shadow);
-            transition: var(--transition);
-            border: 1px solid var(--neutral-200);
-        }
-
-        .order-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--hover-shadow);
-        }
-
-        .order-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid var(--neutral-100);
-        }
-
-        .order-id {
-            font-weight: 600;
-            color: var(--primary-600);
-            font-size: 1.3rem;
-        }
-
-        .order-status {
-            background-color: var(--primary-100);
-            color: var(--primary-700);
-            padding: 0.5rem 1rem;
-            border-radius: var(--badge-radius);
-            font-size: 0.9rem;
-            text-transform: capitalize;
-        }
-
-        .order-items {
-            margin: 1rem 0;
-        }
-
-        .item {
-            display: grid;
-            grid-template-columns: 3fr 1fr 1fr 1fr;
-            padding: 0.75rem 0;
-            border-bottom: 1px solid var(--neutral-100);
-            color: var(--neutral-700);
-        }
-
-        .item:last-child {
-            border-bottom: none;
-        }
-
-        .item strong {
-            color: var(--primary-600);
-        }
-
-        .order-total {
-            text-align: right;
-            font-weight: 600;
-            margin-top: 1rem;
-            font-size: 1.3rem;
-            color: var(--primary-600);
-        }
-
-        .empty-message {
-            text-align: center;
-            color: var(--primary-600);
-            padding: 2rem;
-            background: white;
-            border-radius: var(--card-radius);
-            box-shadow: var(--card-shadow);
-        }
-
-        @media (max-width: 768px) {
-            .order-card {
-                padding: 1rem;
-            }
-
-            .order-items {
-                margin: 0.5rem 0;
-            }
-
-            .item {
-                grid-template-columns: 2fr 1fr 1fr;
-            }
-
-            .order-total {
-                font-size: 1.1rem;
-            }
-        }
-    </style>
+  <link rel="stylesheet" href="/css/ui-enhancements.css">
+  <style>
+    body {
+      background: #f8fafc;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: #0f172a;
+    }
+    .order-detail-wrap {
+      max-width: 1100px;
+      margin: 2.5rem auto 4rem;
+      padding: 0 1.25rem;
+    }
+    .detail-card {
+      background: #ffffff;
+      border: 1px solid rgba(226, 232, 240, 0.8);
+      border-radius: 20px;
+      box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.05);
+      margin-bottom: 2rem;
+      overflow: hidden;
+    }
+    .detail-card-header {
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid #f1f5f9;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .detail-card-body {
+      padding: 2rem;
+    }
+    .timeline-steps {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      margin: 2rem 0;
+    }
+    .timeline-steps::before {
+      content: '';
+      position: absolute;
+      top: 18px;
+      left: 30px;
+      right: 30px;
+      height: 4px;
+      background: #e2e8f0;
+      z-index: 1;
+    }
+    .timeline-step {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      flex: 1;
+    }
+    .timeline-dot {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 3px solid #cbd5e1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 0.75rem;
+      font-size: 0.95rem;
+      color: #64748b;
+      transition: all 0.3s;
+    }
+    .timeline-step.completed .timeline-dot {
+      border-color: #10b981;
+      background: #10b981;
+      color: white;
+    }
+    .timeline-step.active .timeline-dot {
+      border-color: #0284c7;
+      background: #0284c7;
+      color: white;
+      box-shadow: 0 0 0 5px rgba(2, 132, 199, 0.2);
+    }
+    .item-thumb {
+      width: 64px;
+      height: 64px;
+      border-radius: 12px;
+      object-fit: cover;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+    }
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.45rem 1rem;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.825rem;
+      text-transform: uppercase;
+    }
+    .status-pill.pending { background: #fef3c7; color: #b45309; }
+    .status-pill.processing { background: #e0f2fe; color: #0369a1; }
+    .status-pill.shipped { background: #e0e7ff; color: #4338ca; }
+    .status-pill.delivered { background: #dcfce7; color: #15803d; }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Customer Orders</h1>
-        </div>
-        <div id="orders-list" class="orders-list">
-            <!-- Orders will be inserted here by JavaScript -->
-        </div>
+
+  <%- include('../partials/header') %>
+
+  <div class="order-detail-wrap">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+      <div>
+        <a href="/customer/orders" class="text-decoration-none text-muted fw-semibold small mb-2 d-inline-block">
+          <i class="fas fa-arrow-left me-1"></i> Back to Orders
+        </a>
+        <h1 class="h3 fw-bold mb-0">Order #<%= order.orderNumber || order.orderId || order._id.toString().substring(0, 8) %></h1>
+        <small class="text-muted">
+          Placed on <%= new Date(order.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }) %>
+        </small>
+      </div>
+
+      <div class="d-flex gap-2">
+        <button class="btn btn-outline-secondary rounded-pill px-3" onclick="window.print()">
+          <i class="fas fa-print me-1"></i> Print Invoice
+        </button>
+        <span class="status-pill <%= order.status || 'pending' %>">
+          <i class="fas fa-circle" style="font-size: 0.45rem;"></i> <%= order.status || 'Pending' %>
+        </span>
+      </div>
     </div>
 
-    <script>
-        // Sample order data - in a real application, this would come from a backend
-        const orders = [
-            {
-                id: 'ORD-2024-001',
-                date: '2024-03-14',
-                status: 'Processing',
-                items: [
-                    { name: 'Blue Widget', quantity: 2, price: 29.99 },
-                    { name: 'White Gadget', quantity: 1, price: 49.99 },
-                    { name: 'Premium Tool', quantity: 3, price: 19.99 }
-                ]
-            },
-            {
-                id: 'ORD-2024-002',
-                date: '2024-03-13',
-                status: 'Shipped',
-                items: [
-                    { name: 'Deluxe Package', quantity: 1, price: 99.99 },
-                    { name: 'Basic Kit', quantity: 2, price: 24.99 }
-                ]
-            }
-        ];
+    <!-- Status Tracking Timeline -->
+    <div class="detail-card">
+      <div class="detail-card-body">
+        <h5 class="fw-bold mb-4"><i class="fas fa-truck-moving text-primary me-2"></i> Shipment Progress</h5>
+        <% 
+          const currentStatus = (order.status || 'pending').toLowerCase();
+          const isPlaced = true;
+          const isProcessing = ['processing', 'shipped', 'delivered'].includes(currentStatus);
+          const isShipped = ['shipped', 'delivered'].includes(currentStatus);
+          const isDelivered = currentStatus === 'delivered';
+        %>
+        <div class="timeline-steps">
+          <div class="timeline-step <%= isProcessing ? 'completed' : 'active' %>">
+            <div class="timeline-dot"><i class="fas fa-receipt"></i></div>
+            <div class="fw-bold small">Order Placed</div>
+            <small class="text-muted"><%= new Date(order.createdAt).toLocaleDateString('en-IN') %></small>
+          </div>
+          <div class="timeline-step <%= isShipped ? 'completed' : (isProcessing ? 'active' : '') %>">
+            <div class="timeline-dot"><i class="fas fa-box"></i></div>
+            <div class="fw-bold small">Inspection & Packing</div>
+            <small class="text-muted">Clearance Verified</small>
+          </div>
+          <div class="timeline-step <%= isDelivered ? 'completed' : (isShipped ? 'active' : '') %>">
+            <div class="timeline-dot"><i class="fas fa-truck"></i></div>
+            <div class="fw-bold small">Out for Delivery</div>
+            <small class="text-muted">Courier Dispatch</small>
+          </div>
+          <div class="timeline-step <%= isDelivered ? 'completed' : '' %>">
+            <div class="timeline-dot"><i class="fas fa-home"></i></div>
+            <div class="fw-bold small">Delivered</div>
+            <small class="text-muted">Complete</small>
+          </div>
+        </div>
+      </div>
+    </div>
 
-        function formatCurrency(amount) {
-            return new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD'
-            }).format(amount);
-        }
-
-        function formatDate(dateString) {
-            return new Date(dateString).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            });
-        }
-
-        function calculateOrderTotal(items) {
-            return items.reduce((total, item) => total + (item.price * item.quantity), 0);
-        }
-
-        function renderOrders() {
-            const ordersContainer = document.getElementById('orders-list');
-
-            if (orders.length === 0) {
-                ordersContainer.innerHTML = '<div class="empty-message">No orders found</div>';
-                return;
-            }
-
-            ordersContainer.innerHTML = orders.map(order => `
-                <div class="order-card">
-                    <div class="order-header">
-                        <div>
-                            <div class="order-id">${order.id}</div>
-                            <div>${formatDate(order.date)}</div>
-                        </div>
-                        <span class="order-status">${order.status}</span>
-                    </div>
-                    <div class="order-items">
-                        <div class="item">
-                            <strong>Item</strong>
-                            <strong>Quantity</strong>
-                            <strong>Price</strong>
-                            <strong>Subtotal</strong>
-                        </div>
-                        ${order.items.map(item => `
-                            <div class="item">
-                                <div>${item.name}</div>
-                                <div>${item.quantity}</div>
-                                <div>${formatCurrency(item.price)}</div>
-                                <div>${formatCurrency(item.price * item.quantity)}</div>
+    <div class="row g-4">
+      <!-- Order Items -->
+      <div class="col-lg-8">
+        <div class="detail-card">
+          <div class="detail-card-header">
+            <h5 class="fw-bold mb-0">Items in this Package (<%= (order.items && order.items.length) || 0 %>)</h5>
+            <span class="badge bg-light text-dark border">Escrow Protected</span>
+          </div>
+          <div class="detail-card-body p-0">
+            <div class="table-responsive">
+              <table class="table mb-0 align-middle">
+                <thead class="table-light">
+                  <tr>
+                    <th>Item</th>
+                    <th class="text-center">Quantity</th>
+                    <th class="text-end">Price</th>
+                    <th class="text-end">Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% if (order.items && order.items.length > 0) { %>
+                    <% order.items.forEach(item => { %>
+                      <tr>
+                        <td>
+                          <div class="d-flex align-items-center gap-3">
+                            <img src="<%= item.image || '/api/placeholder/100/100' %>" 
+                                 class="item-thumb" 
+                                 alt="<%= item.name %>"
+                                 onerror="this.onerror=null; this.src='https://via.placeholder.com/100x100?text=Item';">
+                            <div>
+                              <div class="fw-bold text-dark"><%= item.name %></div>
+                              <small class="text-muted">Official Seizure Batch</small>
                             </div>
-                        `).join('')}
-                    </div>
-                    <div class="order-total">
-                        Total: ${formatCurrency(calculateOrderTotal(order.items))}
-                    </div>
-                </div>
-            `).join('');
-        }
+                          </div>
+                        </td>
+                        <td class="text-center fw-semibold"><%= item.quantity %></td>
+                        <td class="text-end text-muted">₹<%= (item.price || 0).toLocaleString('en-IN') %></td>
+                        <td class="text-end fw-bold text-dark">₹<%= ((item.price || 0) * item.quantity).toLocaleString('en-IN') %></td>
+                      </tr>
+                    <% }) %>
+                  <% } %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
 
-        // Initialize the page
-        document.addEventListener('DOMContentLoaded', renderOrders);
-    </script>
+      <!-- Financials and Shipping Address -->
+      <div class="col-lg-4">
+        <!-- Payment & Financials -->
+        <div class="detail-card mb-4">
+          <div class="detail-card-header">
+            <h5 class="fw-bold mb-0">Payment Summary</h5>
+          </div>
+          <div class="detail-card-body">
+            <div class="d-flex justify-content-between mb-2">
+              <span class="text-muted">Subtotal</span>
+              <span class="fw-semibold">₹<%= (order.subtotal || 0).toLocaleString('en-IN') %></span>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+              <span class="text-muted">Tax (GST)</span>
+              <span class="fw-semibold">₹<%= (order.tax || 0).toLocaleString('en-IN') %></span>
+            </div>
+            <div class="d-flex justify-content-between mb-3">
+              <span class="text-muted">Shipping</span>
+              <span class="text-success fw-bold">₹<%= (order.shipping || 0).toLocaleString('en-IN') %></span>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <span class="h6 fw-bold mb-0">Total Paid</span>
+              <span class="h4 fw-bold text-primary mb-0">₹<%= (order.totalAmount || 0).toLocaleString('en-IN') %></span>
+            </div>
+            <div class="p-2 bg-light rounded text-center small text-muted">
+              Method: <strong><%= order.paymentMethod || 'Credit Card' %></strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Delivery Address -->
+        <div class="detail-card">
+          <div class="detail-card-header">
+            <h5 class="fw-bold mb-0"><i class="fas fa-map-pin text-primary me-2"></i> Shipping To</h5>
+          </div>
+          <div class="detail-card-body">
+            <% if (order.shippingAddress) { %>
+              <div class="fw-bold mb-1"><%= order.shippingAddress.firstName %> <%= order.shippingAddress.lastName %></div>
+              <div class="text-muted small mb-1"><%= order.shippingAddress.address %></div>
+              <div class="text-muted small mb-2"><%= order.shippingAddress.city %>, <%= order.shippingAddress.state %> <%= order.shippingAddress.zip %></div>
+              <div class="text-muted small"><i class="fas fa-phone me-1"></i> <%= order.shippingAddress.phone %></div>
+            <% } else { %>
+              <p class="text-muted mb-0">Standard Courier Address on file.</p>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%- include('../partials/footer') %>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

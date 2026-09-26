@@ -8,255 +8,342 @@
   <link rel="stylesheet" href="/css/styles.css">
   <link rel="stylesheet" href="/css/animations.css">
   <link rel="stylesheet" href="/css/buttons.css">
+  <link rel="stylesheet" href="/css/ui-enhancements.css">
   <style>
-    .contact-container {
-      max-width: 1200px;
+    :root {
+      --contact-bg: #f4fbff;
+      --contact-card: rgba(255,255,255,0.9);
+      --contact-border: rgba(14,165,233,0.12);
+      --contact-ink: #0f172a;
+      --contact-muted: #475569;
+      --contact-accent: #0ea5e9;
+      --contact-accent-dark: #0369a1;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(180deg, #f0f9ff 0%, #f8fafc 100%);
+      color: var(--contact-ink);
+    }
+
+    .contact-shell {
+      max-width: 1180px;
       margin: 0 auto;
-      padding: 2rem;
+      padding: 54px 20px 72px;
     }
 
     .contact-header {
       text-align: center;
-      margin-bottom: 3rem;
-      animation: fadeIn 1s ease;
+      margin-bottom: 26px;
+    }
+
+    .contact-header span {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: rgba(14,165,233,0.1);
+      color: var(--contact-accent-dark);
+      border-radius: 999px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.72rem;
     }
 
     .contact-header h1 {
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: var(--neutral-900);
-      margin-bottom: 1rem;
+      margin: 18px 0 10px;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      line-height: 1;
+      letter-spacing: -0.06em;
+      color: var(--contact-ink);
     }
 
     .contact-header p {
-      font-size: 1.125rem;
-      color: var(--neutral-600);
-      max-width: 700px;
+      max-width: 720px;
       margin: 0 auto;
+      color: var(--contact-muted);
+      font-size: 1.08rem;
+      line-height: 1.7;
     }
 
-    .contact-content {
+    .contact-layout {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 22px;
+      margin-top: 26px;
     }
 
-    .contact-info {
-      animation: slideInLeft 1s ease;
+    .info-panel,
+    .form-panel {
+      background: var(--contact-card);
+      border: 1px solid var(--contact-border);
+      border-radius: 26px;
+      box-shadow: 0 16px 35px rgba(15,23,42,0.05);
+      padding: 28px 24px;
     }
 
-    .contact-info h2 {
-      font-size: 1.5rem;
-      font-weight: 600;
-      margin-bottom: 1.5rem;
-      color: var(--neutral-900);
+    .info-panel h2,
+    .form-panel h2 {
+      margin: 0 0 20px;
+      font-size: 1.6rem;
+      color: var(--contact-ink);
     }
 
-    .contact-info-item {
+    .info-list {
+      display: grid;
+      gap: 18px;
+    }
+
+    .info-item {
       display: flex;
+      gap: 14px;
       align-items: flex-start;
-      margin-bottom: 1.5rem;
     }
 
-    .contact-info-icon {
-      width: 40px;
-      height: 40px;
-      background-image: linear-gradient(135deg, var(--primary-500), var(--primary-700));
-      border-radius: 50%;
-      display: flex;
+    .info-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      margin-right: 1rem;
       color: white;
-      font-size: 1rem;
+      background: linear-gradient(135deg, var(--contact-accent-dark), var(--contact-accent));
+      box-shadow: 0 12px 22px rgba(14,165,233,0.2);
       flex-shrink: 0;
     }
 
-    .contact-info-content h3 {
-      font-size: 1.125rem;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-      color: var(--neutral-800);
+    .info-item h3 {
+      margin: 0 0 6px;
+      font-size: 1.1rem;
+      color: var(--contact-ink);
     }
 
-    .contact-info-content p {
-      color: var(--neutral-600);
-      line-height: 1.6;
+    .info-item p {
+      margin: 0;
+      color: var(--contact-muted);
+      line-height: 1.7;
     }
 
-    .contact-social {
-      margin-top: 2rem;
-    }
-
-    .contact-social h3 {
-      font-size: 1.125rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-      color: var(--neutral-800);
-    }
-
-    .social-icons {
+    .social-row {
       display: flex;
-      gap: 1rem;
+      gap: 12px;
+      margin-top: 24px;
+      flex-wrap: wrap;
     }
 
-    .social-icon {
-      width: 40px;
-      height: 40px;
+    .social-pill {
+      width: 42px;
+      height: 42px;
       border-radius: 50%;
-      background-color: var(--neutral-100);
-      display: flex;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      color: var(--neutral-700);
-      font-size: 1.25rem;
-      transition: all 0.3s ease;
+      background: rgba(14,165,233,0.08);
+      color: var(--contact-accent-dark);
+      border: 1px solid rgba(14,165,233,0.12);
     }
 
-    .social-icon:hover {
-      background-color: var(--primary-500);
-      color: white;
-      transform: translateY(-3px);
-    }
-
-    .contact-form-container {
-      background-color: white;
-      border-radius: 1rem;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      padding: 2rem;
-      animation: slideInRight 1s ease;
-      border: 1px solid var(--neutral-200);
-    }
-
-    .contact-form-container h2 {
-      font-size: 1.5rem;
-      font-weight: 600;
-      margin-bottom: 1.5rem;
-      color: var(--neutral-900);
-      text-align: center;
+    .form-panel {
+      background: rgba(255,255,255,0.86);
     }
 
     .contact-form {
       display: grid;
-      gap: 1.5rem;
-    }
-
-    .form-group {
-      margin-bottom: 0;
+      gap: 16px;
     }
 
     .form-row {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .form-group {
+      display: grid;
+      gap: 8px;
     }
 
     .form-label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 500;
-      color: var(--neutral-700);
+      font-weight: 600;
+      color: var(--contact-ink);
     }
 
     .form-input,
     .form-textarea,
     .form-select {
       width: 100%;
-      padding: 0.75rem 1rem;
-      border: 1px solid var(--neutral-300);
-      border-radius: 0.5rem;
-      font-size: 1rem;
-      transition: all 0.3s ease;
+      border: 1px solid rgba(148,163,184,0.4);
+      background: rgba(248,250,252,0.9);
+      border-radius: 14px;
+      padding: 14px 16px;
+      font: inherit;
+      color: var(--contact-ink);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
     }
 
     .form-input:focus,
     .form-textarea:focus,
     .form-select:focus {
       outline: none;
-      border-color: var(--primary-500);
-      box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+      border-color: rgba(14,165,233,0.7);
+      background: white;
+      box-shadow: 0 0 0 4px rgba(14,165,233,0.12);
     }
 
     .form-textarea {
-      min-height: 150px;
+      min-height: 160px;
       resize: vertical;
     }
 
-    .form-select {
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23475569'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 1rem center;
-      background-size: 1.5rem;
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 0.85rem 1.4rem;
+      border: none;
+      border-radius: 999px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .map-container {
-      margin-top: 3rem;
-      border-radius: 1rem;
-      overflow: hidden;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      height: 400px;
-      animation: fadeIn 1s ease;
-      animation-delay: 0.5s;
-      animation-fill-mode: both;
+    .btn-primary {
+      background: linear-gradient(135deg, #0369a1 0%, #0ea5e9 100%);
+      color: white;
+      box-shadow: 0 14px 26px rgba(14,165,233,0.2);
     }
 
-    .map-container iframe {
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 18px 30px rgba(14,165,233,0.25);
+    }
+
+    .btn-block {
       width: 100%;
-      height: 100%;
-      border: 0;
     }
 
-    @media (max-width: 768px) {
-      .contact-content {
+    @media (max-width: 900px) {
+      .contact-layout {
         grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .contact-shell {
+        padding-left: 14px;
+        padding-right: 14px;
       }
 
       .form-row {
         grid-template-columns: 1fr;
       }
-
-      .contact-header h1 {
-        font-size: 2rem;
-      }
-
-      .contact-header p {
-        font-size: 1rem;
-      }
     }
   </style>
 </head>
 <body>
-  <!-- Navigation removed -->
-
-  <div class="contact-container">
+  <div class="contact-shell">
     <div class="contact-header">
-      <h1>Get in Touch</h1>
-      <p>Have questions or need assistance? We're here to help. Reach out to us using any of the methods below.</p>
+      <span><i class="fas fa-envelope"></i> Contact Setu</span>
+      <h1>Let’s talk.</h1>
+      <p>We’re here to help with product questions, support requests, and anything you need to make the platform work better for you.</p>
     </div>
 
-    <div class="contact-content">
-      <div class="contact-info">
-        <h2>Contact Information</h2>
+    <div class="contact-layout">
+      <div class="info-panel">
+        <h2>Contact information</h2>
 
-        <div class="contact-info-item">
-          <div class="contact-info-icon">
-            <i class="fas fa-map-marker-alt"></i>
+        <div class="info-list">
+          <div class="info-item">
+            <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
+            <div>
+              <h3>Our Location</h3>
+              <p>123 Business Avenue, Tech Park<br>Bangalore, Karnataka 560001<br>India</p>
+            </div>
           </div>
-          <div class="contact-info-content">
-            <h3>Our Location</h3>
-            <p>123 Business Avenue, Tech Park<br>Bangalore, Karnataka 560001<br>India</p>
+
+          <div class="info-item">
+            <div class="info-icon"><i class="fas fa-phone-alt"></i></div>
+            <div>
+              <h3>Phone</h3>
+              <p>+91 80 1234 5678<br>+91 80 8765 4321</p>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-icon"><i class="fas fa-envelope"></i></div>
+            <div>
+              <h3>Email</h3>
+              <p>support@setu.com<br>hello@setu.com</p>
+            </div>
           </div>
         </div>
 
-        <div class="contact-info-item">
-          <div class="contact-info-icon">
-            <i class="fas fa-phone-alt"></i>
+        <div class="social-row">
+          <span class="social-pill"><i class="fab fa-linkedin-in"></i></span>
+          <span class="social-pill"><i class="fab fa-twitter"></i></span>
+          <span class="social-pill"><i class="fab fa-instagram"></i></span>
+          <span class="social-pill"><i class="fab fa-facebook-f"></i></span>
+        </div>
+      </div>
+
+      <div class="form-panel">
+        <h2>Send us a message</h2>
+        <form class="contact-form" action="/support/contact/submit" method="POST">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="firstName" class="form-label">First Name</label>
+              <input type="text" id="firstName" name="firstName" class="form-input" placeholder="John" required>
+            </div>
+            <div class="form-group">
+              <label for="lastName" class="form-label">Last Name</label>
+              <input type="text" id="lastName" name="lastName" class="form-input" placeholder="Doe" required>
+            </div>
           </div>
-          <div class="contact-info-content">
-            <h3>Phone Number</h3>
-            <p>+91 80 1234 5678 (Main Office)<br>+91 80 8765 4321 (Customer Support)</p>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" id="email" name="email" class="form-input" placeholder="you@example.com" required>
+            </div>
+            <div class="form-group">
+              <label for="phone" class="form-label">Phone</label>
+              <input type="tel" id="phone" name="phone" class="form-input" placeholder="+91 12345 67890">
+            </div>
           </div>
+
+          <div class="form-group">
+            <label for="subject" class="form-label">Subject</label>
+            <select id="subject" name="subject" class="form-select" required>
+              <option value="">Select a topic</option>
+              <option value="Account Support">Account Support</option>
+              <option value="Order Help">Order Help</option>
+              <option value="Technical Issue">Technical Issue</option>
+              <option value="Business Inquiry">Business Inquiry</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="message" class="form-label">Message</label>
+            <textarea id="message" name="message" class="form-textarea" placeholder="Tell us how we can help" required></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">
+            <i class="fas fa-paper-plane"></i>
+            <span>Send Message</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://embedded-voice-assistant.onrender.com/assistant.js" data-user-id="6ab6a7796589f3f11afa63be"></script>
+</body>
+</html>
         </div>
 
         <div class="contact-info-item">

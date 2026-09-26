@@ -1,99 +1,63 @@
-<header class="bg-white shadow-sm">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex justify-between h-16">
-      <div class="flex">
-        <button class="mobile-menu-button md:hidden mr-2">
-          <i class="fas fa-bars"></i>
-        </button>
-        <div class="flex-shrink-0 flex items-center">
-          <a href="/" class="flex items-center">
-            <div class="w-10 h-10 bg-primary-600 rounded-lg flex items-center justify-center text-white mr-2">
-              <i class="fas fa-shopping-bag"></i>
-            </div>
-            <span class="text-xl font-bold text-gray-900">SETU</span>
-          </a>
-        </div>
-        <nav class="hidden md:ml-6 md:flex md:space-x-8">
-          <a href="/" class="<%= page === 'home' ? 'border-primary-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' %> inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-            Home
-          </a>
-          <a href="/about" class="<%= page === 'about' ? 'border-primary-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' %> inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-            About
-          </a>
-          <a href="/solutions" class="<%= page === 'solutions' ? 'border-primary-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' %> inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-            Solutions
-          </a>
-          <a href="/support" class="<%= page === 'support' ? 'border-primary-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' %> inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-            Support
-          </a>
-          <a href="/support/contact" class="<%= page === 'contact' ? 'border-primary-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' %> inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-            Contact
-          </a>
-        </nav>
+<header class="site-header">
+  <nav class="site-navbar" aria-label="Main navigation">
+    <!-- Brand -->
+    <a href="/" class="site-brand">
+      <span class="site-brand-mark">
+        <i class="fas fa-shield-halved"></i>
+      </span>
+      <div class="brand-text-col">
+        <span class="brand-name">SETU</span>
+        <span class="brand-tagline">Seized Goods Portal</span>
       </div>
-      <div class="flex items-center">
-        <% if (typeof user !== 'undefined' && user) { %>
-          <div class="hidden md:ml-4 md:flex-shrink-0 md:flex md:items-center">
-            <div class="ml-3 relative">
-              <div>
-                <a href="<%= user.role === 'customer' ? '/customer/dashboard' : (user.role === 'agency' ? '/agency/dashboard' : '/admin/dashboard') %>" class="max-w-xs bg-white flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
-                  <span class="sr-only">Open user menu</span>
-                  <div class="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center text-primary-600">
-                    <i class="fas fa-user"></i>
-                  </div>
-                  <span class="ml-2 text-gray-700"><%= user.name %></span>
-                </a>
-              </div>
-            </div>
-            <a href="/auth/logout" class="ml-4 px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">
-              Logout
-            </a>
-          </div>
+    </a>
+
+    <!-- Nav Links -->
+    <div class="site-nav-links">
+      <a href="/" class="nav-link-item"><i class="fas fa-home me-1"></i> Home</a>
+      <a href="/customer/browsing" class="nav-link-item highlight"><i class="fas fa-store me-1"></i> Browse Catalog</a>
+      <a href="/solutions" class="nav-link-item"><i class="fas fa-scale-balanced me-1"></i> Transparency</a>
+      <a href="/support" class="nav-link-item"><i class="fas fa-headset me-1"></i> Support</a>
+    </div>
+
+    <!-- Actions -->
+    <div class="site-nav-actions">
+      <!-- Cart Icon with Live Badge -->
+      <a href="/customer/cart" class="nav-cart-link" title="View Shopping Cart">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-count badge bg-primary" id="navCartCount">0</span>
+      </a>
+
+      <% if (typeof user !== 'undefined' && user) { %>
+        <% if (user.role === 'admin') { %>
+          <a href="/admin/dashboard" class="btn btn-sm btn-dark rounded-pill px-3">
+            <i class="fas fa-user-shield me-1"></i> Admin Panel
+          </a>
+        <% } else if (user.role === 'agency') { %>
+          <a href="/agency/dashboard" class="btn btn-sm btn-primary rounded-pill px-3">
+            <i class="fas fa-building me-1"></i> Agency Portal
+          </a>
         <% } else { %>
-          <div class="flex-shrink-0">
-            <a href="/auth/customer/login" class="relative inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
-              <i class="fas fa-sign-in-alt -ml-1 mr-2 h-5 w-5"></i>
-              <span>Sign In</span>
-            </a>
+          <div class="dropdown">
+            <button class="btn btn-sm btn-outline-primary dropdown-toggle rounded-pill px-3" type="button" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-user-circle me-1"></i> <%= user.name ? user.name.split(' ')[0] : 'Account' %>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-3 mt-2" aria-labelledby="userMenu">
+              <li><a class="dropdown-item py-2" href="/customer/dashboard"><i class="fas fa-tachometer-alt me-2 text-primary"></i> Dashboard</a></li>
+              <li><a class="dropdown-item py-2" href="/customer/orders"><i class="fas fa-box-open me-2 text-primary"></i> My Orders</a></li>
+              <li><a class="dropdown-item py-2" href="/customer/wishlist"><i class="fas fa-heart me-2 text-danger"></i> Wishlist</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item py-2 text-danger" href="/auth/customer/logout"><i class="fas fa-sign-out-alt me-2"></i> Log Out</a></li>
+            </ul>
           </div>
         <% } %>
-      </div>
+      <% } else { %>
+        <a href="/auth/agency/login" class="nav-link-item d-none d-md-inline-block small text-muted">
+          Agency Portal
+        </a>
+        <a href="/auth/customer/login" class="btn btn-primary rounded-pill px-4 btn-sm fw-semibold shadow-sm">
+          <i class="fas fa-sign-in-alt me-1"></i> Sign In
+        </a>
+      <% } %>
     </div>
-  </div>
-
-  <!-- Mobile Menu -->
-  <div class="mobile-menu">
-    <a href="/" class="<%= page === 'home' ? 'active' : '' %>">
-      <i class="fas fa-home mr-2"></i> Home
-    </a>
-    <a href="/about" class="<%= page === 'about' ? 'active' : '' %>">
-      <i class="fas fa-info-circle mr-2"></i> About
-    </a>
-    <a href="/solutions" class="<%= page === 'solutions' ? 'active' : '' %>">
-      <i class="fas fa-lightbulb mr-2"></i> Solutions
-    </a>
-    <a href="/support" class="<%= page === 'support' ? 'active' : '' %>">
-      <i class="fas fa-headset mr-2"></i> Support
-    </a>
-    <a href="/support/contact" class="<%= page === 'contact' ? 'active' : '' %>">
-      <i class="fas fa-envelope mr-2"></i> Contact
-    </a>
-
-    <% if (typeof user !== 'undefined' && user) { %>
-      <div class="border-t border-gray-200 my-2 pt-2">
-        <a href="<%= user.role === 'customer' ? '/customer/dashboard' : (user.role === 'agency' ? '/agency/dashboard' : '/admin/dashboard') %>">
-          <i class="fas fa-tachometer-alt mr-2"></i> Dashboard
-        </a>
-        <a href="/auth/logout" class="text-red-600">
-          <i class="fas fa-sign-out-alt mr-2"></i> Logout
-        </a>
-      </div>
-    <% } else { %>
-      <div class="border-t border-gray-200 my-2 pt-2">
-        <a href="/auth/customer/login" class="bg-primary-600 text-white">
-          <i class="fas fa-sign-in-alt mr-2"></i> Sign In
-        </a>
-      </div>
-    <% } %>
-  </div>
+  </nav>
 </header>
